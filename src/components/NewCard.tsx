@@ -1,5 +1,5 @@
 import { FC } from "react";
-import { Recipe } from "./Recipes";
+import { Recipe } from "./TopRecipes";
 
 interface NewCardProps {
   recipe: Recipe;

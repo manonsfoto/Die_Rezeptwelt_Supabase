@@ -5,7 +5,7 @@ import TopCard from "./TopCard";
 
 export type Recipe = Tables<"recipes">;
 
-const Recipes = () => {
+const TopRecipes = () => {
   const [recipes, setRecipes] = useState<Recipe[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
 
@@ -35,12 +35,12 @@ const Recipes = () => {
   }, []);
 
   return (
-    <div>
-      <h1>Die beliebtesten Rezepte</h1>
+    <section className="flex flex-col justify-center items-center">
+      <h1 className="font-bold text-3xl	my-12 ">Die beliebtesten Rezepte</h1>
       {loading ? (
         <p>Loading...</p>
       ) : (
-        <ul>
+        <ul className="flex flex-row gap-4">
           {recipes.map((recipe) => (
             <li key={recipe.id}>
               <TopCard recipe={recipe} />
@@ -48,8 +48,8 @@ const Recipes = () => {
           ))}
         </ul>
       )}
-    </div>
+    </section>
   );
 };
 
-export default Recipes;
+export default TopRecipes;

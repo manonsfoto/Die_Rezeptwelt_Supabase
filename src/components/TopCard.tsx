@@ -1,5 +1,5 @@
 import { FC } from "react";
-import { Recipe } from "./Recipes";
+import { Recipe } from "./TopRecipes";
 
 interface TopCardProps {
   recipe: Recipe;
@@ -13,7 +13,7 @@ const TopCard: FC<TopCardProps> = ({ recipe }) => {
       </figure>
       <div className="card-body">
         <h2 className="card-title">{recipe.name}</h2>
-        <p>{recipe.description}</p>
+        <p className="h-16">{recipe.description}</p>
         <div className="card-actions justify-start">
           <button className="btn btn-primary">Zum Rezept</button>
         </div>

@@ -1,5 +1,11 @@
+import TopRecipes from "../components/TopRecipes";
+
 const Home = () => {
-  return <h1>Home</h1>;
+  return (
+    <section>
+      <TopRecipes />
+    </section>
+  );
 };
 
 export default Home;
