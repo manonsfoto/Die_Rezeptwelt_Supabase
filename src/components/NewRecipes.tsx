@@ -35,7 +35,7 @@ const NewRecipes = () => {
   }, []);
 
   return (
-    <section className="flex flex-col justify-center items-center">
+    <section className="flex flex-col justify-center items-center mb-16">
       <h1 className="font-bold text-3xl	my-12 ">Neueste Rezepte</h1>
       {loading ? (
         <p>Loading...</p>
