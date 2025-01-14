@@ -1,10 +1,12 @@
+import NewRecipes from "../components/NewRecipes";
 import TopRecipes from "../components/TopRecipes";
 
 const Home = () => {
   return (
-    <section>
+    <>
       <TopRecipes />
-    </section>
+      <NewRecipes />
+    </>
   );
 };
 

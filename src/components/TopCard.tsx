@@ -14,6 +14,8 @@ const TopCard: FC<TopCardProps> = ({ recipe }) => {
       <div className="card-body">
         <h2 className="card-title">{recipe.name}</h2>
         <p className="h-16">{recipe.description}</p>
+        <p>⭐{recipe.rating}/5</p>
+
         <div className="card-actions justify-start">
           <button className="btn btn-primary">Zum Rezept</button>
         </div>
