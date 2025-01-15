@@ -1,5 +1,6 @@
 import { FC } from "react";
-import { Recipe } from "./TopRecipes";
+import { Link } from "react-router-dom";
+import { Recipe } from "../../utils/types";
 
 interface TopCardProps {
   recipe: Recipe;
@@ -17,7 +18,10 @@ const TopCard: FC<TopCardProps> = ({ recipe }) => {
         <p>⭐{recipe.rating}/5</p>
 
         <div className="card-actions justify-start">
-          <button className="btn btn-primary">Zum Rezept</button>
+          <Link to={`/details/${recipe.id}`}>
+            {" "}
+            <button className="btn btn-primary">Zum Rezept</button>
+          </Link>
         </div>
       </div>
     </div>

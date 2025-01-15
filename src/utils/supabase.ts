@@ -58,8 +58,6 @@ export type Database = {
           created_at: string
           id: string
           name: string
-          quantity: number | null
-          recipe_id: string
           unit: Database["public"]["Enums"]["unit_enum"] | null
         }
         Insert: {
@@ -67,8 +65,6 @@ export type Database = {
           created_at?: string
           id?: string
           name: string
-          quantity?: number | null
-          recipe_id?: string
           unit?: Database["public"]["Enums"]["unit_enum"] | null
         }
         Update: {
@@ -76,19 +72,9 @@ export type Database = {
           created_at?: string
           id?: string
           name?: string
-          quantity?: number | null
-          recipe_id?: string
           unit?: Database["public"]["Enums"]["unit_enum"] | null
         }
-        Relationships: [
-          {
-            foreignKeyName: "ingredients_recipe_id_fkey"
-            columns: ["recipe_id"]
-            isOneToOne: false
-            referencedRelation: "recipes"
-            referencedColumns: ["id"]
-          },
-        ]
+        Relationships: []
       }
       recipes: {
         Row: {
@@ -130,6 +116,39 @@ export type Database = {
             columns: ["category_id"]
             isOneToOne: false
             referencedRelation: "categories"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      recipes_ingredients: {
+        Row: {
+          ingredient_id: string
+          quantity: number | null
+          recipe_id: string
+        }
+        Insert: {
+          ingredient_id: string
+          quantity?: number | null
+          recipe_id: string
+        }
+        Update: {
+          ingredient_id?: string
+          quantity?: number | null
+          recipe_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "recipes_ingredients_ingredient_id_fkey"
+            columns: ["ingredient_id"]
+            isOneToOne: false
+            referencedRelation: "ingredients"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "recipes_ingredients_recipe_id_fkey"
+            columns: ["recipe_id"]
+            isOneToOne: false
+            referencedRelation: "recipes"
             referencedColumns: ["id"]
           },
         ]

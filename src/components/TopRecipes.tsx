@@ -1,9 +1,7 @@
 import { useState, useEffect } from "react";
-import { Tables } from "../utils/supabase";
 import { supabase } from "../utils/supabaseClient";
-import TopCard from "./TopCard";
-
-export type Recipe = Tables<"recipes">;
+import TopCard from "./card/TopCard";
+import { Recipe } from "../utils/types";
 
 const TopRecipes = () => {
   const [recipes, setRecipes] = useState<Recipe[]>([]);

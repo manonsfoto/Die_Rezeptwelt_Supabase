@@ -1,5 +1,6 @@
 import { FC } from "react";
-import { Recipe } from "./TopRecipes";
+import { Link } from "react-router-dom";
+import { Recipe } from "../../utils/types";
 
 interface NewCardProps {
   recipe: Recipe;
@@ -17,7 +18,10 @@ const NewCard: FC<NewCardProps> = ({ recipe }) => {
         <h2 className="card-title">{recipe.name}</h2>
         <p>{recipe.description}</p>
         <div className="card-actions justify-start">
-          <button className="btn btn-primary">Zum Rezept</button>
+          <Link to={`/details/${recipe.id}`}>
+            {" "}
+            <button className="btn btn-primary">Zum Rezept</button>
+          </Link>
         </div>
       </div>
     </div>
