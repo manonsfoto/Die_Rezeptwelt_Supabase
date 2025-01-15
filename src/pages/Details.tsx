@@ -1,12 +1,12 @@
 import { useParams } from "react-router-dom";
-import { Recipe } from "../utils/types";
 import { useEffect, useState } from "react";
 import { supabase } from "../utils/supabaseClient";
+import { JoinedRecipe } from "../utils/types";
 
 const Details = () => {
   const { recipe_id } = useParams<{ recipe_id: string }>();
 
-  const [singleRecipe, setSingleRecipes] = useState<Recipe | null>(null);
+  const [singleRecipe, setSingleRecipes] = useState<JoinedRecipe | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
 
   useEffect(() => {
@@ -15,8 +15,15 @@ const Details = () => {
       try {
         const { data, error } = await supabase
           .from("recipes")
-          .select("*")
-          .eq("id", recipe_id)
+          .select(
+            `*,
+            categories(name),
+            recipes_ingredients(
+              quantity,
+              ingredients(name, unit, additional_info)
+            )`
+          )
+          .eq("id", `${recipe_id && recipe_id}`)
           .single();
 
         if (error) {
@@ -42,8 +49,18 @@ const Details = () => {
       ) : (
         <article className="flex flex-col gap-7">
           <h1 className="text-4xl font-bold">{singleRecipe?.name}</h1>
+          <h3 className="text-2xl font-semibold">Kategorie</h3>
+          <p>{singleRecipe?.categories.name}</p>
           <h3 className="text-2xl font-semibold">Zutaten</h3>
-
+          <p className="font-semibold">{singleRecipe?.servings} Servings</p>
+          <ul className="list-disc">
+            {singleRecipe?.recipes_ingredients.map((item) => (
+              <li key={item.ingredients.name}>
+                {item.ingredients.name} {item.quantity} {item.ingredients.unit}{" "}
+                ({item.ingredients.additional_info})
+              </li>
+            ))}
+          </ul>
           <h3 className="text-2xl font-semibold">Zubereitung</h3>
           <ol>
             {singleRecipe?.instructions.split(";").map((item) => (

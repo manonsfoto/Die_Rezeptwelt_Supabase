@@ -1,5 +1,14 @@
+import NewRecipes from "../components/NewRecipes";
+import TopRecipes from "../components/TopRecipes";
+
 const Rezepte = () => {
-  return <h1>Rezepte</h1>;
+  return (
+    <>
+      {" "}
+      <TopRecipes />
+      <NewRecipes />
+    </>
+  );
 };
 
 export default Rezepte;
