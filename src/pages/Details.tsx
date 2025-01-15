@@ -36,17 +36,20 @@ const Details = () => {
   }, []);
 
   return (
-    <section>
+    <section className="flex justify-center items-center mt-12">
       {loading ? (
         <p>Loading...</p>
       ) : (
-        <article>
-          <h1>{singleRecipe?.name}</h1>
-          <h3>Zutaten</h3>
-          {/* <p>{singleRecipe?.}</p> */}
-          <h3>Zubereitung</h3>
-          <p>{singleRecipe?.instructions}</p>
-          <h3>Zusätzliche Informationen</h3>
+        <article className="flex flex-col gap-7">
+          <h1 className="text-4xl font-bold">{singleRecipe?.name}</h1>
+          <h3 className="text-2xl font-semibold">Zutaten</h3>
+
+          <h3 className="text-2xl font-semibold">Zubereitung</h3>
+          <ol>
+            {singleRecipe?.instructions.split(";").map((item) => (
+              <li key={item}>{item}</li>
+            ))}
+          </ol>
         </article>
       )}
     </section>
