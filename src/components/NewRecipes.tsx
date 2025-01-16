@@ -38,7 +38,7 @@ const NewRecipes = () => {
       {loading ? (
         <p>Loading...</p>
       ) : (
-        <ul className="flex flex-col gap-4">
+        <ul className="flex flex-col gap-4 flex-wrap">
           {recipes.map((recipe) => (
             <li key={recipe.id}>
               <NewCard recipe={recipe} />

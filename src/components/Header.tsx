@@ -59,6 +59,13 @@ const Header = () => {
           </ul>
         </div>
         <div className="navbar-end">
+          <div className="form-control mr-4">
+            <input
+              type="text"
+              placeholder="Search"
+              className="input input-bordered w-24 md:w-auto"
+            />
+          </div>
           <a className="btn">Login</a>
         </div>
       </nav>

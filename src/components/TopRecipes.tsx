@@ -38,7 +38,7 @@ const TopRecipes = () => {
       {loading ? (
         <p>Loading...</p>
       ) : (
-        <ul className="flex flex-row gap-4">
+        <ul className="flex flex-row gap-4 flex-wrap justify-center items-center">
           {recipes.map((recipe) => (
             <li key={recipe.id}>
               <TopCard recipe={recipe} />
