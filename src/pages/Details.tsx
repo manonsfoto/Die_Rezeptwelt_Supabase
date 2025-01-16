@@ -2,6 +2,7 @@ import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { supabase } from "../utils/supabaseClient";
 import { JoinedRecipe } from "../utils/types";
+import Hero from "../components/Hero";
 
 const Details = () => {
   const { recipe_id } = useParams<{ recipe_id: string }>();
@@ -43,33 +44,37 @@ const Details = () => {
   }, []);
 
   return (
-    <section className="flex justify-center items-center mt-12">
+    <>
+      {" "}
       {loading ? (
         <p>Loading...</p>
       ) : (
-        <article className="flex flex-col gap-7">
-          <h1 className="text-4xl font-bold">{singleRecipe?.name}</h1>
-          <h3 className="text-2xl font-semibold">Kategorie</h3>
-          <p>{singleRecipe?.categories.name}</p>
-          <h3 className="text-2xl font-semibold">Zutaten</h3>
-          <p className="font-semibold">{singleRecipe?.servings} Servings</p>
-          <ul className="list-disc">
-            {singleRecipe?.recipes_ingredients.map((item) => (
-              <li key={item.ingredients.name}>
-                {item.ingredients.name} {item.quantity} {item.ingredients.unit}{" "}
-                ({item.ingredients.additional_info})
-              </li>
-            ))}
-          </ul>
-          <h3 className="text-2xl font-semibold">Zubereitung</h3>
-          <ol>
-            {singleRecipe?.instructions.split(";").map((item) => (
-              <li key={item}>{item}</li>
-            ))}
-          </ol>
-        </article>
+        <section className="flex flex-col justify-center items-center">
+          <Hero text={singleRecipe?.name} imgUrl={singleRecipe?.imageUrl} />
+          <article className="flex flex-col gap-7 mt-12">
+            <h1 className="text-4xl font-bold">{singleRecipe?.name}</h1>
+            <h3 className="text-2xl font-semibold">Kategorie</h3>
+            <p>{singleRecipe?.categories.name}</p>
+            <h3 className="text-2xl font-semibold">Zutaten</h3>
+            <p className="font-semibold">{singleRecipe?.servings} Servings</p>
+            <ul className="list-disc">
+              {singleRecipe?.recipes_ingredients.map((item) => (
+                <li key={item.ingredients.name}>
+                  {item.ingredients.name} {item.quantity}{" "}
+                  {item.ingredients.unit} ({item.ingredients.additional_info})
+                </li>
+              ))}
+            </ul>
+            <h3 className="text-2xl font-semibold">Zubereitung</h3>
+            <ol>
+              {singleRecipe?.instructions.split(";").map((item) => (
+                <li key={item}>{item}</li>
+              ))}
+            </ol>
+          </article>{" "}
+        </section>
       )}
-    </section>
+    </>
   );
 };
 

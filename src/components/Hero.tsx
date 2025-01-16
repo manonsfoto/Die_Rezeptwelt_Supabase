@@ -1,8 +1,8 @@
 import { FC } from "react";
 
 interface HeroProps {
-  text: string;
-  imgUrl: string;
+  text: string | undefined;
+  imgUrl: string | undefined | null;
 }
 
 const Hero: FC<HeroProps> = ({ text, imgUrl }) => {
