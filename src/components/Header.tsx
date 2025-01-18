@@ -1,7 +1,19 @@
 import { Link, NavLink } from "react-router-dom";
 import LogoIcon from "../assets/SVG/Logo";
+import { useContext, useRef } from "react";
+import { SearchInputContext } from "../context/Context";
 
 const Header = () => {
+  const { setSearchInput } = useContext(SearchInputContext);
+  const searchInputRef = useRef(null);
+
+  function handleSearchButton() {
+    if (searchInputRef.current) {
+      setSearchInput(searchInputRef.current.value);
+      console.log(searchInputRef.current.value);
+    }
+  }
+
   return (
     <header>
       <nav className="navbar bg-base-100">
@@ -59,14 +71,25 @@ const Header = () => {
           </ul>
         </div>
         <div className="navbar-end">
-          <div className="form-control mr-4">
+          <div className="form-control mr-4 flex flex-row gap-2">
             <input
+              ref={searchInputRef}
               type="text"
               placeholder="Search"
               className="input input-bordered w-24 md:w-auto"
             />
+            <Link to={"/results"}>
+              {" "}
+              <button
+                type="button"
+                className="btn"
+                onClick={handleSearchButton}
+              >
+                Search
+              </button>
+            </Link>
           </div>
-          <a className="btn">Login</a>
+          <a className="btn btn-accent">Login</a>
         </div>
       </nav>
     </header>
