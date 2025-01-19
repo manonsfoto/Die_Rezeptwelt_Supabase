@@ -1,16 +1,17 @@
 import { Link, NavLink } from "react-router-dom";
 import LogoIcon from "../assets/SVG/Logo";
 import { useContext, useRef } from "react";
-import { SearchInputContext } from "../context/Context";
+import { RefreshContext, SearchInputContext } from "../context/Context";
 
 const Header = () => {
   const { setSearchInput } = useContext(SearchInputContext);
-  const searchInputRef = useRef(null);
+  const { setRefresh } = useContext(RefreshContext);
+  const searchInputRef = useRef<HTMLInputElement>(null);
 
   function handleSearchButton() {
     if (searchInputRef.current) {
       setSearchInput(searchInputRef.current.value);
-      console.log(searchInputRef.current.value);
+      setRefresh((prev) => !prev);
     }
   }
 
