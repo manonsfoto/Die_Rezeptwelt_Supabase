@@ -25,12 +25,10 @@ const Profile = () => {
               {new Date(user.created_at).toLocaleString()}
             </p>
             <p>
-              <strong>Zuletzt geändert am:</strong>{" "}
-              {new Date(user.updated_at).toLocaleString()}
+              <strong>Zuletzt geändert am:</strong> {user.updated_at}
             </p>
             <p>
-              <strong>Letzter Login:</strong>{" "}
-              {new Date(user.last_sign_in_at).toLocaleString()}
+              <strong>Letzter Login:</strong> {user.last_sign_in_at}
             </p>
           </div>
         </section>
