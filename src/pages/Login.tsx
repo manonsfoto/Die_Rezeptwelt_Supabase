@@ -91,7 +91,9 @@ const Login = () => {
       <Link to={"/signup"} className="btn ">
         Sign Up
       </Link>
-
+      {/* <button type="button" className="btn " onClick={handleLogin}>
+        Find my Password
+      </button> */}
       {error.length > 0 && <p className="text-red-600">🚨{error}</p>}
     </section>
   );

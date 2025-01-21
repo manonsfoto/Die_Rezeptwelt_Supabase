@@ -6,9 +6,10 @@ import {
   SearchInputContext,
   UserContext,
 } from "../context/Context";
+import { supabase } from "../utils/supabaseClient";
 
 const Header = () => {
-  const { user } = useContext(UserContext);
+  const { user, setUser } = useContext(UserContext);
   const { setSearchInput } = useContext(SearchInputContext);
   const { setRefresh } = useContext(RefreshContext);
   const searchInputRef = useRef<HTMLInputElement>(null);
@@ -18,6 +19,12 @@ const Header = () => {
       setSearchInput(searchInputRef.current.value);
       setRefresh((prev) => !prev);
     }
+  }
+  async function handleLogOutButton() {
+    const { error } = await supabase.auth.signOut();
+    console.log(error);
+
+    setUser(null);
   }
 
   return (
@@ -63,7 +70,7 @@ const Header = () => {
             </ul>
           </div>
 
-          <Link to={"/"} className="btn btn-ghost text-xl">
+          <Link to={"/"} className="btn btn-ghost text-xl hidden lg:flex">
             <LogoIcon />
           </Link>
         </div>
@@ -107,7 +114,17 @@ const Header = () => {
             </Link>
           </div>
           {user ? (
-            <button className="btn btn-secondary">Logout</button>
+            <div className="flex gap-4">
+              <p>
+                Hallo, <strong>{user.user_metadata.first_name}</strong>
+              </p>{" "}
+              <button
+                onClick={handleLogOutButton}
+                className="btn btn-secondary"
+              >
+                Logout
+              </button>
+            </div>
           ) : (
             <Link to={"/login"} className="btn btn-accent">
               Login

@@ -29,7 +29,6 @@ const SearchResult = () => {
           console.error("Fehler beim Laden der Rezepte:", error.message);
         } else {
           setRecipes(data || []);
-          console.log(data);
         }
       } catch (err) {
         console.error("Unerwarteter Fehler:", err);

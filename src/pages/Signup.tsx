@@ -64,8 +64,6 @@ const Signup = () => {
       firstNameRef.current.value = "";
       lastNameRef.current.value = "";
     }
-
-    console.log(data, error);
   }
 
   return (

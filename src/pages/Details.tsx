@@ -31,7 +31,6 @@ const Details = () => {
           console.error("Fehler beim Laden der Rezepte:", error.message);
         } else {
           setSingleRecipes(data);
-          console.log("single Recipe", data);
         }
       } catch (err) {
         console.error("Unerwarteter Fehler:", err);
