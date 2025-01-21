@@ -50,6 +50,9 @@ const Header = () => {
               <li>
                 <NavLink to={"about"}>Über uns</NavLink>
               </li>
+              <li>
+                <NavLink to={"profile"}>Profile</NavLink>
+              </li>
             </ul>
           </div>
 
@@ -69,6 +72,9 @@ const Header = () => {
             <li>
               <NavLink to={"about"}>Über uns</NavLink>
             </li>
+            <li>
+              <NavLink to={"profile"}>Profile</NavLink>
+            </li>
           </ul>
         </div>
         <div className="navbar-end">
@@ -76,6 +82,7 @@ const Header = () => {
             <input
               ref={searchInputRef}
               type="text"
+              name="searchInput"
               placeholder="Search"
               className="input input-bordered w-24 md:w-auto"
             />

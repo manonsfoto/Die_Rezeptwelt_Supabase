@@ -1,46 +1,109 @@
 import { useRef, useState } from "react";
-import { Link } from "react-router-dom";
 import { supabase } from "../utils/supabaseClient";
 
-const Login = () => {
+type TUser = {
+  email: string;
+  password: string;
+  options: {
+    data: {
+      first_name: string;
+      last_name: string;
+    };
+  };
+};
+
+const Signup = () => {
   const emailRef = useRef<HTMLInputElement>(null!);
   const passwordRef = useRef<HTMLInputElement>(null!);
+  const firstNameRef = useRef<HTMLInputElement>(null!);
+  const lastNameRef = useRef<HTMLInputElement>(null!);
 
   const [success, setSuccess] = useState<string>("");
   const [error, setError] = useState<string>("");
 
-  async function handleLogin() {
+  async function register() {
     const emailValue = emailRef.current?.value;
     const passwordValue = passwordRef.current?.value;
+    const firstNameValue = firstNameRef.current?.value;
+    const lastNameValue = lastNameRef.current?.value;
 
-    if (!emailValue || !passwordValue) {
-      setError("E-Mail und Passwort müssen ausgefüllt sein.");
+    if (!emailValue || !passwordValue || !firstNameValue || !lastNameValue) {
+      setError(
+        "Alle Felder (Vorname, Nachname, E-Mail, Passwort) müssen ausgefüllt sein."
+      );
       setSuccess("");
       return;
     }
 
-    const { data, error } = await supabase.auth.signInWithPassword({
+    const newUser: TUser = {
       email: emailValue,
       password: passwordValue,
-    });
+      options: {
+        data: {
+          first_name: firstNameValue,
+          last_name: lastNameValue,
+        },
+      },
+    };
+
+    const { data, error } = await supabase.auth.signUp(newUser);
+
     if (error) {
       setSuccess("");
       setError(error.message);
       emailRef.current.value = "";
       passwordRef.current.value = "";
+      firstNameRef.current.value = "";
+      lastNameRef.current.value = "";
     }
-
     if (data.user) {
       setError("");
-      setSuccess("You are logged in");
+      setSuccess("Bitte bestätige deine Registrierung per E-Mail 🥰");
       emailRef.current.value = "";
       passwordRef.current.value = "";
+      firstNameRef.current.value = "";
+      lastNameRef.current.value = "";
     }
-    console.dir(data);
+
+    console.log(data, error);
   }
 
   return (
     <section className="flex flex-col justify-center items-center gap-5 border-solid border-4 rounded-md border-orange-300 p-8 w-fit mx-auto mt-10">
+      <label className="input input-bordered flex items-center gap-2">
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          viewBox="0 0 16 16"
+          fill="currentColor"
+          className="h-4 w-4 opacity-70"
+        >
+          <path d="M8 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6ZM12.735 14c.618 0 1.093-.561.872-1.139a6.002 6.002 0 0 0-11.215 0c-.22.578.254 1.139.872 1.139h9.47Z" />
+        </svg>
+        <input
+          ref={firstNameRef}
+          type="text"
+          name="firstName"
+          className="grow"
+          placeholder="First Name"
+        />
+      </label>
+      <label className="input input-bordered flex items-center gap-2">
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          viewBox="0 0 16 16"
+          fill="currentColor"
+          className="h-4 w-4 opacity-70"
+        >
+          <path d="M8 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6ZM12.735 14c.618 0 1.093-.561.872-1.139a6.002 6.002 0 0 0-11.215 0c-.22.578.254 1.139.872 1.139h9.47Z" />
+        </svg>
+        <input
+          ref={lastNameRef}
+          type="text"
+          name="lastName"
+          className="grow"
+          placeholder="Last Name"
+        />
+      </label>
       <label className="input input-bordered flex items-center gap-2">
         <svg
           xmlns="http://www.w3.org/2000/svg"
@@ -53,7 +116,7 @@ const Login = () => {
         </svg>
         <input
           ref={emailRef}
-          name="emailInput"
+          name="email"
           type="text"
           className="grow"
           placeholder="Email"
@@ -81,13 +144,9 @@ const Login = () => {
         />
       </label>
 
-      <button type="button" className="btn btn-accent" onClick={handleLogin}>
-        Log In
+      <button type="button" className="btn" onClick={register}>
+        Registrieren
       </button>
-
-      <Link to={"/signup"} className="btn ">
-        Sign Up
-      </Link>
 
       {error.length > 0 && <p className="text-red-600">🚨{error}</p>}
       {success.length > 0 && <p className="text-green-900">{success}</p>}
@@ -95,4 +154,4 @@ const Login = () => {
   );
 };
 
-export default Login;
+export default Signup;

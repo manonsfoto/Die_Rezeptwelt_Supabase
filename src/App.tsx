@@ -11,6 +11,8 @@ import About from "./pages/About";
 import Details from "./pages/Details";
 import SearchResult from "./pages/SearchResult";
 import Login from "./pages/Login";
+import Profile from "./pages/Profile";
+import Signup from "./pages/Signup";
 
 function App() {
   const router = createBrowserRouter(
@@ -22,6 +24,8 @@ function App() {
         <Route path="details/:recipe_id" element={<Details />} />
         <Route path="results" element={<SearchResult />} />
         <Route path="login" element={<Login />} />
+        <Route path="signup" element={<Signup />} />
+        <Route path="profile" element={<Profile />} />
       </Route>
     )
   );
