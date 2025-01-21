@@ -1,10 +1,16 @@
 import { useContext, useEffect, useState } from "react";
-import { RefreshContext, SearchInputContext } from "../context/Context";
+import {
+  RefreshContext,
+  SearchInputContext,
+  UserContext,
+} from "../context/Context";
 import { Recipe } from "../utils/types";
 import TopCard from "../components/card/TopCard";
 import { supabase } from "../utils/supabaseClient";
+import { Link } from "react-router-dom";
 
 const SearchResult = () => {
+  const { user } = useContext(UserContext);
   const { searchInput } = useContext(SearchInputContext);
   const { refresh } = useContext(RefreshContext);
   const [recipes, setRecipes] = useState<Recipe[]>([]);
@@ -34,7 +40,7 @@ const SearchResult = () => {
 
     getSearchResult();
   }, [refresh]);
-  return (
+  return user ? (
     <section className="flex flex-col justify-center items-center">
       <h1 className="font-bold text-3xl	my-12 ">Search Results</h1>
       {loading ? (
@@ -54,6 +60,10 @@ const SearchResult = () => {
         </p>
       )}
     </section>
+  ) : (
+    <Link to={"/login"} className="btn btn-secondary ">
+      Zum Log-In
+    </Link>
   );
 };
 

@@ -1,9 +1,14 @@
 import { Link, NavLink } from "react-router-dom";
 import LogoIcon from "../assets/SVG/Logo";
 import { useContext, useRef } from "react";
-import { RefreshContext, SearchInputContext } from "../context/Context";
+import {
+  RefreshContext,
+  SearchInputContext,
+  UserContext,
+} from "../context/Context";
 
 const Header = () => {
+  const { user } = useContext(UserContext);
   const { setSearchInput } = useContext(SearchInputContext);
   const { setRefresh } = useContext(RefreshContext);
   const searchInputRef = useRef<HTMLInputElement>(null);
@@ -50,9 +55,11 @@ const Header = () => {
               <li>
                 <NavLink to={"about"}>Über uns</NavLink>
               </li>
-              <li>
-                <NavLink to={"profile"}>Profile</NavLink>
-              </li>
+              {user && (
+                <li>
+                  <NavLink to={"profile"}>Profile</NavLink>
+                </li>
+              )}
             </ul>
           </div>
 
@@ -72,9 +79,11 @@ const Header = () => {
             <li>
               <NavLink to={"about"}>Über uns</NavLink>
             </li>
-            <li>
-              <NavLink to={"profile"}>Profile</NavLink>
-            </li>
+            {user && (
+              <li>
+                <NavLink to={"profile"}>Profile</NavLink>
+              </li>
+            )}
           </ul>
         </div>
         <div className="navbar-end">
@@ -97,9 +106,13 @@ const Header = () => {
               </button>
             </Link>
           </div>
-          <Link to={"/login"} className="btn btn-accent">
-            Login
-          </Link>
+          {user ? (
+            <button className="btn btn-secondary">Logout</button>
+          ) : (
+            <Link to={"/login"} className="btn btn-accent">
+              Login
+            </Link>
+          )}
         </div>
       </nav>
     </header>

@@ -1,12 +1,14 @@
-import { useRef, useState } from "react";
+import { useContext, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import { supabase } from "../utils/supabaseClient";
+import { UserContext } from "../context/Context";
 
 const Login = () => {
   const emailRef = useRef<HTMLInputElement>(null!);
   const passwordRef = useRef<HTMLInputElement>(null!);
 
-  const [success, setSuccess] = useState<string>("");
+  const { setUser, user } = useContext(UserContext);
+
   const [error, setError] = useState<string>("");
 
   async function handleLogin() {
@@ -15,7 +17,7 @@ const Login = () => {
 
     if (!emailValue || !passwordValue) {
       setError("E-Mail und Passwort müssen ausgefüllt sein.");
-      setSuccess("");
+
       return;
     }
 
@@ -24,22 +26,23 @@ const Login = () => {
       password: passwordValue,
     });
     if (error) {
-      setSuccess("");
       setError(error.message);
       emailRef.current.value = "";
       passwordRef.current.value = "";
     }
 
     if (data.user) {
-      setError("");
-      setSuccess("You are logged in");
-      emailRef.current.value = "";
-      passwordRef.current.value = "";
+      setUser(data.user);
     }
     console.dir(data);
   }
 
-  return (
+  return user ? (
+    <Link to={"/"}>
+      {" "}
+      <button className="btn btn-success">Zum Home</button>
+    </Link>
+  ) : (
     <section className="flex flex-col justify-center items-center gap-5 border-solid border-4 rounded-md border-orange-300 p-8 w-fit mx-auto mt-10">
       <label className="input input-bordered flex items-center gap-2">
         <svg
@@ -90,7 +93,6 @@ const Login = () => {
       </Link>
 
       {error.length > 0 && <p className="text-red-600">🚨{error}</p>}
-      {success.length > 0 && <p className="text-green-900">{success}</p>}
     </section>
   );
 };
