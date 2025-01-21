@@ -49,30 +49,33 @@ const Details = () => {
       {loading ? (
         <p>Loading...</p>
       ) : (
-        <section className="flex flex-col justify-center items-center">
+        <>
+          {" "}
           <Hero text={singleRecipe?.name} imgUrl={singleRecipe?.imageUrl} />
-          <article className="flex flex-col gap-7 mt-12">
-            <h1 className="text-4xl font-bold">{singleRecipe?.name}</h1>
-            <h3 className="text-2xl font-semibold">Kategorie</h3>
-            <p>{singleRecipe?.categories.name}</p>
-            <h3 className="text-2xl font-semibold">Zutaten</h3>
-            <p className="font-semibold">{singleRecipe?.servings} Servings</p>
-            <ul className="list-disc">
-              {singleRecipe?.recipes_ingredients.map((item) => (
-                <li key={item.ingredients.name}>
-                  {item.ingredients.name} {item.quantity}{" "}
-                  {item.ingredients.unit} ({item.ingredients.additional_info})
-                </li>
-              ))}
-            </ul>
-            <h3 className="text-2xl font-semibold">Zubereitung</h3>
-            <ol>
-              {singleRecipe?.instructions.split(";").map((item) => (
-                <li key={item}>{item}</li>
-              ))}
-            </ol>
-          </article>{" "}
-        </section>
+          <section className="flex flex-col justify-center items-center">
+            <article className="flex flex-col gap-7 mt-12">
+              <h1 className="text-4xl font-bold">{singleRecipe?.name}</h1>
+              <h3 className="text-2xl font-semibold">Kategorie</h3>
+              <p>{singleRecipe?.categories.name}</p>
+              <h3 className="text-2xl font-semibold">Zutaten</h3>
+              <p className="font-semibold">{singleRecipe?.servings} Servings</p>
+              <ul className="list-disc">
+                {singleRecipe?.recipes_ingredients.map((item) => (
+                  <li key={item.ingredients.name}>
+                    {item.ingredients.name} {item.quantity}{" "}
+                    {item.ingredients.unit} ({item.ingredients.additional_info})
+                  </li>
+                ))}
+              </ul>
+              <h3 className="text-2xl font-semibold">Zubereitung</h3>
+              <ol>
+                {singleRecipe?.instructions.split(";").map((item) => (
+                  <li key={item}>{item}</li>
+                ))}
+              </ol>
+            </article>{" "}
+          </section>{" "}
+        </>
       )}
     </>
   );

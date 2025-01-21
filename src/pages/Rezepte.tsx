@@ -23,7 +23,7 @@ const Rezepte = () => {
           <NewRecipes />
         </>
       ) : (
-        <Link to={"/login"} className="btn btn-secondary ">
+        <Link to={"/login"} className="btn btn-secondary  mt-24 ">
           Zum Log-In
         </Link>
       )}

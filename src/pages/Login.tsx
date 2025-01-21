@@ -40,7 +40,7 @@ const Login = () => {
   return user ? (
     <Link to={"/"}>
       {" "}
-      <button className="btn btn-success">Zum Home</button>
+      <button className="btn btn-success mt-24 text-yellow-50">Zum Home</button>
     </Link>
   ) : (
     <section className="flex flex-col justify-center items-center gap-5 border-solid border-4 rounded-md border-orange-300 p-8 w-fit mx-auto mt-10">

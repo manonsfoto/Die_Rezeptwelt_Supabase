@@ -20,7 +20,7 @@ const RootLayout = () => {
         <RefreshContext.Provider value={{ refresh, setRefresh }}>
           <SearchInputContext.Provider value={{ searchInput, setSearchInput }}>
             <Header />
-            <main>
+            <main className="flex flex-col justify-center items-center">
               <Outlet />
             </main>{" "}
             <Footer />
