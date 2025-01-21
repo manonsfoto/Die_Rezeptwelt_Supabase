@@ -90,7 +90,9 @@ const Header = () => {
               </button>
             </Link>
           </div>
-          <a className="btn btn-accent">Login</a>
+          <Link to={"/login"} className="btn btn-accent">
+            Login
+          </Link>
         </div>
       </nav>
     </header>

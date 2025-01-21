@@ -10,6 +10,7 @@ import Rezepte from "./pages/Rezepte";
 import About from "./pages/About";
 import Details from "./pages/Details";
 import SearchResult from "./pages/SearchResult";
+import Login from "./pages/Login";
 
 function App() {
   const router = createBrowserRouter(
@@ -20,6 +21,7 @@ function App() {
         <Route path="about" element={<About />} />
         <Route path="details/:recipe_id" element={<Details />} />
         <Route path="results" element={<SearchResult />} />
+        <Route path="login" element={<Login />} />
       </Route>
     )
   );
