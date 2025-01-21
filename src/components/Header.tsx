@@ -114,7 +114,7 @@ const Header = () => {
             </Link>
           </div>
           {user ? (
-            <div className="flex gap-4">
+            <div className="flex gap-4 items-center justify-center">
               <p>
                 Hallo, <strong>{user.user_metadata.first_name}</strong>
               </p>{" "}

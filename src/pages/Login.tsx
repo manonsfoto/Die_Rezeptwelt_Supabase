@@ -34,7 +34,6 @@ const Login = () => {
     if (data.user) {
       setUser(data.user);
     }
-    console.dir(data);
   }
 
   return user ? (
