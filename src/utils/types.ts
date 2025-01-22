@@ -11,3 +11,8 @@ export type JoinedRecipe = Tables<"recipes"> & {
     >;
   })[];
 };
+
+export type InsertRecipeFavorites = Pick<
+  Tables<"recipe_favorites">,
+  "user_id" | "recipe_id"
+>;
