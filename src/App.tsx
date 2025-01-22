@@ -13,6 +13,7 @@ import SearchResult from "./pages/SearchResult";
 import Login from "./pages/Login";
 import Profile from "./pages/Profile";
 import Signup from "./pages/Signup";
+import MeineRezepte from "./pages/MeineRezepte";
 
 function App() {
   const router = createBrowserRouter(
@@ -26,6 +27,7 @@ function App() {
         <Route path="login" element={<Login />} />
         <Route path="signup" element={<Signup />} />
         <Route path="profile" element={<Profile />} />
+        <Route path="meine_rezepte" element={<MeineRezepte />} />
       </Route>
     )
   );

@@ -30,6 +30,12 @@ const Profile = () => {
             <p>
               <strong>Letzter Login:</strong> {user.last_sign_in_at}
             </p>
+            <Link to={"/meine_rezepte"}>
+              {" "}
+              <button className="btn btn-success mt-24 text-yellow-50">
+                Meine Rezepte 💖
+              </button>
+            </Link>
           </div>
         </section>
       ) : (
