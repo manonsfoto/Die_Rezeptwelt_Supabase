@@ -34,7 +34,7 @@ const MeineRezepte = () => {
     <>
       <section className="flex flex-col justify-center items-center mb-16">
         <h1 className="font-bold text-3xl	my-12 ">Meine Rezepte 🥰</h1>
-        {
+        {favoriteRecipes.length > 0 ? (
           <ul className="flex flex-col gap-4 flex-wrap">
             {favoriteRecipes.map((recipe) => (
               <li key={recipe.id}>
@@ -42,7 +42,18 @@ const MeineRezepte = () => {
               </li>
             ))}
           </ul>
-        }
+        ) : (
+          <div className="flex flex-col justify-center items-center gap-4 mt-8">
+            {" "}
+            <p className="text-2xl font-bold text-gray-600">
+              No favorite Recipes found
+            </p>
+            <p className="texl-xl text-gray-400">
+              When you click a 🩶 button on detailed recipes, it will appear
+              here.
+            </p>
+          </div>
+        )}
       </section>
     </>
   );
