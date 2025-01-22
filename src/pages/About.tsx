@@ -12,7 +12,7 @@ const About = () => {
           "https://images.unsplash.com/photo-1577308856961-8e9ec50d0c67?q=80&w=1470&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
         }
       />
-      <article className=" flex justify-center items-center mt-20">
+      <article className=" flex justify-center items-center mt-20 p-5">
         <p className="text-xl max-w-2xl text-center">
           Hallo, wir sind Minyeong und Philip und freuen uns, unsere Arbeit auf
           Rezeptwelt vorstellen zu können. Bei der Erkundung dieser
