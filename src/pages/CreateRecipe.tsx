@@ -10,11 +10,13 @@ const CreateRecipe = () => {
   const instructionsRef = useRef<HTMLTextAreaElement>(null!);
   const categoryIdRef = useRef<HTMLSelectElement>(null!);
   const imageFileRef = useRef<HTMLInputElement>(null!);
+
   const ratingRef = useRef<string | null>(null!);
   const [success, setSuccess] = useState<string>("");
   const [error, setError] = useState<string>("");
   const [uploadSuccess, setUploadSuccess] = useState<string>("");
   const [uploadError, setUploadError] = useState<string>("");
+  const [imageUrl, setImageUrl] = useState<string>("");
   const { user } = useContext(UserContext);
 
   async function createNewRecipe() {
@@ -24,7 +26,6 @@ const CreateRecipe = () => {
     const instructionsValue = instructionsRef.current?.value;
     const categoryIdValue = categoryIdRef.current?.value;
     const ratingValue = ratingRef.current;
-    const imageUrlValue = "";
 
     const instructionsArr = instructionsValue.split(/([.!?])\s*/);
     const processedInstructions = instructionsArr
@@ -65,7 +66,7 @@ const CreateRecipe = () => {
       servings: Number(servingsValue),
       instructions: processedInstructions,
       category_id: categoryIdValue,
-      imageUrl: imageUrlValue,
+      imageUrl: imageUrl,
       rating: Number(ratingValue),
     };
 
@@ -99,26 +100,46 @@ const CreateRecipe = () => {
   };
 
   async function uploadImgFile() {
-    if (imageFileRef.current.files && user) {
-      const imageFile = imageFileRef.current?.files[0];
-      const fileName = `${user.id}_${imageFile.name}`;
-      const { data, error } = await supabase.storage
-        .from("photos")
-        .upload(fileName, imageFile, {
-          cacheControl: "3600",
-          upsert: true,
-        });
+    try {
+      if (imageFileRef.current.files && user) {
+        const imageFile = imageFileRef.current?.files[0];
+        const fileName = `${user.id}_${imageFile.name}`;
+        const { data, error } = await supabase.storage
+          .from("photos")
+          .upload(fileName, imageFile, {
+            cacheControl: "3600",
+            upsert: false,
+          });
 
-      if (data) {
-        setUploadSuccess(`"${imageFile.name}" uploaded ✅`);
-        setUploadError("");
+        if (data) {
+          setUploadSuccess(`"${imageFile.name}" ✅uploaded`);
+          setUploadError("");
+
+          const { data: publicURL } = supabase.storage
+            .from("photos")
+            .getPublicUrl(data.path);
+
+          if (publicURL) {
+            setImageUrl(publicURL.publicUrl);
+          }
+        }
+        if (error) {
+          setUploadSuccess("");
+          setUploadError("Failed to upload ❌");
+        }
+      } else {
+        throw new Error();
       }
-      if (error) {
-        setUploadSuccess("");
-        setUploadError("Failed to upload ❌");
-      }
+    } catch (err) {
+      console.error(err);
+      setUploadSuccess("");
+      setUploadError("Failed to upload ❌");
+    } finally {
+      imageFileRef.current.value = "";
     }
   }
+
+  async function changeImgFile() {}
 
   return (
     <section className="flex flex-col gap-4 mt-20">
@@ -224,19 +245,19 @@ const CreateRecipe = () => {
           </button>
         </div>
       </label>
-      <div className="max-w-xs">
+      <div>
         {uploadError.length > 0 && (
           <p className="text-red-600 text-center">🚨{uploadError}</p>
         )}
         {uploadSuccess.length > 0 && (
-          <div className="flex">
-            <p className="text-green-900 text-center max-w-xs">
+          <div className="flex gap-6 items-center">
+            <p className="text-green-900 text-center max-w-xs ">
               {uploadSuccess}
             </p>{" "}
             <button
               type="button"
-              className="btn btn-accent mt-6 max-w-xs"
-              onClick={createNewRecipe}
+              className="btn btn-neutral mt-6 max-w-xs "
+              onClick={changeImgFile}
             >
               Change File
             </button>
@@ -248,7 +269,7 @@ const CreateRecipe = () => {
         className="btn btn-accent mt-6 max-w-xs"
         onClick={createNewRecipe}
       >
-        Create New Recipe🪄
+        Save New Recipe🪄
       </button>
       <div className="max-w-xs">
         {error.length > 0 && (
