@@ -10,6 +10,7 @@ const CreateRecipe = () => {
   const instructionsRef = useRef<HTMLTextAreaElement>(null!);
   const categoryIdRef = useRef<HTMLSelectElement>(null!);
   const imageFileRef = useRef<HTMLInputElement>(null!);
+  const imageFileNameForRemoveRef = useRef<string>(null!);
 
   const ratingRef = useRef<string | null>(null!);
   const [success, setSuccess] = useState<string>("");
@@ -83,6 +84,8 @@ const CreateRecipe = () => {
       servingsRef.current.value = "";
       instructionsRef.current.value = "";
       categoryIdRef.current.value = "";
+      setUploadError("");
+      setUploadSuccess("");
     }
     if (data) {
       setError("");
@@ -92,6 +95,8 @@ const CreateRecipe = () => {
       servingsRef.current.value = "";
       instructionsRef.current.value = "";
       categoryIdRef.current.value = "";
+      setUploadError("");
+      setUploadSuccess("");
     }
   }
 
@@ -104,6 +109,7 @@ const CreateRecipe = () => {
       if (imageFileRef.current.files && user) {
         const imageFile = imageFileRef.current?.files[0];
         const fileName = `${user.id}_${imageFile.name}`;
+        imageFileNameForRemoveRef.current = fileName;
         const { data, error } = await supabase.storage
           .from("photos")
           .upload(fileName, imageFile, {
@@ -139,7 +145,19 @@ const CreateRecipe = () => {
     }
   }
 
-  async function changeImgFile() {}
+  async function changeImgFile() {
+    const { data, error } = await supabase.storage
+      .from("photos")
+      .remove([imageFileNameForRemoveRef.current]);
+    if (data) {
+      setUploadSuccess("");
+      setImageUrl("");
+    }
+    if (error) {
+      setUploadSuccess("");
+      setUploadError("Failed to change ❌");
+    }
+  }
 
   return (
     <section className="flex flex-col gap-4 mt-20">
