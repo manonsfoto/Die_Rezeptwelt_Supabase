@@ -1,6 +1,7 @@
-import { useRef, useState } from "react";
+import { useContext, useRef, useState } from "react";
 import { Recipe } from "../utils/types";
 import { supabase } from "../utils/supabaseClient";
+import { UserContext } from "../context/Context";
 
 const CreateRecipe = () => {
   const nameRef = useRef<HTMLInputElement>(null!);
@@ -8,11 +9,13 @@ const CreateRecipe = () => {
   const servingsRef = useRef<HTMLSelectElement>(null!);
   const instructionsRef = useRef<HTMLTextAreaElement>(null!);
   const categoryIdRef = useRef<HTMLSelectElement>(null!);
-  const imageUrlRef = useRef<HTMLInputElement>(null!);
+  const imageFileRef = useRef<HTMLInputElement>(null!);
   const ratingRef = useRef<string | null>(null!);
-
   const [success, setSuccess] = useState<string>("");
   const [error, setError] = useState<string>("");
+  const [uploadSuccess, setUploadSuccess] = useState<string>("");
+  const [uploadError, setUploadError] = useState<string>("");
+  const { user } = useContext(UserContext);
 
   async function createNewRecipe() {
     const nameValue = nameRef.current?.value;
@@ -20,8 +23,8 @@ const CreateRecipe = () => {
     const servingsValue = servingsRef.current?.value;
     const instructionsValue = instructionsRef.current?.value;
     const categoryIdValue = categoryIdRef.current?.value;
-    const imageUrlValue = imageUrlRef.current?.value;
     const ratingValue = ratingRef.current;
+    const imageUrlValue = "";
 
     const instructionsArr = instructionsValue.split(/([.!?])\s*/);
     const processedInstructions = instructionsArr
@@ -94,6 +97,28 @@ const CreateRecipe = () => {
   const handleRatingChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     ratingRef.current = event.target.value;
   };
+
+  async function uploadImgFile() {
+    if (imageFileRef.current.files && user) {
+      const imageFile = imageFileRef.current?.files[0];
+      const fileName = `${user.id}_${imageFile.name}`;
+      const { data, error } = await supabase.storage
+        .from("photos")
+        .upload(fileName, imageFile, {
+          cacheControl: "3600",
+          upsert: true,
+        });
+
+      if (data) {
+        setUploadSuccess(`"${imageFile.name}" uploaded ✅`);
+        setUploadError("");
+      }
+      if (error) {
+        setUploadSuccess("");
+        setUploadError("Failed to upload ❌");
+      }
+    }
+  }
 
   return (
     <section className="flex flex-col gap-4 mt-20">
@@ -181,14 +206,43 @@ const CreateRecipe = () => {
       <label className="form-control  max-w-xs">
         <div className="label">
           <span className="label-text">
-            Pick a image file for the new recipe
+            Upload an image file for the new recipe
           </span>
         </div>
-        <input
-          type="file"
-          className="file-input file-input-bordered  max-w-xs"
-        />
+        <div className="flex gap-6 justify-start items-center">
+          <input
+            type="file"
+            ref={imageFileRef}
+            className="file-input file-input-bordered min-w-full "
+          />
+          <button
+            type="button"
+            className="btn btn-neutral max-w-xs"
+            onClick={uploadImgFile}
+          >
+            Upload
+          </button>
+        </div>
       </label>
+      <div className="max-w-xs">
+        {uploadError.length > 0 && (
+          <p className="text-red-600 text-center">🚨{uploadError}</p>
+        )}
+        {uploadSuccess.length > 0 && (
+          <div className="flex">
+            <p className="text-green-900 text-center max-w-xs">
+              {uploadSuccess}
+            </p>{" "}
+            <button
+              type="button"
+              className="btn btn-accent mt-6 max-w-xs"
+              onClick={createNewRecipe}
+            >
+              Change File
+            </button>
+          </div>
+        )}
+      </div>
       <button
         type="button"
         className="btn btn-accent mt-6 max-w-xs"
