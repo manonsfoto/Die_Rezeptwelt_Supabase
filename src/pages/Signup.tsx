@@ -1,5 +1,7 @@
-import { useRef, useState } from "react";
+import { useContext, useRef, useState } from "react";
 import { supabase } from "../utils/supabaseClient";
+import { Link } from "react-router-dom";
+import { UserContext } from "../context/Context";
 
 type TUser = {
   email: string;
@@ -20,7 +22,7 @@ const Signup = () => {
 
   const [success, setSuccess] = useState<string>("");
   const [error, setError] = useState<string>("");
-
+  const { setUser } = useContext(UserContext);
   async function register() {
     const emailValue = emailRef.current?.value;
     const passwordValue = passwordRef.current?.value;
@@ -58,6 +60,7 @@ const Signup = () => {
     }
     if (data.user) {
       setError("");
+      setUser(data.user);
       setSuccess("Bitte bestätige deine Registrierung per E-Mail 🥰");
       emailRef.current.value = "";
       passwordRef.current.value = "";
@@ -147,7 +150,18 @@ const Signup = () => {
       </button>
 
       {error.length > 0 && <p className="text-red-600">🚨{error}</p>}
-      {success.length > 0 && <p className="text-green-900">{success}</p>}
+      {success.length > 0 && (
+        <>
+          {" "}
+          <p className="text-green-900">{success}</p>{" "}
+          <Link to={"/"}>
+            {" "}
+            <button className="btn btn-success mt-24 text-yellow-50">
+              Zur Startseite
+            </button>
+          </Link>
+        </>
+      )}
     </section>
   );
 };

@@ -1,5 +1,5 @@
 import { useContext, useRef, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { supabase } from "../utils/supabaseClient";
 import { UserContext } from "../context/Context";
 
@@ -7,9 +7,10 @@ const Login = () => {
   const emailRef = useRef<HTMLInputElement>(null!);
   const passwordRef = useRef<HTMLInputElement>(null!);
 
-  const { setUser, user } = useContext(UserContext);
-
+  const { setUser } = useContext(UserContext);
   const [error, setError] = useState<string>("");
+
+  const navigate = useNavigate();
 
   async function handleLogin() {
     const emailValue = emailRef.current?.value;
@@ -33,15 +34,11 @@ const Login = () => {
 
     if (data.user) {
       setUser(data.user);
+      navigate("/");
     }
   }
 
-  return user ? (
-    <Link to={"/"}>
-      {" "}
-      <button className="btn btn-success mt-24 text-yellow-50">Zum Home</button>
-    </Link>
-  ) : (
+  return (
     <section className="flex flex-col justify-center items-center gap-5 border-solid border-4 rounded-md border-orange-300 p-8 w-fit mx-auto mt-10">
       <label className="input input-bordered flex items-center gap-2">
         <svg
@@ -90,6 +87,7 @@ const Login = () => {
       <Link to={"/signup"} className="btn ">
         Sign Up
       </Link>
+
       {/* <button type="button" className="btn " onClick={handleLogin}>
         Find my Password
       </button> */}

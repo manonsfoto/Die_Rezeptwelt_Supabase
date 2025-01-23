@@ -30,17 +30,25 @@ const Profile = () => {
             <p>
               <strong>Letzter Login:</strong> {user.last_sign_in_at}
             </p>
-            <Link to={"/meine_rezepte"}>
-              {" "}
-              <button className="btn btn-success mt-24 text-yellow-50">
-                Meine Rezepte 💖
-              </button>
-            </Link>
+            <div className="flex justify-between">
+              <Link to={"/meine_rezepte"}>
+                {" "}
+                <button className="btn btn-success mt-24 text-yellow-50">
+                  Meine Rezepte 💖
+                </button>
+              </Link>
+              <Link to={"/create_recipe"}>
+                {" "}
+                <button className="btn btn-info mt-24 text-yellow-50">
+                  Create New Recipe
+                </button>
+              </Link>
+            </div>
           </div>
         </section>
       ) : (
         <Link to={"/login"} className="btn btn-secondary  mt-24 ">
-          Zum Log-In
+          Zum Login
         </Link>
       )}
     </>

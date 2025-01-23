@@ -153,7 +153,7 @@ const Details = () => {
         </>
       ) : (
         <Link to={"/login"} className="btn btn-secondary  mt-24 ">
-          Zum Log-In
+          Zum Login
         </Link>
       )}
     </>
