@@ -4,9 +4,9 @@ import { supabase } from "../utils/supabaseClient";
 
 const CreateRecipe = () => {
   const nameRef = useRef<HTMLInputElement>(null!);
-  const descriptionRef = useRef<HTMLInputElement>(null!);
+  const descriptionRef = useRef<HTMLTextAreaElement>(null!);
   const servingsRef = useRef<HTMLSelectElement>(null!);
-  const instructionsRef = useRef<HTMLInputElement>(null!);
+  const instructionsRef = useRef<HTMLTextAreaElement>(null!);
   const categoryIdRef = useRef<HTMLSelectElement>(null!);
   const imageUrlRef = useRef<HTMLInputElement>(null!);
   const ratingRef = useRef<string | null>(null!);
@@ -22,6 +22,16 @@ const CreateRecipe = () => {
     const categoryIdValue = categoryIdRef.current?.value;
     const imageUrlValue = imageUrlRef.current?.value;
     const ratingValue = ratingRef.current;
+
+    const instructionsArr = instructionsValue.split(/([.!?])\s*/);
+    const processedInstructions = instructionsArr
+      .map((sentence, index) => {
+        if (index % 2 === 0 && sentence.trim() !== "") {
+          return sentence.trim() + ";";
+        }
+        return sentence;
+      })
+      .join(" ");
 
     if (
       !nameValue ||
@@ -50,7 +60,7 @@ const CreateRecipe = () => {
       name: nameValue,
       description: descriptionValue,
       servings: Number(servingsValue),
-      instructions: instructionsValue,
+      instructions: processedInstructions,
       category_id: categoryIdValue,
       imageUrl: imageUrlValue,
       rating: Number(ratingValue),
@@ -69,7 +79,6 @@ const CreateRecipe = () => {
       servingsRef.current.value = "";
       instructionsRef.current.value = "";
       categoryIdRef.current.value = "";
-      imageUrlRef.current.value = "";
     }
     if (data) {
       setError("");
@@ -79,7 +88,6 @@ const CreateRecipe = () => {
       servingsRef.current.value = "";
       instructionsRef.current.value = "";
       categoryIdRef.current.value = "";
-      imageUrlRef.current.value = "";
     }
   }
 
@@ -95,7 +103,7 @@ const CreateRecipe = () => {
       >
         Create New Recipe
       </h1>
-      <label className="input input-bordered flex items-center gap-2">
+      <label className="max-w-xs input input-bordered flex items-center gap-2">
         <input
           ref={nameRef}
           name="RecipeName"
@@ -104,19 +112,30 @@ const CreateRecipe = () => {
           placeholder="Recipe Name"
         />
       </label>
-      <label className="input input-bordered flex items-center gap-2">
-        <input
+      <label className="form-control max-w-xs ">
+        <textarea
           ref={descriptionRef}
-          type="text"
+          className="textarea textarea-bordered h-24"
           name="Description"
           placeholder="Description"
-          className="grow"
-        />
+        ></textarea>
       </label>
+      <label className="form-control max-w-xs ">
+        <textarea
+          ref={instructionsRef}
+          className="textarea textarea-bordered h-44"
+          name="Instructions"
+          placeholder="Instructions z.B, 
+          Mehl, Milch und Eier verrühren.
+          In einer Pfanne etwas Butter erhitzen.
+          Teig portionsweise goldbraun braten."
+        ></textarea>
+      </label>
+
       <select
         ref={servingsRef}
         name="servings"
-        className="select select-bordered w-full max-w-xs"
+        className="select select-bordered  max-w-xs"
         defaultValue=""
       >
         <option value={""}>Servings</option>
@@ -126,20 +145,10 @@ const CreateRecipe = () => {
         <option value={4}>4 Servings</option>
         <option value={5}>5 Servings</option>
       </select>
-
-      <label className="input input-bordered flex items-center gap-2">
-        <input
-          ref={instructionsRef}
-          type="text"
-          name="Instructions"
-          className="grow"
-          placeholder="Instructions"
-        />
-      </label>
       <select
         ref={categoryIdRef}
         name="categoryId"
-        className="select select-bordered w-full max-w-xs"
+        className="select select-bordered  max-w-xs"
         defaultValue=""
       >
         <option value={""}>Category</option>
@@ -156,8 +165,7 @@ const CreateRecipe = () => {
         </option>
         <option value={"933f18c3-052b-4989-9f74-4d692fda1473"}>Dessert</option>
       </select>
-
-      <div className="rating">
+      <div className="rating mt-4">
         <p className="mr-8">Rating</p>
         {[1, 2, 3, 4, 5].map((value) => (
           <input
@@ -170,7 +178,7 @@ const CreateRecipe = () => {
           />
         ))}
       </div>
-      <label className="form-control w-full max-w-xs">
+      <label className="form-control  max-w-xs">
         <div className="label">
           <span className="label-text">
             Pick a image file for the new recipe
@@ -178,16 +186,24 @@ const CreateRecipe = () => {
         </div>
         <input
           type="file"
-          className="file-input file-input-bordered w-full max-w-xs"
+          className="file-input file-input-bordered  max-w-xs"
         />
       </label>
       <button
         type="button"
-        className="btn btn-accent mt-6"
+        className="btn btn-accent mt-6 max-w-xs"
         onClick={createNewRecipe}
       >
         Create New Recipe🪄
       </button>
+      <div className="max-w-xs">
+        {error.length > 0 && (
+          <p className="text-red-600 text-center">🚨{error}</p>
+        )}
+        {success.length > 0 && (
+          <p className="text-green-900 text-center">{success}</p>
+        )}
+      </div>
     </section>
   );
 };

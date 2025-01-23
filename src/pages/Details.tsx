@@ -141,7 +141,7 @@ const Details = () => {
                     ))}
                   </ul>
                   <h3 className="text-2xl font-semibold">Zubereitung</h3>
-                  <ol>
+                  <ol className="list-decimal">
                     {singleRecipe?.instructions.split(";").map((item) => (
                       <li key={item}>{item}</li>
                     ))}
