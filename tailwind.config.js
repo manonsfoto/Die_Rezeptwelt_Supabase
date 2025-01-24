@@ -6,6 +6,12 @@ export default {
       minHeight: {
         128: "38rem",
       },
+      width: {
+        130: "43rem",
+      },
+      height: {
+        100: "28rem",
+      },
     },
   },
   plugins: [require("daisyui")],

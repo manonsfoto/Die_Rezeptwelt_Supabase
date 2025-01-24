@@ -10,6 +10,7 @@ import { supabase } from "../utils/supabaseClient";
 
 import Hero from "../components/Hero";
 import ZumLogin from "../components/ZumLogin";
+import LoaderTopRecipes from "../components/loader/LoaderTopRecipes";
 
 const SearchResult = () => {
   const { user } = useContext(UserContext);
@@ -56,7 +57,7 @@ const SearchResult = () => {
       <section className="flex flex-col justify-center items-center">
         <h1 className="font-bold text-3xl	my-20 ">Search Results</h1>
         {loading ? (
-          <p>Loading...</p>
+          <LoaderTopRecipes />
         ) : recipes.length > 0 ? (
           <ul className="flex flex-row gap-4 flex-wrap justify-center items-center">
             {recipes.map((recipe) => (

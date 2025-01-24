@@ -5,6 +5,7 @@ import { InsertRecipeFavorites, JoinedRecipe } from "../utils/types";
 import Hero from "../components/Hero";
 import { UserContext } from "../context/Context";
 import ZumLogin from "../components/ZumLogin";
+import LoaderDetails from "../components/loader/LoaderDetails";
 
 const Details = () => {
   const { recipe_id } = useParams<{ recipe_id: string }>();
@@ -109,7 +110,7 @@ const Details = () => {
         <>
           {" "}
           {loading ? (
-            <p>Loading...</p>
+            <LoaderDetails />
           ) : (
             <>
               {" "}

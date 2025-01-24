@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { supabase } from "../utils/supabaseClient";
 import TopCard from "./card/TopCard";
 import { Recipe } from "../utils/types";
+import LoaderTopRecipes from "./loader/LoaderTopRecipes";
 
 const TopRecipes = () => {
   const [recipes, setRecipes] = useState<Recipe[]>([]);
@@ -36,7 +37,7 @@ const TopRecipes = () => {
     <section className="flex flex-col justify-center items-center">
       <h1 className="font-bold text-3xl	my-12 ">Die beliebtesten Rezepte</h1>
       {loading ? (
-        <p>Loading...</p>
+        <LoaderTopRecipes />
       ) : (
         <ul className="flex flex-row gap-4 flex-wrap justify-center items-center">
           {recipes.map((recipe) => (

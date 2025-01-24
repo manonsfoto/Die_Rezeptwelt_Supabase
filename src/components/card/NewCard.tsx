@@ -14,7 +14,7 @@ const NewCard: FC<NewCardProps> = ({ recipe }) => {
           <img className=" h-full" src={recipe.imageUrl} alt={recipe.name} />
         )}
       </figure>
-      <div className="card-body">
+      <div className="card-body ">
         <h2 className="card-title">{recipe.name}</h2>
         <p>{recipe.description}</p>
         <div className="card-actions justify-start">
