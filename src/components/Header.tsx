@@ -123,7 +123,7 @@ const Header = () => {
                   type="text"
                   name="searchInput"
                   placeholder="Search"
-                  className="input input-bordered w-24 md:w-auto"
+                  className="input input-bordered "
                 />
 
                 <Link to={"/results"}>
