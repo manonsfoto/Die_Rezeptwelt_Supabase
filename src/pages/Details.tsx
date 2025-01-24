@@ -1,9 +1,10 @@
-import { Link, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import { useContext, useEffect, useState } from "react";
 import { supabase } from "../utils/supabaseClient";
 import { InsertRecipeFavorites, JoinedRecipe } from "../utils/types";
 import Hero from "../components/Hero";
 import { UserContext } from "../context/Context";
+import ZumLogin from "../components/ZumLogin";
 
 const Details = () => {
   const { recipe_id } = useParams<{ recipe_id: string }>();
@@ -152,20 +153,7 @@ const Details = () => {
           )}
         </>
       ) : (
-        <>
-          {" "}
-          <Hero
-            text={
-              "Lassen Sie sich inspirieren, kochen Sie mit Leidenschaft und erleben Sie unvergessliche Momente bei Tisch."
-            }
-            imgUrl={
-              "https://images.unsplash.com/photo-1577308856961-8e9ec50d0c67?q=80&w=1470&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
-            }
-          />
-          <Link to={"/login"} className="btn btn-secondary  mt-24 ">
-            Zum Login
-          </Link>
-        </>
+        <ZumLogin />
       )}
     </>
   );

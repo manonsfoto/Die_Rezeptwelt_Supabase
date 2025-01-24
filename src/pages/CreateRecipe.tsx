@@ -18,7 +18,7 @@ const CreateRecipe = () => {
   const [error, setError] = useState<string>("");
   const [uploadSuccess, setUploadSuccess] = useState<string>("");
   const [uploadError, setUploadError] = useState<string>("");
-  const [imageUrl, setImageUrl] = useState<string>("");
+  const imageUrlRef = useRef<string | null>(null!);
   const { user } = useContext(UserContext);
 
   async function createNewRecipe() {
@@ -68,7 +68,7 @@ const CreateRecipe = () => {
       servings: Number(servingsValue),
       instructions: processedInstructions,
       category_id: categoryIdValue,
-      imageUrl: imageUrl,
+      imageUrl: imageUrlRef.current,
       rating: Number(ratingValue),
     };
 
@@ -127,7 +127,7 @@ const CreateRecipe = () => {
             .getPublicUrl(data.path);
 
           if (publicURL) {
-            setImageUrl(publicURL.publicUrl);
+            imageUrlRef.current = publicURL.publicUrl;
           }
         }
         if (error) {
@@ -152,7 +152,7 @@ const CreateRecipe = () => {
       .remove([imageFileNameForRemoveRef.current]);
     if (data) {
       setUploadSuccess("");
-      setImageUrl("");
+      imageUrlRef.current = "";
     }
     if (error) {
       setUploadSuccess("");
