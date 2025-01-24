@@ -114,7 +114,7 @@ const Details = () => {
             <>
               {" "}
               <Hero text={singleRecipe?.name} imgUrl={singleRecipe?.imageUrl} />
-              <section className="flex flex-col justify-center items-center">
+              <section className="flex flex-col justify-center items-center max-w-lg">
                 <article className="flex flex-col gap-7 mt-12">
                   <div className="flex">
                     <h1 className="text-4xl font-bold">{singleRecipe?.name}</h1>{" "}
