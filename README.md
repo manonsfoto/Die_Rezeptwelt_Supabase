@@ -1,7 +1,6 @@
 # Rezeptwelt with Supabase
 
 [Hier kannst du die Live-Demo ansehen](https://rezept-supabase.netlify.app/)
-![Untitled design](https://github.com/user-attachments/assets/195f48b9-814e-4814-be41-84146cec6173)
 
 ## Projektvorschau
 
