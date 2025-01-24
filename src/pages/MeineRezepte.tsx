@@ -4,6 +4,7 @@ import { Recipe } from "../utils/types";
 import { UserContext } from "../context/Context";
 import NewCard from "../components/card/NewCard";
 import { Link } from "react-router-dom";
+import Hero from "../components/Hero";
 
 const MeineRezepte = () => {
   const [favoriteRecipes, setFavoriteRecipes] = useState<Recipe[]>([]);
@@ -33,33 +34,55 @@ const MeineRezepte = () => {
   return (
     <>
       {user ? (
-        <section className="flex flex-col justify-center items-center mb-16">
-          <h1 className="font-bold text-3xl	my-12 ">Meine Rezepte 🥰</h1>
-          {favoriteRecipes.length > 0 ? (
-            <ul className="flex flex-col gap-4 flex-wrap">
-              {favoriteRecipes.map((recipe) => (
-                <li key={recipe.id}>
-                  <NewCard recipe={recipe} />
-                </li>
-              ))}
-            </ul>
-          ) : (
-            <div className="flex flex-col justify-center items-center gap-4 mt-8">
-              {" "}
-              <p className="text-2xl font-bold text-gray-600">
-                No favorite Recipes found
-              </p>
-              <p className="texl-xl text-gray-400">
-                When you click a 🩶 button on detailed recipes, it will appear
-                here.
-              </p>
-            </div>
-          )}
-        </section>
+        <>
+          {" "}
+          <Hero
+            text={
+              "Lassen Sie sich inspirieren, kochen Sie mit Leidenschaft und erleben Sie unvergessliche Momente bei Tisch."
+            }
+            imgUrl={
+              "https://images.unsplash.com/photo-1577308856961-8e9ec50d0c67?q=80&w=1470&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+            }
+          />
+          <section className="flex flex-col justify-center items-center mb-16">
+            <h1 className="font-bold text-3xl	my-12 ">Meine Rezepte 🥰</h1>
+            {favoriteRecipes.length > 0 ? (
+              <ul className="flex flex-col gap-4 flex-wrap">
+                {favoriteRecipes.map((recipe) => (
+                  <li key={recipe.id}>
+                    <NewCard recipe={recipe} />
+                  </li>
+                ))}
+              </ul>
+            ) : (
+              <div className="flex flex-col justify-center items-center gap-4 mt-8">
+                {" "}
+                <p className="text-2xl font-bold text-gray-600">
+                  No favorite Recipes found
+                </p>
+                <p className="texl-xl text-gray-400">
+                  When you click a 🩶 button on detailed recipes, it will appear
+                  here.
+                </p>
+              </div>
+            )}
+          </section>
+        </>
       ) : (
-        <Link to={"/login"} className="btn btn-secondary  mt-24 ">
-          Zum Login
-        </Link>
+        <>
+          {" "}
+          <Hero
+            text={
+              "Lassen Sie sich inspirieren, kochen Sie mit Leidenschaft und erleben Sie unvergessliche Momente bei Tisch."
+            }
+            imgUrl={
+              "https://images.unsplash.com/photo-1577308856961-8e9ec50d0c67?q=80&w=1470&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+            }
+          />
+          <Link to={"/login"} className="btn btn-secondary  mt-24 ">
+            Zum Login
+          </Link>
+        </>
       )}
     </>
   );
