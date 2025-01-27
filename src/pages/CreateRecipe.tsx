@@ -289,7 +289,7 @@ const CreateRecipe = () => {
               </p>{" "}
               <button
                 type="button"
-                className="btn btn-neutral mt-6 max-w-xs "
+                className="btn btn-neutral max-w-xs "
                 onClick={changeImgFile}
               >
                 Change File

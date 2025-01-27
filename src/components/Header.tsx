@@ -63,9 +63,17 @@ const Header = () => {
                 <NavLink to={"about"}>Über uns</NavLink>
               </li>
               {user && (
-                <li>
-                  <NavLink to={"profile"}>Profile</NavLink>
-                </li>
+                <>
+                  <li>
+                    <NavLink to={"profile"}>Profile</NavLink>
+                  </li>
+                  <li>
+                    <NavLink to={"meine_rezepte"}>Meine Rezepte💖</NavLink>
+                  </li>
+                  <li>
+                    <NavLink to={"create_recipe"}>Create New Recipe</NavLink>
+                  </li>
+                </>
               )}
             </ul>
           </div>
