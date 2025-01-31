@@ -6,6 +6,7 @@ import Hero from "../components/Hero";
 import { UserContext } from "../context/Context";
 import ZumLogin from "../components/ZumLogin";
 import LoaderDetails from "../components/loader/LoaderDetails";
+import { Tables } from "../utils/supabaseDatabase";
 
 const Details = () => {
   const { recipe_id } = useParams<{ recipe_id: string }>();
@@ -27,7 +28,7 @@ const Details = () => {
             categories(name),
             recipes_ingredients(
               quantity,
-              ingredients(name, unit, additional_info)
+              ingredients(id,name, unit, additional_info)
             )`
           )
           .eq("id", `${recipe_id && recipe_id}`)
@@ -104,7 +105,65 @@ const Details = () => {
     checkIsMarkedforFavorites();
   }
 
-  async function handleAddMyGroceryList() {}
+  async function handleAddMyGroceryList(
+    item: Pick<
+      {
+        ingredient_id: string;
+        quantity: number | null;
+        recipe_id: string;
+      },
+      "quantity"
+    > & {
+      ingredients: Pick<
+        Tables<"ingredients">,
+        "id" | "name" | "unit" | "additional_info"
+      >;
+    }
+  ) {
+    if (!user) return;
+
+    const { data, error } = await supabase
+      .from("grocerylists")
+      .select()
+      .eq("user_id", user.id);
+
+    if (error) {
+      console.error(error);
+    }
+    if (!data) return;
+    if (data?.length > 0) {
+      const { error } = await supabase.from("grocerylist_ingredients").insert({
+        grocerylist_id: data[0].id,
+        user_id: user.id,
+        ingredient_id: item.ingredients.id,
+      });
+
+      if (error) {
+        console.error(error);
+      }
+    } else {
+      const { error } = await supabase
+        .from("grocerylists")
+        .insert({ user_id: user.id });
+
+      if (error) {
+        console.error(error);
+
+        const { error: addIngredientError } = await supabase
+          .from("grocerylist_ingredients")
+          .insert({
+            grocerylist_id: data[0].id,
+            user_id: user.id,
+            ingredient_id: item.ingredients.id,
+          });
+        if (addIngredientError) {
+          console.error(addIngredientError);
+        }
+      }
+    }
+
+    console.log("grocerylist", data);
+  }
 
   return (
     <>
@@ -145,7 +204,7 @@ const Details = () => {
                         <button
                           title="Zur Einkaufsliste hinzufügen"
                           type="button"
-                          onClick={handleAddMyGroceryList}
+                          onClick={() => handleAddMyGroceryList(item)}
                         >
                           📋
                         </button>

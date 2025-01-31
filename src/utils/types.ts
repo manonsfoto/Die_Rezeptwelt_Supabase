@@ -7,7 +7,7 @@ export type JoinedRecipe = Tables<"recipes"> & {
   recipes_ingredients: (Pick<Tables<"recipes_ingredients">, "quantity"> & {
     ingredients: Pick<
       Tables<"ingredients">,
-      "name" | "unit" | "additional_info"
+      "id" | "name" | "unit" | "additional_info"
     >;
   })[];
 };
@@ -16,3 +16,5 @@ export type InsertRecipeFavorites = Pick<
   Tables<"recipe_favorites">,
   "user_id" | "recipe_id"
 >;
+
+export type GroceryList = Tables<"grocerylists">;
