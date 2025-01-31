@@ -1,9 +1,13 @@
 import { useParams } from "react-router-dom";
 import { useContext, useEffect, useState } from "react";
 import { supabase } from "../utils/supabaseClient";
-import { InsertRecipeFavorites, JoinedRecipe } from "../utils/types";
+import {
+  GroceryItem,
+  InsertRecipeFavorites,
+  JoinedRecipe,
+} from "../utils/types";
 import Hero from "../components/Hero";
-import { UserContext } from "../context/Context";
+import { RefreshGroceryListContext, UserContext } from "../context/Context";
 import ZumLogin from "../components/ZumLogin";
 import LoaderDetails from "../components/loader/LoaderDetails";
 import { Tables } from "../utils/supabaseDatabase";
@@ -14,6 +18,7 @@ const Details = () => {
   const [singleRecipe, setSingleRecipes] = useState<JoinedRecipe | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const { user } = useContext(UserContext);
+  const { setRefreshGroceryList } = useContext(RefreshGroceryListContext);
 
   const [isMarked, setIsMarked] = useState<boolean>(false);
 
@@ -105,21 +110,7 @@ const Details = () => {
     checkIsMarkedforFavorites();
   }
 
-  async function handleAddMyGroceryList(
-    item: Pick<
-      {
-        ingredient_id: string;
-        quantity: number | null;
-        recipe_id: string;
-      },
-      "quantity"
-    > & {
-      ingredients: Pick<
-        Tables<"ingredients">,
-        "id" | "name" | "unit" | "additional_info"
-      >;
-    }
-  ) {
+  async function handleAddMyGroceryList(item: GroceryItem) {
     if (!user) return;
 
     const { data, error } = await supabase
@@ -162,7 +153,7 @@ const Details = () => {
       }
     }
 
-    console.log("grocerylist", data);
+    setRefreshGroceryList((prev) => !prev);
   }
 
   return (

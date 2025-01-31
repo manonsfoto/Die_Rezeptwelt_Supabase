@@ -25,3 +25,10 @@ interface IGroceryListContext {
   setGroceryList: React.Dispatch<React.SetStateAction<GroceryList[] | null>>;
 }
 export const GroceryListContext = createContext<IGroceryListContext>(null!);
+
+interface IRefreshGroceryListContext {
+  refreshGroceryList: boolean;
+  setRefreshGroceryList: React.Dispatch<React.SetStateAction<boolean>>;
+}
+export const RefreshGroceryListContext =
+  createContext<IRefreshGroceryListContext>(null!);
