@@ -1,5 +1,6 @@
 import { User } from "@supabase/supabase-js";
 import { createContext } from "react";
+import { GroceryList } from "../utils/types";
 
 interface ISearchInputContext {
   searchInput: string;
@@ -18,3 +19,9 @@ interface IUserContext {
   setUser: React.Dispatch<React.SetStateAction<User | null>>;
 }
 export const UserContext = createContext<IUserContext>(null!);
+
+interface IGroceryListContext {
+  groceryList: GroceryList[] | null;
+  setGroceryList: React.Dispatch<React.SetStateAction<GroceryList[] | null>>;
+}
+export const GroceryListContext = createContext<IGroceryListContext>(null!);

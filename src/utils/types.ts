@@ -17,4 +17,6 @@ export type InsertRecipeFavorites = Pick<
   "user_id" | "recipe_id"
 >;
 
-export type GroceryList = Tables<"grocerylists">;
+export type GroceryList = Tables<"grocerylist_ingredients"> & {
+  ingredients: Pick<Tables<"ingredients">, "name" | "unit">;
+};
