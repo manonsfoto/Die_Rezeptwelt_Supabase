@@ -10,7 +10,6 @@ import Hero from "../components/Hero";
 import { RefreshGroceryListContext, UserContext } from "../context/Context";
 import ZumLogin from "../components/ZumLogin";
 import LoaderDetails from "../components/loader/LoaderDetails";
-import { Tables } from "../utils/supabaseDatabase";
 
 const Details = () => {
   const { recipe_id } = useParams<{ recipe_id: string }>();

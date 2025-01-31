@@ -1,9 +1,43 @@
-import { useContext } from "react";
+import { useContext, useRef } from "react";
 import Hero from "../components/Hero";
-import { GroceryListContext } from "../context/Context";
+import {
+  GroceryListContext,
+  RefreshGroceryListContext,
+} from "../context/Context";
+import { supabase } from "../utils/supabaseClient";
 
 const MyGroceryList = () => {
   const { groceryList } = useContext(GroceryListContext);
+  const { setRefreshGroceryList } = useContext(RefreshGroceryListContext);
+  const quantityInputRef = useRef<HTMLInputElement>(null!);
+
+  async function handleDeleteGroceryItem(ingredient_id: string) {
+    await supabase
+      .from("grocerylist_ingredients")
+      .delete()
+      .eq("ingredient_id", ingredient_id);
+    setRefreshGroceryList((prev) => !prev);
+  }
+
+  async function handleQuantityChangeButton(ingredient_id: string) {
+    try {
+      const { error } = await supabase
+        .from("grocerylist_ingredients")
+        .update({ quantity: Number(quantityInputRef.current?.value) })
+        .eq("ingredient_id", ingredient_id);
+
+      console.log("quantityInputRef", Number(quantityInputRef.current?.value));
+      if (error) {
+        throw new Error();
+      }
+    } catch (error) {
+      console.error(error);
+    } finally {
+      quantityInputRef.current.value = "";
+      setRefreshGroceryList((prev) => !prev);
+    }
+  }
+
   return (
     <>
       {" "}
@@ -22,15 +56,18 @@ const MyGroceryList = () => {
         >
           Meine Einkaufsliste
         </h1>
-        <ul></ul>
-        <div className="overflow-x-auto">
+
+        <div className="overflow-x-auto min-h-128">
           <table className="table">
-            {/* head */}
             <thead>
-              <tr>
+              <tr className="text-xl">
                 <th>
                   <label>
-                    <input type="checkbox" className="checkbox" />
+                    <input
+                      type="checkbox"
+                      name="checkbox-top"
+                      className="checkbox"
+                    />
                   </label>
                 </th>
                 <th>Artikelname</th>
@@ -40,33 +77,92 @@ const MyGroceryList = () => {
               </tr>
             </thead>
             <tbody>
-              {/* row 1 */}
-
               {groceryList?.map((item) => (
-                <tr key={item.ingredient_id}>
+                <tr key={item.ingredient_id} className="text-lg">
                   <th>
                     <label>
-                      <input type="checkbox" className="checkbox" />
+                      <input
+                        type="checkbox"
+                        name={`checkbox${item.ingredient_id}`}
+                        className="checkbox"
+                      />
                     </label>
                   </th>
                   <td>
                     <div className="flex items-center gap-3">
                       <div>
-                        <div className="font-bold">{item.ingredients.name}</div>
+                        <div className="font-bold ">
+                          {item.ingredients.name}
+                        </div>
                       </div>
                     </div>
                   </td>
-                  <td>{item.quantity}</td>
-                  <td>{item.ingredients.unit}</td>
+                  <td>
+                    {item.quantity}{" "}
+                    <div className="dropdown dropdown-bottom">
+                      <div
+                        tabIndex={0}
+                        role="button"
+                        className="btn btn-ghost btn-xs m-1"
+                      >
+                        edit
+                      </div>
+                      <div
+                        tabIndex={0}
+                        className="dropdown-content menu bg-base-200 rounded-box z-[1] w-24 p-2 shadow  gap-2"
+                      >
+                        <input
+                          ref={quantityInputRef}
+                          type="number"
+                          name={`quantityInput${item.ingredient_id}`}
+                          min={1}
+                          placeholder="200"
+                          className="input input-bordered input-xs w-full text-xs "
+                        />
+
+                        <button
+                          type="button"
+                          className="btn btn-active  btn-xs"
+                          onClick={() => {
+                            handleQuantityChangeButton(item.ingredient_id);
+                          }}
+                        >
+                          Change
+                        </button>
+                      </div>
+                    </div>
+                  </td>
+                  <td className="text-sm">{item.ingredients.unit}</td>
                   <th>
-                    <button className="btn btn-ghost btn-xs">edit</button>
+                    <button
+                      className="btn btn-square btn-sm"
+                      title="delete"
+                      onClick={() => {
+                        handleDeleteGroceryItem(item.ingredient_id);
+                      }}
+                    >
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        className="h-4 w-4"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke="currentColor"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth="2"
+                          d="M6 18L18 6M6 6l12 12"
+                        />
+                      </svg>
+                    </button>
                   </th>
                 </tr>
               ))}
             </tbody>
-            {/* foot */}
+
             <tfoot>
-              <tr>
+              <tr className="text-xl">
                 <th></th>
                 <th>Artikelname</th>
                 <th>Menge</th>
