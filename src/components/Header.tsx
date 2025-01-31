@@ -7,6 +7,7 @@ import {
   UserContext,
 } from "../context/Context";
 import { supabase } from "../utils/supabaseClient";
+import ListIcon from "../assets/SVG/ListIcon";
 
 const Header = () => {
   const { user, setUser } = useContext(UserContext);
@@ -102,7 +103,6 @@ const Header = () => {
           </ul>
         </div>
         <div className="navbar-end">
-          {/*  */}
           <div className="dropdown dropdown-end">
             <button tabIndex={0} className="btn btn-ghost btn-circle">
               <svg
@@ -147,20 +147,51 @@ const Header = () => {
               </div>
             </div>
           </div>
-          {/*  */}
 
           {user ? (
-            <div className="flex gap-4 items-center justify-center">
-              <p>
-                Hallo, <strong>{user.user_metadata.first_name}</strong>
-              </p>{" "}
-              <button
-                onClick={handleLogOutButton}
-                className="btn btn-secondary"
-              >
-                Logout
-              </button>
-            </div>
+            <>
+              <div className="flex gap-4 items-center justify-center">
+                {/*my grocery list  */}
+                <div className="dropdown dropdown-end">
+                  <div
+                    tabIndex={0}
+                    role="button"
+                    className="btn btn-ghost btn-circle"
+                  >
+                    <div className="indicator flex">
+                      <ListIcon />
+                      <span className="badge badge-sm indicator-item">8</span>
+                    </div>
+                  </div>
+                  <div
+                    tabIndex={0}
+                    className="card card-compact dropdown-content bg-base-100 z-[1] mt-3 w-52 shadow"
+                  >
+                    <div className="card-body">
+                      <span className="text-lg font-bold">8 Items</span>
+                      <span className="text-info">Subtotal: $999</span>
+
+                      <Link to={"/my_grocery_list"}>
+                        {" "}
+                        <button className="btn btn-accent btn-block">
+                          Zur Einkaufsliste
+                        </button>
+                      </Link>
+                    </div>
+                  </div>
+                </div>
+                {/* my grocery list */}
+                <p>
+                  Hallo, <strong>{user.user_metadata.first_name}</strong>
+                </p>{" "}
+                <button
+                  onClick={handleLogOutButton}
+                  className="btn btn-secondary"
+                >
+                  Logout
+                </button>
+              </div>
+            </>
           ) : (
             <Link to={"/login"} className="btn btn-accent">
               Login

@@ -104,6 +104,8 @@ const Details = () => {
     checkIsMarkedforFavorites();
   }
 
+  async function handleAddMyGroceryList() {}
+
   return (
     <>
       {user ? (
@@ -122,6 +124,7 @@ const Details = () => {
                     <button
                       className="text-3xl"
                       type="button"
+                      title="Zu meinen Rezepten hinzufügen"
                       onClick={handleFavoritesBtn}
                     >
                       {isMarked ? "💖" : "🩶"}
@@ -138,7 +141,14 @@ const Details = () => {
                       <li key={item.ingredients.name}>
                         {item.ingredients.name} {item.quantity}{" "}
                         {item.ingredients.unit} (
-                        {item.ingredients.additional_info})
+                        {item.ingredients.additional_info}){" "}
+                        <button
+                          title="Zur Einkaufsliste hinzufügen"
+                          type="button"
+                          onClick={handleAddMyGroceryList}
+                        >
+                          📋
+                        </button>
                       </li>
                     ))}
                   </ul>

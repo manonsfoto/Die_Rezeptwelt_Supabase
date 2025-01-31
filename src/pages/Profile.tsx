@@ -52,7 +52,7 @@ const Profile = () => {
                 <Link to={"/create_recipe"}>
                   {" "}
                   <button className="btn btn-info mt-24 text-yellow-50">
-                    Create New Recipe
+                    Create New Recipe 📝
                   </button>
                 </Link>
               </div>

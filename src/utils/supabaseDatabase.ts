@@ -52,6 +52,63 @@ export type Database = {
         };
         Relationships: [];
       };
+      grocerylist_ingredients: {
+        Row: {
+          created_at: string;
+          grocerylist_id: string;
+          ingredient_id: string;
+          quantity: number;
+          user_id: string;
+        };
+        Insert: {
+          created_at?: string;
+          grocerylist_id: string;
+          ingredient_id: string;
+          quantity?: number;
+          user_id: string;
+        };
+        Update: {
+          created_at?: string;
+          grocerylist_id?: string;
+          ingredient_id?: string;
+          quantity?: number;
+          user_id?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: "grocerylist_ingredients_grocerylist_id_fkey";
+            columns: ["grocerylist_id"];
+            isOneToOne: false;
+            referencedRelation: "grocerylists";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "grocerylist_ingredients_ingredient_id_fkey";
+            columns: ["ingredient_id"];
+            isOneToOne: false;
+            referencedRelation: "ingredients";
+            referencedColumns: ["id"];
+          }
+        ];
+      };
+      grocerylists: {
+        Row: {
+          created_at: string;
+          id: string;
+          user_id: string;
+        };
+        Insert: {
+          created_at?: string;
+          id?: string;
+          user_id: string;
+        };
+        Update: {
+          created_at?: string;
+          id?: string;
+          user_id?: string;
+        };
+        Relationships: [];
+      };
       ingredients: {
         Row: {
           additional_info: string | null;
