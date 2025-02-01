@@ -1,4 +1,4 @@
-import { useContext, useRef } from "react";
+import { useContext, useState } from "react";
 import Hero from "../components/Hero";
 import {
   GroceryListContext,
@@ -9,7 +9,9 @@ import { supabase } from "../utils/supabaseClient";
 const MyGroceryList = () => {
   const { groceryList } = useContext(GroceryListContext);
   const { setRefreshGroceryList } = useContext(RefreshGroceryListContext);
-  const quantityInputRef = useRef<HTMLInputElement>(null!);
+  const [quantityInputs, setQuantityInputs] = useState<{
+    [key: string]: number;
+  }>({});
 
   async function handleDeleteGroceryItem(ingredient_id: string) {
     await supabase
@@ -23,20 +25,26 @@ const MyGroceryList = () => {
     try {
       const { error } = await supabase
         .from("grocerylist_ingredients")
-        .update({ quantity: Number(quantityInputRef.current?.value) })
+        .update({ quantity: quantityInputs[ingredient_id] })
         .eq("ingredient_id", ingredient_id);
 
-      console.log("quantityInputRef", Number(quantityInputRef.current?.value));
+      console.log("quantityInput", quantityInputs[ingredient_id]);
       if (error) {
         throw new Error();
       }
     } catch (error) {
       console.error(error);
     } finally {
-      quantityInputRef.current.value = "";
       setRefreshGroceryList((prev) => !prev);
     }
   }
+
+  const handleInputChange = (ingredient_id: string, value: number) => {
+    setQuantityInputs((prev) => ({
+      ...prev,
+      [ingredient_id]: value,
+    }));
+  };
 
   return (
     <>
@@ -112,10 +120,16 @@ const MyGroceryList = () => {
                         className="dropdown-content menu bg-base-200 rounded-box z-[1] w-24 p-2 shadow  gap-2"
                       >
                         <input
-                          ref={quantityInputRef}
                           type="number"
                           name={`quantityInput${item.ingredient_id}`}
                           min={1}
+                          value={quantityInputs[item.ingredient_id] || ""}
+                          onChange={(e) =>
+                            handleInputChange(
+                              item.ingredient_id,
+                              Number(e.target.value)
+                            )
+                          }
                           placeholder="200"
                           className="input input-bordered input-xs w-full text-xs "
                         />
