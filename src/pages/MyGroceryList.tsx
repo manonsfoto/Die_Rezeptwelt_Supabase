@@ -57,7 +57,16 @@ const MyGroceryList = () => {
       console.error("Error", error);
     }
   }
+  async function emptyGroceryList() {
+    if (groceryList) {
+      await supabase
+        .from("grocerylist_ingredients")
+        .delete()
+        .eq("grocerylist_id", groceryList[0].grocerylist_id);
 
+      setRefreshGroceryList((prev) => !prev);
+    }
+  }
   return (
     <>
       {" "}
@@ -76,7 +85,12 @@ const MyGroceryList = () => {
         >
           Meine Einkaufsliste
         </h1>
-
+        <button
+          onClick={emptyGroceryList}
+          className="btn btn-xs sm:btn-sm md:btn-md lg:btn-lg btn-outline btn-warning w-fit self-end"
+        >
+          Liste leeren 🗑️
+        </button>
         <div className="overflow-x-auto min-h-128">
           <table className="table">
             <thead>
