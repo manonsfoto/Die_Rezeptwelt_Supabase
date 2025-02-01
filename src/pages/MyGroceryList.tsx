@@ -1,10 +1,11 @@
-import { useContext, useState } from "react";
+import { ChangeEvent, useContext, useState } from "react";
 import Hero from "../components/Hero";
 import {
   GroceryListContext,
   RefreshGroceryListContext,
 } from "../context/Context";
 import { supabase } from "../utils/supabaseClient";
+import { GroceryList } from "../utils/types";
 
 const MyGroceryList = () => {
   const { groceryList } = useContext(GroceryListContext);
@@ -46,6 +47,17 @@ const MyGroceryList = () => {
     }));
   };
 
+  async function changeCheckbox(item: GroceryList, completed: boolean) {
+    const { error } = await supabase
+      .from("grocerylist_ingredients")
+      .update({ completed: completed })
+      .eq("ingredient_id", item.ingredient_id);
+    setRefreshGroceryList((prev) => !prev);
+    if (error) {
+      console.error("Error", error);
+    }
+  }
+
   return (
     <>
       {" "}
@@ -69,15 +81,7 @@ const MyGroceryList = () => {
           <table className="table">
             <thead>
               <tr className="text-xl">
-                <th>
-                  <label>
-                    <input
-                      type="checkbox"
-                      name="checkbox-top"
-                      className="checkbox"
-                    />
-                  </label>
-                </th>
+                <th></th>
                 <th>Artikelname</th>
                 <th>Menge</th>
                 <th>Einheit</th>
@@ -93,6 +97,10 @@ const MyGroceryList = () => {
                         type="checkbox"
                         name={`checkbox${item.ingredient_id}`}
                         className="checkbox"
+                        checked={item.completed}
+                        onChange={(e: ChangeEvent<HTMLInputElement>) => {
+                          changeCheckbox(item, e.target.checked);
+                        }}
                       />
                     </label>
                   </th>
