@@ -28,6 +28,14 @@
 ![6NewRecipeResult](https://github.com/user-attachments/assets/696d8b46-85b5-4072-8263-092f49ac093f)
 
 
+### Add ingredient to grocery list
+![Add_to_grocerylist](https://github.com/user-attachments/assets/71d68294-7710-41da-a2a3-98331eb4ffea)
+
+
+### My grocery list/ Meine Einkaufsliste
+![Grocerylist_details](https://github.com/user-attachments/assets/5e9df302-5ccd-43c6-b953-120e9d447e4d)
+
+
 ### Dropdown Navigation and Logout
 ![7DropdownMenu_Logout](https://github.com/user-attachments/assets/4dd5a591-dbea-404b-bc0b-b4dd4e7f85e7)
 
