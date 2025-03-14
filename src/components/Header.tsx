@@ -81,8 +81,8 @@ const Header = () => {
             </ul>
           </div>
 
-          <Link to={"/"} className="btn btn-ghost text-xl hidden lg:flex">
-            <LogoIcon />
+          <Link to={"/"} className="btn btn-ghost  hidden lg:flex">
+            <p className="font-gaegu text-3xl tracking-tight">Die Rezeptwelt</p>
           </Link>
         </div>
         <div className="navbar-center hidden lg:flex">

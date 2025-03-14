@@ -23,7 +23,7 @@ const TopCard: FC<TopCardProps> = ({ recipe }) => {
         <div className="pt-6">
           <h2 className="text-3xl font-caprasimo">{recipe.name}</h2>
           <div className="flex items-center justify-between border-b-2 border-black">
-            <p className="h-16 pt-2 font-semibold leading-none ">
+            <p className="h-16 pt-2 pr-5 font-semibold leading-none ">
               {recipe.description}
             </p>
             <p className="border-l-2 border-black h-full p-5 text-xl">🖤</p>
