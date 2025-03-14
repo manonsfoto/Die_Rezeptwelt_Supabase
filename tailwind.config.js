@@ -24,23 +24,24 @@ export default {
     themes: [
       {
         mytheme: {
-          primary: "#becfbb",
+          primary: "#cfdeca",
 
-          secondary: "#d1ccf3",
+          secondary: "#d8dfe9",
 
-          accent: "#caddf4",
+          accent: "#eff0a3",
 
           neutral: "#E7DCC8",
 
           "base-100": "#EDF0EB",
 
-          info: "#a5f3fc",
+          info: "#38bdf8",
 
-          success: "#d9f99d",
+          success: "#10b981",
 
-          warning: "#fef9c3",
+          warning: "#fde68a",
 
-          error: "#fee2e2",
+          error: "#fda4af",
+          black: "#212121",
         },
       },
     ],
