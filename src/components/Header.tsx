@@ -31,8 +31,8 @@ const Header = () => {
   }
 
   return (
-    <header>
-      <nav className="navbar bg-base-100">
+    <header className="px-4">
+      <nav className="navbar bg-base-100 border-b-2 border-black uppercase font-bold">
         <div className="navbar-start">
           <div className="dropdown">
             <div tabIndex={0} role="button" className="btn btn-ghost lg:hidden">
@@ -205,7 +205,10 @@ const Header = () => {
               </div>
             </>
           ) : (
-            <Link to={"/login"} className="btn btn-accent">
+            <Link
+              to={"/login"}
+              className="btn btn-ghost rounded-full  font-bold  border-black border-2 "
+            >
               Login
             </Link>
           )}
