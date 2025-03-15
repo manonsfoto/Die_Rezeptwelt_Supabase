@@ -2,7 +2,8 @@ import { useContext, useRef, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { supabase } from "../utils/supabaseClient";
 import { UserContext } from "../context/Context";
-import Hero from "../components/Hero";
+import EmailIcon from "../assets/SVG/EmailIcon";
+import PasswordIcon from "../assets/SVG/PasswordIcon";
 
 const Login = () => {
   const emailRef = useRef<HTMLInputElement>(null!);
@@ -13,7 +14,8 @@ const Login = () => {
 
   const navigate = useNavigate();
 
-  async function handleLogin() {
+  async function handleLogin(event: React.FormEvent) {
+    event.preventDefault();
     const emailValue = emailRef.current?.value;
     const passwordValue = passwordRef.current?.value;
 
@@ -41,69 +43,65 @@ const Login = () => {
 
   return (
     <>
-      {" "}
-      <Hero
-        text={
-          "Lassen Sie sich inspirieren, kochen Sie mit Leidenschaft und erleben Sie unvergessliche Momente bei Tisch."
-        }
-        imgUrl={
-          "https://images.unsplash.com/photo-1577308856961-8e9ec50d0c67?q=80&w=1470&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
-        }
-      />
-      <section className="flex flex-col justify-center items-center gap-5 border-solid border-4 rounded-md border-orange-300 p-8 w-fit mx-auto my-36">
-        <label className="input input-bordered flex items-center gap-2">
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            viewBox="0 0 16 16"
-            fill="currentColor"
-            className="h-4 w-4 opacity-70"
-          >
-            <path d="M2.5 3A1.5 1.5 0 0 0 1 4.5v.793c.026.009.051.02.076.032L7.674 8.51c.206.1.446.1.652 0l6.598-3.185A.755.755 0 0 1 15 5.293V4.5A1.5 1.5 0 0 0 13.5 3h-11Z" />
-            <path d="M15 6.954 8.978 9.86a2.25 2.25 0 0 1-1.956 0L1 6.954V11.5A1.5 1.5 0 0 0 2.5 13h11a1.5 1.5 0 0 0 1.5-1.5V6.954Z" />
-          </svg>
-          <input
-            ref={emailRef}
-            name="emailInput"
-            type="text"
-            className="grow"
-            placeholder="Email"
-          />
-        </label>
-        <label className="input input-bordered flex items-center gap-2">
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            viewBox="0 0 16 16"
-            fill="currentColor"
-            className="h-4 w-4 opacity-70"
-          >
-            <path
-              fillRule="evenodd"
-              d="M14 6a4 4 0 0 1-4.899 3.899l-1.955 1.955a.5.5 0 0 1-.353.146H5v1.5a.5.5 0 0 1-.5.5h-2a.5.5 0 0 1-.5-.5v-2.293a.5.5 0 0 1 .146-.353l3.955-3.955A4 4 0 1 1 14 6Zm-4-2a.75.75 0 0 0 0 1.5.5.5 0 0 1 .5.5.75.75 0 0 0 1.5 0 2 2 0 0 0-2-2Z"
-              clipRule="evenodd"
-            />
-          </svg>
-          <input
-            ref={passwordRef}
-            type="password"
-            name="password"
-            placeholder="Password"
-            className="grow"
-          />
-        </label>
-
-        <button type="button" className="btn btn-accent" onClick={handleLogin}>
-          Log In
-        </button>
-
-        <Link to={"/signup"} className="btn ">
-          Sign Up
-        </Link>
-
-        {/* <button type="button" className="btn " onClick={handleLogin}>
-        Find my Password
-      </button> */}
-        {error.length > 0 && <p className="text-red-600">🚨{error}</p>}
-      </section>
+      <div className="hero bg-secondary min-h-screen mt-4 rounded-3xl">
+        <div className="card bg-base-100 w-full max-w-sm ">
+          <form className="card-body ">
+            <h1 className="text-3xl  my-12 font-caprasimo">Login</h1>
+            <div className="form-control">
+              <label className="label">
+                <span className="label-text flex items-center gap-2 font-semibold">
+                  <EmailIcon /> Email
+                </span>
+              </label>
+              <input
+                type="email"
+                ref={emailRef}
+                name="emailInput"
+                placeholder="email@rezeptwelt.com"
+                className="input input-bordered"
+                required
+              />
+            </div>
+            <div className="form-control">
+              <label className="label">
+                <span className="label-text flex items-center gap-2 font-semibold ">
+                  <PasswordIcon /> Password
+                </span>
+              </label>
+              <input
+                type="password"
+                ref={passwordRef}
+                name="passwordInput"
+                placeholder="password"
+                className="input input-bordered"
+                required
+              />
+              <label className="label">
+                <p className="label-text-alt link link-hover">
+                  Forgot password?
+                </p>
+              </label>
+            </div>
+            <div className="form-control mt-6">
+              <button
+                className="btn bg-black text-base-100 rounded-full"
+                onClick={handleLogin}
+              >
+                Login
+              </button>
+            </div>{" "}
+            <Link
+              to={"/signup"}
+              className="btn btn-ghost  rounded-full underline "
+            >
+              Sign Up
+            </Link>{" "}
+            {error && (
+              <p className="text-red-500 text-center font-semibold">{error}</p>
+            )}
+          </form>
+        </div>
+      </div>
     </>
   );
 };
