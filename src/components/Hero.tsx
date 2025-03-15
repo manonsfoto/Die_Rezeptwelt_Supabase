@@ -8,7 +8,7 @@ interface HeroProps {
 const Hero: FC<HeroProps> = ({ text, imgUrl }) => {
   return (
     <div
-      className="hero min-h-44 rounded-3xl mt-4 bg-base-100 overflow-hidden"
+      className="hero min-h-44 md:min-h-64 rounded-3xl mt-4 bg-base-100 overflow-hidden"
       style={{
         backgroundImage: `url(${imgUrl})`,
       }}

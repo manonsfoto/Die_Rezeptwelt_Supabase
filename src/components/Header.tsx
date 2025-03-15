@@ -31,7 +31,7 @@ const Header = () => {
   }
 
   return (
-    <header className="px-4">
+    <header className="px-4 sticky top-0 z-50">
       <nav className="navbar bg-base-100 border-b-2 border-black uppercase font-semibold">
         <div className="navbar-start">
           <div className="dropdown">
