@@ -35,7 +35,7 @@ const TopRecipes = () => {
 
   return (
     <section className="flex flex-col justify-center items-center">
-      <h1 className=" text-3xl	my-12 pb-4 font-caprasimo border-b-2 border-black ">
+      <h1 className=" text-3xl w-full my-12 pb-4 font-caprasimo border-b-2 border-black ">
         Die beliebtesten Rezepte
       </h1>
       {loading ? (

@@ -1,57 +1,44 @@
-import Hero from "../components/Hero";
-
 const About = () => {
   return (
-    <>
-      {" "}
-      <Hero
-        text={
-          "Lassen Sie sich inspirieren, kochen Sie mit Leidenschaft und erleben Sie unvergessliche Momente bei Tisch."
-        }
-        imgUrl={
-          "https://images.unsplash.com/photo-1577308856961-8e9ec50d0c67?q=80&w=1470&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
-        }
-      />
-      <article className="  mt-20 p-5">
-        <div className="text-xl max-w-2xl  inline-block items-baseline text-center">
-          <div className="flow-root my-6">
-            Hallo, wir sind Minyeong und Philip und freuen uns, unsere Arbeit
-            auf Rezeptwelt vorstellen zu können. Bei der Erkundung dieser
-            erstaunlichen Website haben wir ein gastronomisches Universum voller
-            köstlicher Rezepte, nützlicher Tipps und kulinarischer Inspiration
-            entdeckt.
-          </div>
-          <div className="flow-root my-6">
-            Rezeptwelt ist ein Ort, an dem sich erfahrene Köche und Kochanfänger
-            in ihrer Leidenschaft für das Essen vereinen können. Was uns
-            besonders begeistert hat, war die Vielfalt der Rezepte. Von
-            traditionellen, gemütlichen Gerichten bis hin zu innovativeren
-            Kreationen gibt es Optionen für jeden Geschmack und jede
-            Gelegenheit.
-          </div>
-          <div className="flow-root my-6">
-            Jedes Rezept wird sorgfältig ausgewählt und getestet, um
-            sicherzustellen, dass die Ergebnisse stets schmackhaft sind und es
-            sich lohnt, sie zu teilen. Neben den Rezepten bietet Rezeptwelt auch
-            nützliche Tipps zur Verbesserung der eigenen Kochkünste. Von
-            Zubereitungstechniken bis hin zu Vorschlägen für
-            Geschmackskombinationen - die Website lädt zum Entdecken und
-            Experimentieren in der Küche ein.
-          </div>
-          <div className="flow-root my-6">
-            Es ist eine gemütliche und integrative Umgebung, in der jeder
-            ermutigt wird, in die Kunst des Kochens einzutauchen und neue
-            Möglichkeiten zu entdecken. Kurz gesagt, Rezeptwelt ist ein
-            inspirierender gastronomischer Raum, der uns einlädt, unsere
-            Leidenschaft für das Kochen zu entdecken, zu kreieren und zu teilen.
-          </div>
-          <div className="flow-root my-6">
-            Wir hoffen, dass unsere Präsentation Ihr Interesse geweckt hat, sich
-            mit uns auf diese köstliche Reise in die Rezeptwelt zu begeben!
-          </div>
+    <section className="max-w-7xl mx-auto  mt-12">
+      <div className="flex flex-col md:flex-row md:gap-12">
+        <article className="text-3xl w-full md:text-6xl">
+          "Rezeptwelt ist mehr als eine Sammlung von Kochanleitungen – es ist
+          ein Ort der Inspiration für Hobbyköche und Profis gleichermaßen."
+        </article>
+        <figure className="w-full rounded-3xl overflow-hidden h-1/4 my-12 md:h-1/2 md:my-0">
+          <img
+            src="https://images.unsplash.com/photo-1675096000167-4b8a276b6187?q=80&w=1974&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+            alt="man holding a dish filled with food"
+            className="w-full h-full object-cover"
+          />
+        </figure>
+      </div>
+      <article className="text-3xl md:text-5xl md:my-12 w-full md:h-[50vh] bg-accent p-4 rounded-3xl font-light relative flex flex-col justify-end">
+        <div className="self-end max-w-2xl">
+          Hier findest du eine bunte Vielfalt an Rezepten: von traditionellen
+          Wohlfühlgerichten bis hin zu kreativen, modernen Kreationen. Jedes
+          Rezept wird sorgfältig ausgewählt und getestet, damit du immer das
+          beste Ergebnis erzielst.
         </div>
-      </article>
-    </>
+      </article>{" "}
+      <div className="flex flex-col md:flex-row md:gap-12 md:my-12">
+        <figure className="w-full rounded-3xl overflow-hidden  my-12  md:my-0">
+          <img
+            src="https://images.unsplash.com/photo-1471478108131-9b2335c21611?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+            alt="a plate with pancakes"
+            className="w-full h-full object-cover"
+          />
+        </figure>
+
+        <article className="text-3xl mt-12 md:mt-0 md:text-5xl md:w-1/2">
+          {" "}
+          Neben Rezepten bieten wir hilfreiche Tipps, Tricks und Inspiration für
+          deine Küche – egal, ob es um die perfekte Zubereitungstechnik oder
+          spannende Geschmackskombinationen geht.
+        </article>
+      </div>
+    </section>
   );
 };
 
