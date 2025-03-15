@@ -9,8 +9,6 @@ import TopCard from "../components/card/TopCard";
 import { supabase } from "../utils/supabaseClient";
 import { useNavigate } from "react-router-dom";
 
-import Hero from "../components/Hero";
-
 import LoaderTopRecipes from "../components/loader/LoaderTopRecipes";
 
 const SearchResult = () => {
@@ -53,16 +51,10 @@ const SearchResult = () => {
   return (
     <>
       {" "}
-      <Hero
-        text={
-          "Lassen Sie sich inspirieren, kochen Sie mit Leidenschaft und erleben Sie unvergessliche Momente bei Tisch."
-        }
-        imgUrl={
-          "https://images.unsplash.com/photo-1577308856961-8e9ec50d0c67?q=80&w=1470&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
-        }
-      />
       <section className="flex flex-col justify-center items-center">
-        <h1 className="font-bold text-3xl	my-20 ">Search Results</h1>
+        <h1 className="text-3xl w-full my-12 pb-4 font-caprasimo border-b-2 border-black">
+          Search Results
+        </h1>
         {loading ? (
           <LoaderTopRecipes />
         ) : recipes.length > 0 ? (

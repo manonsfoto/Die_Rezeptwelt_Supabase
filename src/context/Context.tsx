@@ -32,3 +32,17 @@ interface IRefreshGroceryListContext {
 }
 export const RefreshGroceryListContext =
   createContext<IRefreshGroceryListContext>(null!);
+
+interface ISessionContext {
+  session: {
+    isLoading: boolean;
+    isAuthenticated: boolean;
+  };
+  setSession: React.Dispatch<
+    React.SetStateAction<{
+      isLoading: boolean;
+      isAuthenticated: boolean;
+    }>
+  >;
+}
+export const SessionContext = createContext<ISessionContext>(null!);

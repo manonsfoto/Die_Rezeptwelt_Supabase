@@ -1,6 +1,6 @@
 const Footer = () => {
   return (
-    <footer className="footer footer-center bg-primary text-primary-content p-10">
+    <footer className="footer footer-center bg-primary text-primary-content p-10 rounded-t-3xl">
       <aside>
         <svg
           width="67"

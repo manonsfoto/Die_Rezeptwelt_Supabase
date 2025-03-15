@@ -9,15 +9,15 @@ const HomeHero = () => {
       <div className="hero-overlay bg-black bg-opacity-40"></div>
       <div className="hero-content text-neutral-content text-center">
         <div className="max-w-2xl">
-          <p className="mb-5 text-3xl  font-caprasimo text-base-100">
+          <p className="mb-5 text-3xl md:text-5xl  font-caprasimo text-base-100">
             Lassen Sie sich
             <br />
-            <span className="text-primary font-gaegu font-semibold italic text-5xl">
+            <span className="text-primary font-gaegu font-semibold italic text-5xl md:text-7xl">
               inspirieren
             </span>
             <br />
             und{" "}
-            <span className="text-secondary font-gaegu font-semibold italic text-5xl">
+            <span className="text-secondary font-gaegu font-semibold italic text-5xl md:text-7xl">
               kochen
             </span>{" "}
             Sie
@@ -25,7 +25,6 @@ const HomeHero = () => {
             mit Leidenschaft.
           </p>
         </div>
-       
       </div>
     </div>
   );

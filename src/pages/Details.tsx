@@ -6,8 +6,12 @@ import {
   InsertRecipeFavorites,
   JoinedRecipe,
 } from "../utils/types";
-import Hero from "../components/Hero";
-import { RefreshGroceryListContext, UserContext } from "../context/Context";
+
+import {
+  RefreshGroceryListContext,
+  UserContext,
+  SessionContext,
+} from "../context/Context";
 import LoaderDetails from "../components/loader/LoaderDetails";
 
 const Details = () => {
@@ -16,16 +20,18 @@ const Details = () => {
   const [singleRecipe, setSingleRecipes] = useState<JoinedRecipe | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const { user } = useContext(UserContext);
+  const { session } = useContext(SessionContext);
   const { setRefreshGroceryList } = useContext(RefreshGroceryListContext);
 
   const [isMarked, setIsMarked] = useState<boolean>(false);
 
   useEffect(() => {
-    if (!user) {
+    if (!session.isLoading && !session.isAuthenticated) {
       navigate("/login");
-      return;
     }
+  }, [session, navigate]);
 
+  useEffect(() => {
     const fetchSingleRecipe = async () => {
       setLoading(true);
       try {
@@ -165,48 +171,83 @@ const Details = () => {
         <LoaderDetails />
       ) : (
         <>
-          {" "}
-          <Hero text={singleRecipe?.name} imgUrl={singleRecipe?.imageUrl} />
-          <section className="flex flex-col justify-center items-center max-w-lg px-8">
-            <article className="flex flex-col gap-7 mt-12">
-              <div className="flex">
-                <h1 className="text-4xl font-bold">{singleRecipe?.name}</h1>{" "}
+          <section className="max-w-7xl mx-auto">
+            <div className="flex flex-col md:flex-row md:mt-12 ">
+              <div className="w-full md:border-r-2 border-black md:border-b-2  md:pb-5">
+                <h1 className="text-4xl w-full mt-12 pb-4 font-caprasimo   ">
+                  {singleRecipe?.name}
+                </h1>
+                <p className="w-2/3 text-sm font-semibold leading-none">
+                  {singleRecipe?.description}
+                </p>
+              </div>
+              <div className="border-b-2 border-black flex md:px-5 md:gap-5 items-center justify-between w-full mt-4 md:w-fit md:mt-0 ">
+                <p className="font-semibold w-40">
+                  {singleRecipe?.servings} Servings
+                </p>
+
+                <p className=" font-semibold bg-primary rounded-full px-2 py-1">
+                  {singleRecipe?.categories.name}
+                </p>
+
                 <button
-                  className="text-3xl"
+                  className="border-l-2 border-black h-full p-5 text-xl"
                   type="button"
                   title="Zu meinen Rezepten hinzufügen"
                   onClick={handleFavoritesBtn}
                 >
-                  {isMarked ? "💖" : "🩶"}
+                  {isMarked ? "🖤" : "🩶"}
                 </button>
               </div>
-              <h3 className="text-2xl font-semibold">Kategorie</h3>
-              <p>{singleRecipe?.categories.name}</p>
-              <h3 className="text-2xl font-semibold">Zutaten</h3>
-              <p className="font-semibold">{singleRecipe?.servings} Servings</p>
-              <ul className="list-disc">
-                {singleRecipe?.recipes_ingredients.map((item) => (
-                  <li key={item.ingredients.name}>
-                    {item.ingredients.name} {item.quantity}{" "}
-                    {item.ingredients.unit} ({item.ingredients.additional_info}){" "}
-                    <button
-                      title="Zur Einkaufsliste hinzufügen"
-                      type="button"
-                      onClick={() => handleAddMyGroceryList(item)}
-                    >
-                      📋
-                    </button>
+            </div>
+            {singleRecipe?.imageUrl && (
+              <figure className="w-full rounded-3xl overflow-hidden my-8 ">
+                <img
+                  src={singleRecipe?.imageUrl}
+                  alt={singleRecipe?.name}
+                  className="w-full h-full object-cover"
+                />
+              </figure>
+            )}
+            <h3 className="border-t-2 border-black text-3xl w-full  py-4 font-caprasimo">
+              Zutaten
+            </h3>
+            <ul>
+              {singleRecipe?.recipes_ingredients.map((item) => (
+                <li
+                  key={item.ingredients.name}
+                  className="border-b-2 border-base-300 py-2 flex justify-between items-center md:w-2/3 md:mx-auto"
+                >
+                  <button
+                    title="Zur Einkaufsliste hinzufügen"
+                    type="button"
+                    onClick={() => handleAddMyGroceryList(item)}
+                    className="font-semibold hover:bg-accent rounded-full px-2 py-1"
+                  >
+                    {item.ingredients.name}
+                  </button>{" "}
+                  <p className="font-semibold">
+                    {item.quantity} {item.ingredients.unit}{" "}
+                  </p>
+                </li>
+              ))}
+            </ul>
+            <article className="w-full rounded-3xl pb-8 bg-secondary mt-8">
+              <h3 className=" text-3xl  py-4 font-caprasimo pl-2">
+                Zubereitung
+              </h3>
+              <ol className="list-decimal list-inside">
+                {singleRecipe?.instructions.split(";").map((item) => (
+                  <li
+                    key={item}
+                    className="font-semibold pl-10 border-b-2 border-base-300 py-2 md:w-2/3 md:mx-auto"
+                  >
+                    {item}
                   </li>
                 ))}
-              </ul>
-              <h3 className="text-2xl font-semibold">Zubereitung</h3>
-              <ol className="list-decimal">
-                {singleRecipe?.instructions.split(";").map((item) => (
-                  <li key={item}>{item}</li>
-                ))}
               </ol>
-            </article>{" "}
-          </section>{" "}
+            </article>
+          </section>
         </>
       )}
     </>
