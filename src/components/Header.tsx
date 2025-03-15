@@ -1,5 +1,5 @@
 import { Link, NavLink } from "react-router-dom";
-import LogoIcon from "../assets/SVG/Logo";
+
 import { useContext, useRef } from "react";
 import {
   GroceryListContext,
