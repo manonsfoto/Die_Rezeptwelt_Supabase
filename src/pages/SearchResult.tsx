@@ -7,9 +7,10 @@ import {
 import { Recipe } from "../utils/types";
 import TopCard from "../components/card/TopCard";
 import { supabase } from "../utils/supabaseClient";
+import { useNavigate } from "react-router-dom";
 
 import Hero from "../components/Hero";
-import ZumLogin from "../components/ZumLogin";
+
 import LoaderTopRecipes from "../components/loader/LoaderTopRecipes";
 
 const SearchResult = () => {
@@ -18,8 +19,14 @@ const SearchResult = () => {
   const { refresh } = useContext(RefreshContext);
   const [recipes, setRecipes] = useState<Recipe[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
+  const navigate = useNavigate();
 
   useEffect(() => {
+    if (!user) {
+      navigate("/login");
+      return;
+    }
+
     const getSearchResult = async () => {
       setLoading(true);
       try {
@@ -41,9 +48,9 @@ const SearchResult = () => {
     };
 
     getSearchResult();
-  }, [refresh]);
+  }, [refresh, user]);
 
-  return user ? (
+  return (
     <>
       {" "}
       <Hero
@@ -74,8 +81,6 @@ const SearchResult = () => {
         )}
       </section>
     </>
-  ) : (
-    <ZumLogin />
   );
 };
 

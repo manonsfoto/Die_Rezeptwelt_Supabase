@@ -25,6 +25,7 @@ const HomeHero = () => {
             mit Leidenschaft.
           </p>
         </div>
+       
       </div>
     </div>
   );

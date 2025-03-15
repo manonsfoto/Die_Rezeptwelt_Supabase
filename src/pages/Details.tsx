@@ -1,4 +1,4 @@
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import { useContext, useEffect, useState } from "react";
 import { supabase } from "../utils/supabaseClient";
 import {
@@ -8,12 +8,11 @@ import {
 } from "../utils/types";
 import Hero from "../components/Hero";
 import { RefreshGroceryListContext, UserContext } from "../context/Context";
-import ZumLogin from "../components/ZumLogin";
 import LoaderDetails from "../components/loader/LoaderDetails";
 
 const Details = () => {
   const { recipe_id } = useParams<{ recipe_id: string }>();
-
+  const navigate = useNavigate();
   const [singleRecipe, setSingleRecipes] = useState<JoinedRecipe | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const { user } = useContext(UserContext);
@@ -22,6 +21,11 @@ const Details = () => {
   const [isMarked, setIsMarked] = useState<boolean>(false);
 
   useEffect(() => {
+    if (!user) {
+      navigate("/login");
+      return;
+    }
+
     const fetchSingleRecipe = async () => {
       setLoading(true);
       try {
@@ -157,63 +161,53 @@ const Details = () => {
 
   return (
     <>
-      {user ? (
+      {loading ? (
+        <LoaderDetails />
+      ) : (
         <>
           {" "}
-          {loading ? (
-            <LoaderDetails />
-          ) : (
-            <>
-              {" "}
-              <Hero text={singleRecipe?.name} imgUrl={singleRecipe?.imageUrl} />
-              <section className="flex flex-col justify-center items-center max-w-lg px-8">
-                <article className="flex flex-col gap-7 mt-12">
-                  <div className="flex">
-                    <h1 className="text-4xl font-bold">{singleRecipe?.name}</h1>{" "}
+          <Hero text={singleRecipe?.name} imgUrl={singleRecipe?.imageUrl} />
+          <section className="flex flex-col justify-center items-center max-w-lg px-8">
+            <article className="flex flex-col gap-7 mt-12">
+              <div className="flex">
+                <h1 className="text-4xl font-bold">{singleRecipe?.name}</h1>{" "}
+                <button
+                  className="text-3xl"
+                  type="button"
+                  title="Zu meinen Rezepten hinzufügen"
+                  onClick={handleFavoritesBtn}
+                >
+                  {isMarked ? "💖" : "🩶"}
+                </button>
+              </div>
+              <h3 className="text-2xl font-semibold">Kategorie</h3>
+              <p>{singleRecipe?.categories.name}</p>
+              <h3 className="text-2xl font-semibold">Zutaten</h3>
+              <p className="font-semibold">{singleRecipe?.servings} Servings</p>
+              <ul className="list-disc">
+                {singleRecipe?.recipes_ingredients.map((item) => (
+                  <li key={item.ingredients.name}>
+                    {item.ingredients.name} {item.quantity}{" "}
+                    {item.ingredients.unit} ({item.ingredients.additional_info}){" "}
                     <button
-                      className="text-3xl"
+                      title="Zur Einkaufsliste hinzufügen"
                       type="button"
-                      title="Zu meinen Rezepten hinzufügen"
-                      onClick={handleFavoritesBtn}
+                      onClick={() => handleAddMyGroceryList(item)}
                     >
-                      {isMarked ? "💖" : "🩶"}
+                      📋
                     </button>
-                  </div>
-                  <h3 className="text-2xl font-semibold">Kategorie</h3>
-                  <p>{singleRecipe?.categories.name}</p>
-                  <h3 className="text-2xl font-semibold">Zutaten</h3>
-                  <p className="font-semibold">
-                    {singleRecipe?.servings} Servings
-                  </p>
-                  <ul className="list-disc">
-                    {singleRecipe?.recipes_ingredients.map((item) => (
-                      <li key={item.ingredients.name}>
-                        {item.ingredients.name} {item.quantity}{" "}
-                        {item.ingredients.unit} (
-                        {item.ingredients.additional_info}){" "}
-                        <button
-                          title="Zur Einkaufsliste hinzufügen"
-                          type="button"
-                          onClick={() => handleAddMyGroceryList(item)}
-                        >
-                          📋
-                        </button>
-                      </li>
-                    ))}
-                  </ul>
-                  <h3 className="text-2xl font-semibold">Zubereitung</h3>
-                  <ol className="list-decimal">
-                    {singleRecipe?.instructions.split(";").map((item) => (
-                      <li key={item}>{item}</li>
-                    ))}
-                  </ol>
-                </article>{" "}
-              </section>{" "}
-            </>
-          )}
+                  </li>
+                ))}
+              </ul>
+              <h3 className="text-2xl font-semibold">Zubereitung</h3>
+              <ol className="list-decimal">
+                {singleRecipe?.instructions.split(";").map((item) => (
+                  <li key={item}>{item}</li>
+                ))}
+              </ol>
+            </article>{" "}
+          </section>{" "}
         </>
-      ) : (
-        <ZumLogin />
       )}
     </>
   );
