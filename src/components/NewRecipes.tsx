@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { supabase } from "../utils/supabaseClient";
-import NewCard from "./card/NewCard";
+import TopCard from "./card/TopCard";
 import { Recipe } from "../utils/types";
 import LoaderNewRecipes from "./loader/LoaderNewRecipes";
 
@@ -34,15 +34,17 @@ const NewRecipes = () => {
   }, []);
 
   return (
-    <section className="flex flex-col justify-center items-center my-16">
-      <h1 className="font-bold text-3xl	my-12 ">Neueste Rezepte</h1>
+    <section className="flex flex-col justify-center items-center mt-10 mb-16 ">
+      <h1 className="text-3xl w-full my-12 pb-4 font-caprasimo border-b-2 border-black">
+        Neueste Rezepte
+      </h1>
       {loading ? (
         <LoaderNewRecipes />
       ) : (
-        <ul className="flex flex-col gap-4 flex-wrap">
+        <ul className="flex flex-row gap-4 flex-wrap justify-center items-center">
           {recipes.map((recipe) => (
             <li key={recipe.id}>
-              <NewCard recipe={recipe} />
+              <TopCard recipe={recipe} />
             </li>
           ))}
         </ul>

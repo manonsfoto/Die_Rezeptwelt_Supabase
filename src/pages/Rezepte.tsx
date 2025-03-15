@@ -1,5 +1,5 @@
 import { useContext, useEffect } from "react";
-import Hero from "../components/Hero";
+
 import NewRecipes from "../components/NewRecipes";
 import TopRecipes from "../components/TopRecipes";
 import { UserContext } from "../context/Context";
@@ -13,34 +13,29 @@ const Rezepte = () => {
     if (!user) {
       navigate("/login");
     }
-  }, [user, navigate]);
+  }, [user]);
 
   return (
     <>
-      <Hero
-        text={
-          "Lassen Sie sich inspirieren, kochen Sie mit Leidenschaft und erleben Sie unvergessliche Momente bei Tisch."
-        }
-        imgUrl={
-          "https://images.unsplash.com/photo-1577308856961-8e9ec50d0c67?q=80&w=1470&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
-        }
-      />
-      <div className="flex justify-end gap-6 w-5/6">
-        <Link to={"/meine_rezepte"}>
+      <div className="w-full relative mt-12">
+        <Link to={"/meine_rezepte"} className="w-full">
           {" "}
-          <button className="btn btn-success mt-24 text-yellow-50">
-            Meine Rezepte 💖
-          </button>
+          <div className="flex items-center justify-between pb-8 bg-primary w-full text-2xl   p-4 font-caprasimo  rounded-t-3xl">
+            <p>Meine Rezepte</p>
+            <p>→</p>
+          </div>
         </Link>
-        <Link to={"/create_recipe"}>
+        <Link to={"/create_recipe"} className="w-full">
           {" "}
-          <button className="btn btn-info mt-24 text-yellow-50">
-            Create New Recipe
-          </button>
+          <div className="flex absolute z-10 top-14 items-center  pb-8 justify-between bg-neutral w-full text-2xl   p-4 font-caprasimo  rounded-t-3xl">
+            <p>Create New Recipe</p>
+            <p>→</p>
+          </div>
         </Link>
+        <div className=" absolute z-20 top-28  bg-base-100 w-full    p-4   rounded-t-3xl"></div>
       </div>
-      <TopRecipes />
       <NewRecipes />
+      <TopRecipes />
     </>
   );
 };
