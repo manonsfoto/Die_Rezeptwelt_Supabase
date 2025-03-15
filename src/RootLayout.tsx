@@ -58,7 +58,7 @@ const RootLayout = () => {
                 value={{ searchInput, setSearchInput }}
               >
                 <Header />
-                <main className="flex flex-col  items-center pb-40 min-h-128">
+                <main className="flex flex-col  items-center pb-40 px-4 min-h-128">
                   <Outlet />
                 </main>{" "}
                 <Footer />

@@ -32,7 +32,7 @@ const Header = () => {
 
   return (
     <header className="px-4">
-      <nav className="navbar bg-base-100 border-b-2 border-black uppercase font-bold">
+      <nav className="navbar bg-base-100 border-b-2 border-black uppercase font-semibold">
         <div className="navbar-start">
           <div className="dropdown">
             <div tabIndex={0} role="button" className="btn btn-ghost lg:hidden">
@@ -193,9 +193,7 @@ const Header = () => {
                   </div>
                 </div>
                 {/* my grocery list */}
-                <p>
-                  Hallo, <strong>{user.user_metadata.first_name}</strong>
-                </p>{" "}
+
                 <button
                   onClick={handleLogOutButton}
                   className="btn btn-secondary"
@@ -207,7 +205,7 @@ const Header = () => {
           ) : (
             <Link
               to={"/login"}
-              className="btn btn-ghost rounded-full  font-bold  border-black border-2 "
+              className=" rounded-full  border-black border-1 "
             >
               Login
             </Link>

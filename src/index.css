@@ -3,6 +3,12 @@
 @tailwind utilities;
 
 @layer base {
+  html,
+  body,
+  #root {
+    min-width: 360px;
+  }
+
   @font-face {
     font-family: "Caprasimo";
     src: url("/fonts/Caprasimo-Regular.ttf") format("truetype");
