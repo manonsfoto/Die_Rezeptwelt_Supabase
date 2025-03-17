@@ -42,7 +42,6 @@ const RootLayout = () => {
     }
     getUser();
 
-  
     const { data: authListener } = supabase.auth.onAuthStateChange(
       (event, session) => {
         setUser(session?.user || null);
@@ -53,7 +52,6 @@ const RootLayout = () => {
       }
     );
 
-   
     return () => {
       authListener.subscription.unsubscribe();
     };

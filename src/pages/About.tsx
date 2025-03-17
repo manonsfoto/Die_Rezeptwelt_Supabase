@@ -1,8 +1,8 @@
 const About = () => {
   return (
-    <section className="max-w-7xl mx-auto  mt-12">
+    <section className="md:max-w-7xl   mt-12 w-full ">
       <div className="flex flex-col md:flex-row md:gap-12">
-        <article className="text-3xl w-full md:text-6xl">
+        <article className="text-3xl  md:text-6xl">
           "Rezeptwelt ist mehr als eine Sammlung von Kochanleitungen – es ist
           ein Ort der Inspiration für Hobbyköche und Profis gleichermaßen."
         </article>

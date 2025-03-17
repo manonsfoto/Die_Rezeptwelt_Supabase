@@ -171,7 +171,7 @@ const Details = () => {
         <LoaderDetails />
       ) : (
         <>
-          <section className="max-w-7xl mx-auto">
+          <section className="max-w-7xl ">
             <div className="flex flex-col md:flex-row md:mt-12 ">
               <div className="w-full md:border-r-2 border-black md:border-b-2  md:pb-5">
                 <h1 className="text-4xl w-full mt-12 pb-4 font-caprasimo   ">
@@ -181,7 +181,7 @@ const Details = () => {
                   {singleRecipe?.description}
                 </p>
               </div>
-              <div className="border-b-2 border-black flex md:px-5 md:gap-5 items-center justify-between w-full mt-4 md:w-fit md:mt-0 ">
+              <div className="border-b-2 border-black flex  md:px-5 md:gap-5 items-center justify-between w-full mt-4 md:w-fit md:mt-0 ">
                 <p className="font-semibold w-40">
                   {singleRecipe?.servings} Servings
                 </p>

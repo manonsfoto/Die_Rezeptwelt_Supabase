@@ -27,7 +27,7 @@ const TopCard: FC<TopCardProps> = ({ recipe }) => {
         </Link>
         <div className="flex items-center justify-between border-b-2 border-black">
           <Link to={`/details/${recipe.id}`}>
-            <p className="h-16 flex items-center pr-5 font-semibold leading-none ">
+            <p className=" h-16 flex items-center pr-5 font-semibold leading-none ">
               {recipe.description}
             </p>
           </Link>
