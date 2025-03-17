@@ -2,9 +2,8 @@ import { useContext, useEffect, useState } from "react";
 import { supabase } from "../utils/supabaseClient";
 import { Recipe } from "../utils/types";
 import { UserContext } from "../context/Context";
-import NewCard from "../components/card/NewCard";
 import { useNavigate } from "react-router-dom";
-import Hero from "../components/Hero";
+import TopCard from "../components/card/TopCard";
 
 const MeineRezepte = () => {
   const [favoriteRecipes, setFavoriteRecipes] = useState<Recipe[]>([]);
@@ -38,21 +37,15 @@ const MeineRezepte = () => {
 
   return (
     <>
-      <Hero
-        text={
-          "Lassen Sie sich inspirieren, kochen Sie mit Leidenschaft und erleben Sie unvergessliche Momente bei Tisch."
-        }
-        imgUrl={
-          "https://images.unsplash.com/photo-1577308856961-8e9ec50d0c67?q=80&w=1470&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
-        }
-      />
       <section className="flex flex-col justify-center items-center mb-16">
-        <h1 className="font-bold text-3xl	my-12 ">Meine Rezepte 🥰</h1>
+        <h1 className="text-3xl w-full my-12 pb-4 font-caprasimo border-b-2 border-black">
+          Meine Rezepte
+        </h1>
         {favoriteRecipes.length > 0 ? (
           <ul className="flex flex-col gap-4 flex-wrap min-h-96">
             {favoriteRecipes.map((recipe) => (
               <li key={recipe.id}>
-                <NewCard recipe={recipe} />
+                <TopCard recipe={recipe} />
               </li>
             ))}
           </ul>

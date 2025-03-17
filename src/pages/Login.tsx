@@ -45,7 +45,7 @@ const Login = () => {
     <>
       <div className="hero bg-secondary min-h-screen mt-4 rounded-3xl">
         <div className="card bg-base-100 w-full max-w-sm ">
-          <form className="card-body ">
+          <form className="card-body">
             <h1 className="text-3xl  my-12 font-caprasimo">Login</h1>
             <div className="form-control">
               <label className="label">

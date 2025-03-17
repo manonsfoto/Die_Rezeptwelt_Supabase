@@ -171,7 +171,7 @@ const Details = () => {
         <LoaderDetails />
       ) : (
         <>
-          <section className="max-w-7xl ">
+          <section className="md:max-w-7xl  w-full">
             <div className="flex flex-col md:flex-row md:mt-12 ">
               <div className="w-full md:border-r-2 border-black md:border-b-2  md:pb-5">
                 <h1 className="text-4xl w-full mt-12 pb-4 font-caprasimo   ">

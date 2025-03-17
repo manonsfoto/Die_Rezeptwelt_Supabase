@@ -1,5 +1,5 @@
 import { ChangeEvent, useContext, useState } from "react";
-import Hero from "../components/Hero";
+
 import {
   GroceryListContext,
   RefreshGroceryListContext,
@@ -70,21 +70,8 @@ const MyGroceryList = () => {
   return (
     <>
       {" "}
-      <Hero
-        text={
-          "Lassen Sie sich inspirieren, kochen Sie mit Leidenschaft und erleben Sie unvergessliche Momente bei Tisch."
-        }
-        imgUrl={
-          "https://images.unsplash.com/photo-1577308856961-8e9ec50d0c67?q=80&w=1470&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
-        }
-      />
-      <section className="flex flex-col gap-4 mt-20">
-        <h1
-          className="text-3xl text-center font-bold
-      mb-6"
-        >
-          Meine Einkaufsliste
-        </h1>
+      <section className="w-full gap-4 mt-4">
+        <h1 className="text-3xl  my-12 font-caprasimo">Meine Einkaufsliste</h1>
         <button
           onClick={emptyGroceryList}
           className="btn btn-xs sm:btn-sm md:btn-md lg:btn-lg btn-outline btn-warning w-fit self-end"
