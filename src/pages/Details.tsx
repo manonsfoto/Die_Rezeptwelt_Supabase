@@ -172,7 +172,7 @@ const Details = () => {
       ) : (
         <>
           <section className="md:max-w-7xl  w-full">
-            <div className="flex flex-col md:flex-row md:mt-12 ">
+            <div className="flex flex-col md:flex-row  ">
               <div className="w-full md:border-r-2 border-black md:border-b-2  md:pb-5">
                 <h1 className="text-4xl w-full mt-12 pb-4 font-caprasimo   ">
                   {singleRecipe?.name}
@@ -181,7 +181,7 @@ const Details = () => {
                   {singleRecipe?.description}
                 </p>
               </div>
-              <div className="border-b-2 border-black flex  md:px-5 md:gap-5 items-center justify-between w-full mt-4 md:w-fit md:mt-0 ">
+              <div className="border-b-2 border-black flex md:h-fit md:self-end md:px-5 md:gap-5 items-center justify-between w-full mt-4 md:w-fit md:mt-0 ">
                 <p className="font-semibold w-40">
                   {singleRecipe?.servings} Servings
                 </p>
@@ -191,7 +191,7 @@ const Details = () => {
                 </p>
 
                 <button
-                  className="border-l-2 border-black h-full p-5 text-xl"
+                  className="border-l-2 border-black h-full  p-5 text-xl "
                   type="button"
                   title="Zu meinen Rezepten hinzufügen"
                   onClick={handleFavoritesBtn}
@@ -216,7 +216,7 @@ const Details = () => {
               {singleRecipe?.recipes_ingredients.map((item) => (
                 <li
                   key={item.ingredients.name}
-                  className="border-b-2 border-base-300 py-2 flex justify-between items-center md:w-2/3 md:mx-auto"
+                  className="border-b-2 border-base-300 py-2 flex justify-between items-center  md:w-1/2 md:mx-auto"
                 >
                   <button
                     title="Zur Einkaufsliste hinzufügen"
@@ -240,7 +240,7 @@ const Details = () => {
                 {singleRecipe?.instructions.split(";").map((item) => (
                   <li
                     key={item}
-                    className="font-semibold pl-10 border-b-2 border-base-300 py-2 md:w-2/3 md:mx-auto"
+                    className="font-semibold pl-10 border-b-2 border-base-300 py-2 md:w-1/2 md:mx-auto"
                   >
                     {item}
                   </li>

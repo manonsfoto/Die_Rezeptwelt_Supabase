@@ -1,6 +1,6 @@
 import { useContext, useRef, useState, useEffect } from "react";
 import { supabase } from "../utils/supabaseClient";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { UserContext } from "../context/Context";
 
 type TUser = {
@@ -165,12 +165,17 @@ const Signup = () => {
 
             <button
               type="button"
-              className="btn bg-black text-base-100 rounded-full mt-6"
+              className="btn bg-black hover:text-black text-base-100 rounded-full mt-6"
               onClick={register}
             >
               Registrieren
             </button>
-
+            <Link
+              to={"/login"}
+              className="btn btn-ghost hover:bg-transparent hover:text-info rounded-full underline "
+            >
+             Schon registriert? Zum Login 
+            </Link>
             {error.length > 0 && (
               <p className="text-red-500 text-center font-semibold">
                 🚨{error}

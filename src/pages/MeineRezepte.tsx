@@ -4,6 +4,7 @@ import { Recipe } from "../utils/types";
 import { UserContext } from "../context/Context";
 import { useNavigate } from "react-router-dom";
 import TopCard from "../components/card/TopCard";
+import EmptyHero from "../components/EmptyHero";
 
 const MeineRezepte = () => {
   const [favoriteRecipes, setFavoriteRecipes] = useState<Recipe[]>([]);
@@ -37,12 +38,12 @@ const MeineRezepte = () => {
 
   return (
     <>
-      <section className="flex flex-col justify-center items-center mb-16">
+      <section className="flex flex-col justify-center items-center mb-16 w-full">
         <h1 className="text-3xl w-full my-12 pb-4 font-caprasimo border-b-2 border-black">
           Meine Rezepte
         </h1>
         {favoriteRecipes.length > 0 ? (
-          <ul className="flex flex-col gap-4 flex-wrap min-h-96">
+          <ul className="flex flex-col gap-4 flex-wrap min-h-screen md:flex-row">
             {favoriteRecipes.map((recipe) => (
               <li key={recipe.id}>
                 <TopCard recipe={recipe} />
@@ -50,16 +51,7 @@ const MeineRezepte = () => {
             ))}
           </ul>
         ) : (
-          <div className="flex flex-col justify-center items-center gap-4 my-36">
-            {" "}
-            <p className="text-2xl font-bold text-gray-600">
-              No favorite Recipes found
-            </p>
-            <p className="texl-xl text-gray-400">
-              When you click a 🩶 button on detailed recipes, it will appear
-              here.
-            </p>
-          </div>
+          <EmptyHero mainText="No favorite Recipes found" subText="When you click a 🩶 button on detailed recipes, it will appear here." />
         )}
       </section>
     </>

@@ -162,24 +162,24 @@ const CreateRecipe = () => {
 
   return (
     <>
-      <section className="w-full bg-secondary min-h-screen mt-4 rounded-3xl">
-        <div className="card bg-base-100 w-full ">
-          <form className="flex flex-col gap-4">
-            <h1 className="text-3xl  my-12 font-caprasimo">
+      <section className="hero bg-secondary min-h-screen mt-4 rounded-3xl ">
+        <div className="card bg-base-100  max-w-sm ">
+          <form className="card-body ">
+            <h1 className="text-3xl  my-12 font-caprasimo text-center">
               Create New Recipe
             </h1>
 
-            <label className="max-w-xs input input-bordered flex items-center gap-2">
+            <label className="form-control font-semibold ">
               <input
                 ref={nameRef}
                 name="RecipeName"
                 type="text"
-                className="grow"
+                className="input input-bordered"
                 placeholder="Recipe Name"
               />
             </label>
 
-            <label className="form-control max-w-xs ">
+            <label className="form-control font-semibold ">
               <textarea
                 ref={descriptionRef}
                 className="textarea textarea-bordered h-24"
@@ -187,7 +187,7 @@ const CreateRecipe = () => {
                 placeholder="Description"
               ></textarea>
             </label>
-            <label className="form-control max-w-xs ">
+            <label className="form-control font-semibold">
               <textarea
                 ref={instructionsRef}
                 className="textarea textarea-bordered h-44"
@@ -202,7 +202,7 @@ const CreateRecipe = () => {
             <select
               ref={servingsRef}
               name="servings"
-              className="select select-bordered  max-w-xs"
+              className="select select-bordered font-semibold "
               defaultValue=""
             >
               <option value={""}>Servings</option>
@@ -215,7 +215,7 @@ const CreateRecipe = () => {
             <select
               ref={categoryIdRef}
               name="categoryId"
-              className="select select-bordered  max-w-xs"
+              className="select select-bordered font-semibold "
               defaultValue=""
             >
               <option value={""}>Category</option>
@@ -239,7 +239,7 @@ const CreateRecipe = () => {
               </option>
             </select>
             <div className="rating mt-4">
-              <p className="mr-8">Rating</p>
+              <p className="mr-8 font-semibold">Rating</p>
               {[1, 2, 3, 4, 5].map((value) => (
                 <input
                   key={value}
@@ -251,39 +251,39 @@ const CreateRecipe = () => {
                 />
               ))}
             </div>
-            <label className="form-control  max-w-xs">
+            <label className="form-control font-semibold">
               <div className="label">
                 <span className="label-text">
                   Upload an image file for the new recipe
                 </span>
-              </div>
-              <div className="flex gap-6 justify-start items-center">
-                <input
-                  type="file"
-                  ref={imageFileRef}
-                  className="file-input file-input-bordered min-w-full "
-                />
                 <button
                   type="button"
-                  className="btn btn-neutral max-w-xs"
+                  className="btn btn-neutral max-w-xs rounded-full"
                   onClick={uploadImgFile}
                 >
                   Upload
                 </button>
               </div>
+              <input
+                type="file"
+                ref={imageFileRef}
+                className="file-input file-input-bordered min-w-full "
+              />
             </label>
             <div>
               {uploadError.length > 0 && (
-                <p className="text-red-600 text-center">🚨{uploadError}</p>
+                <p className="text-red-500 text-center font-semibold">
+                  🚨{uploadError}
+                </p>
               )}
               {uploadSuccess.length > 0 && (
                 <div className="flex gap-6 items-center">
-                  <p className="text-green-900 text-center max-w-xs ">
+                  <p className="text-green-900 text-center font-semibold max-w-xs ">
                     {uploadSuccess}
                   </p>{" "}
                   <button
                     type="button"
-                    className="btn btn-neutral max-w-xs "
+                    className="btn btn-neutral max-w-xs rounded-full"
                     onClick={changeImgFile}
                   >
                     Change File
@@ -293,17 +293,21 @@ const CreateRecipe = () => {
             </div>
             <button
               type="button"
-              className="btn btn-accent mt-6 max-w-xs"
+              className="btn bg-black hover:text-black text-base-100 rounded-full mt-6"
               onClick={createNewRecipe}
             >
-              Save New Recipe🪄
+              Save New Recipe
             </button>
             <div className="max-w-xs">
               {error.length > 0 && (
-                <p className="text-red-600 text-center">🚨{error}</p>
+                <p className="text-red-500 text-center font-semibold">
+                  🚨{error}
+                </p>
               )}
               {success.length > 0 && (
-                <p className="text-green-900 text-center">{success}</p>
+                <p className="text-green-900 text-center font-semibold">
+                  {success}
+                </p>
               )}
             </div>
           </form>

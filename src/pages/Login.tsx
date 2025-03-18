@@ -84,7 +84,7 @@ const Login = () => {
             </div>
             <div className="form-control mt-6">
               <button
-                className="btn bg-black text-base-100 rounded-full"
+                className="btn bg-black hover:text-black text-base-100 rounded-full"
                 onClick={handleLogin}
               >
                 Login
@@ -92,9 +92,9 @@ const Login = () => {
             </div>{" "}
             <Link
               to={"/signup"}
-              className="btn btn-ghost  rounded-full underline "
+              className="btn btn-ghost hover:bg-transparent hover:text-info rounded-full underline "
             >
-              Sign Up
+              Noch kein Konto? Jetzt registrieren
             </Link>{" "}
             {error && (
               <p className="text-red-500 text-center font-semibold">{error}</p>
