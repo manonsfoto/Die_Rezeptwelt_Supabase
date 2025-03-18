@@ -5,12 +5,13 @@ import {
   UserContext,
 } from "../context/Context";
 import { Recipe } from "../utils/types";
-import TopCard from "../components/card/TopCard";
+
 import { supabase } from "../utils/supabaseClient";
 import { useNavigate } from "react-router-dom";
 
 import LoaderTopRecipes from "../components/loader/LoaderTopRecipes";
 import EmptyHero from "../components/EmptyHero";
+import TopCard from "../components/TopCard";
 
 const SearchResult = () => {
   const { user } = useContext(UserContext);

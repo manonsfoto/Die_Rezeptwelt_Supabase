@@ -1,6 +1,7 @@
 import { FC } from "react";
 import { Link } from "react-router-dom";
-import { Recipe } from "../../utils/types";
+import { Recipe } from "../utils/types";
+import HeartIcon from "../assets/SVG/HeartIcon";
 
 interface TopCardProps {
   recipe: Recipe;
@@ -31,7 +32,9 @@ const TopCard: FC<TopCardProps> = ({ recipe }) => {
               {recipe.description}
             </p>
           </Link>
-          <p className="border-l-2 border-black h-full p-5 text-xl">🖤</p>
+          <div className="border-l-2 border-black h-full p-5 ">
+            <HeartIcon />
+          </div>
         </div>
         <p className="font-gaegu absolute top-3 right-3 text-xl font-bold w-14 h-14 -rotate-12 bg-accent text-center flex items-center justify-center rounded-full">
           {recipe.rating}/5

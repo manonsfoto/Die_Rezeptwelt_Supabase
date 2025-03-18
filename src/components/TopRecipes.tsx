@@ -1,8 +1,9 @@
 import { useState, useEffect } from "react";
 import { supabase } from "../utils/supabaseClient";
-import TopCard from "./card/TopCard";
+
 import { Recipe } from "../utils/types";
 import LoaderTopRecipes from "./loader/LoaderTopRecipes";
+import TopCard from "./TopCard";
 
 const TopRecipes = () => {
   const [recipes, setRecipes] = useState<Recipe[]>([]);

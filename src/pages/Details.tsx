@@ -13,6 +13,8 @@ import {
   SessionContext,
 } from "../context/Context";
 import LoaderDetails from "../components/loader/LoaderDetails";
+import HeartIcon from "../assets/SVG/HeartIcon";
+import ArrowIcon from "../assets/SVG/ArrowIcon";
 
 const Details = () => {
   const { recipe_id } = useParams<{ recipe_id: string }>();
@@ -173,8 +175,16 @@ const Details = () => {
         <>
           <section className="md:max-w-7xl  w-full">
             <div className="flex flex-col md:flex-row  ">
-              <div className="w-full md:border-r-2 border-black md:border-b-2  md:pb-5">
-                <h1 className="text-4xl w-full mt-12 pb-4 font-caprasimo   ">
+              <div className="w-full md:border-r-2 border-black md:border-b-2 pt-5 md:py-5">
+                <button
+                  onClick={() => navigate(-1)}
+                  className="hover:opacity-70 transition-opacity mb-4"
+                  aria-label="Zurück zur vorherigen Seite"
+                  title="Zurück"
+                >
+                  <ArrowIcon />
+                </button>
+                <h1 className="text-2xl md:text-4xl w-full mt-12 pb-4 font-caprasimo    ">
                   {singleRecipe?.name}
                 </h1>
                 <p className="w-2/3 text-sm font-semibold leading-none">
@@ -196,7 +206,7 @@ const Details = () => {
                   title="Zu meinen Rezepten hinzufügen"
                   onClick={handleFavoritesBtn}
                 >
-                  {isMarked ? "🖤" : "🩶"}
+                  <HeartIcon isFilled={isMarked} />
                 </button>
               </div>
             </div>
@@ -209,7 +219,7 @@ const Details = () => {
                 />
               </figure>
             )}
-            <h3 className="border-t-2 border-black text-3xl w-full  py-4 font-caprasimo">
+            <h3 className="border-t-2 border-black text-2xl w-full  py-4 font-caprasimo">
               Zutaten
             </h3>
             <ul>
@@ -233,7 +243,7 @@ const Details = () => {
               ))}
             </ul>
             <article className="w-full rounded-3xl pb-8 bg-secondary mt-8">
-              <h3 className=" text-3xl  py-4 font-caprasimo pl-2">
+              <h3 className=" text-2xl  py-4 font-caprasimo pl-2">
                 Zubereitung
               </h3>
               <ol className="list-decimal list-inside">

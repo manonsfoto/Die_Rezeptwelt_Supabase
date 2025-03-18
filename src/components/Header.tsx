@@ -9,6 +9,9 @@ import {
 } from "../context/Context";
 import { supabase } from "../utils/supabaseClient";
 import ListIcon from "../assets/SVG/ListIcon";
+import LogoutIcon from "../assets/SVG/LogoutIcon";
+import SearchIcon from "../assets/SVG/SearchIcon";
+import MenuIcon from "../assets/SVG/MenuIcon";
 
 const Header = () => {
   const { user, setUser } = useContext(UserContext);
@@ -32,35 +35,26 @@ const Header = () => {
 
   return (
     <header className="px-4 sticky top-0 z-50  bg-base-100">
-      <nav className="navbar  border-b-2 border-black uppercase font-semibold">
+      <nav className="navbar px-0  border-b-2 border-black uppercase font-semibold">
         <div className="navbar-start">
           <div className="dropdown">
-            <div tabIndex={0} role="button" className="btn btn-ghost lg:hidden">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                className="h-5 w-5"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth="2"
-                  d="M4 6h16M4 12h8m-8 6h16"
-                />
-              </svg>
+            <div
+              tabIndex={0}
+              role="button"
+              className="btn btn-ghost btn-circle lg:hidden"
+            >
+              <MenuIcon />
             </div>
             <ul
               tabIndex={0}
-              className="menu menu-sm dropdown-content bg-base-100 rounded-box z-[1] mt-3 w-52 p-2 shadow"
+              className="menu menu-sm dropdown-content bg-primary rounded-box z-[1] mt-3 w-52 p-2 shadow"
             >
               <li>
                 <NavLink to={"/"}>Home</NavLink>
               </li>
 
               <li>
-                <NavLink to={"rezepte"}> Rezepte</NavLink>
+                <NavLink to={"rezepte"}>Rezepte</NavLink>
               </li>
               <li>
                 <NavLink to={"about"}>Über uns</NavLink>
@@ -68,64 +62,84 @@ const Header = () => {
               {user && (
                 <>
                   <li>
-                    <NavLink to={"profile"}>Profile</NavLink>
+                    <NavLink to={"profile"}>Profil</NavLink>
                   </li>
                   <li>
-                    <NavLink to={"meine_rezepte"}>Meine Rezepte💖</NavLink>
-                  </li>
-                  <li>
-                    <NavLink to={"create_recipe"}>Create New Recipe</NavLink>
+                    <NavLink to={"meine_rezepte"}>Meine Rezepte</NavLink>
                   </li>
                 </>
               )}
             </ul>
           </div>
 
-          <Link to={"/"} className="btn btn-ghost  hidden lg:flex">
+          <Link to={"/"} className="hover:text-info hidden lg:flex">
             <p className="font-gaegu text-3xl tracking-tight">Die Rezeptwelt</p>
           </Link>
         </div>
         <div className="navbar-center hidden lg:flex">
-          <ul className="menu menu-horizontal px-1">
+          <ul className="flex gap-4  px-1">
             <li>
-              <NavLink to={"/"}>Home</NavLink>
+              <NavLink
+                to={"/"}
+                className={({ isActive }) =>
+                  isActive ? "border-2 rounded-full border-black px-2" : "px-2"
+                }
+              >
+                Home
+              </NavLink>
             </li>
 
             <li>
-              <NavLink to={"rezepte"}> Rezepte</NavLink>
+              <NavLink
+                to={"rezepte"}
+                className={({ isActive }) =>
+                  isActive ? "border-2 rounded-full border-black px-2" : "px-2"
+                }
+              >
+                Rezepte
+              </NavLink>
             </li>
             <li>
-              <NavLink to={"about"}>Über uns</NavLink>
+              <NavLink
+                to={"about"}
+                className={({ isActive }) =>
+                  isActive ? "border-2 rounded-full border-black px-2" : "px-2"
+                }
+              >
+                Über uns
+              </NavLink>
             </li>
             {user && (
               <li>
-                <NavLink to={"profile"}>Profile</NavLink>
+                <NavLink
+                  to={"profile"}
+                  className={({ isActive }) =>
+                    isActive
+                      ? "border-2 rounded-full border-black px-2"
+                      : "px-2"
+                  }
+                >
+                  Profil
+                </NavLink>
               </li>
             )}
           </ul>
         </div>
         <div className="navbar-end">
           <div className="dropdown dropdown-end">
-            <button tabIndex={0} className="btn btn-ghost btn-circle">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                className="h-5 w-5"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth="2"
-                  d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
-                />
-              </svg>
+            <button
+              tabIndex={0}
+              className="btn btn-circle btn-ghost mr-4"
+              title="Suche"
+            >
+              <SearchIcon />
             </button>
 
             <div
               tabIndex={0}
-              className="card card-compact dropdown-content bg-base-100 z-[1] mt-3 w-52 shadow"
+              className={`card card-compact dropdown-content bg-secondary z-[1] mt-3 w-52 shadow ${
+                user ? "-left-10" : ""
+              }`}
             >
               <div className="card-body">
                 <input
@@ -133,14 +147,14 @@ const Header = () => {
                   type="text"
                   name="searchInput"
                   placeholder="Search"
-                  className="input input-bordered "
+                  className="input input-bordered rounded-full "
                 />
 
                 <Link to={"/results"}>
                   {" "}
                   <button
                     type="button"
-                    className="btn btn-primary btn-block"
+                    className="btn bg-black hover:text-black text-base-100 btn-block rounded-full"
                     onClick={handleSearchButton}
                   >
                     Search
@@ -158,6 +172,7 @@ const Header = () => {
                   <div
                     tabIndex={0}
                     role="button"
+                    title="Einkaufsliste"
                     className="btn btn-ghost btn-circle"
                   >
                     <div className="indicator flex">
@@ -169,15 +184,15 @@ const Header = () => {
                   </div>
                   <div
                     tabIndex={0}
-                    className="card card-compact dropdown-content bg-base-100 z-[1] mt-3 w-52 shadow"
+                    className="card card-compact dropdown-content bg-primary z-[1] mt-3 w-52 shadow"
                   >
                     <div className="card-body">
                       <span className="text-lg font-bold">
                         {groceryList?.length} Items
                       </span>
-                      <ul>
+                      <ul className="list-disc list-inside">
                         {groceryList?.map((item) => (
-                          <li key={item.ingredient_id} className="text-info">
+                          <li key={item.ingredient_id}>
                             {item.ingredients.name}
                           </li>
                         ))}
@@ -185,7 +200,7 @@ const Header = () => {
 
                       <Link to={"/my_grocery_list"}>
                         {" "}
-                        <button className="btn btn-accent btn-block">
+                        <button className="btn btn-accent btn-block rounded-full">
                           Zur Einkaufsliste
                         </button>
                       </Link>
@@ -195,17 +210,18 @@ const Header = () => {
                 {/* my grocery list */}
 
                 <button
+                  className="btn btn-ghost btn-circle"
                   onClick={handleLogOutButton}
-                  className="btn btn-secondary"
+                  title="Abmelden"
                 >
-                  Logout
+                  <LogoutIcon />
                 </button>
               </div>
             </>
           ) : (
             <Link
               to={"/login"}
-              className=" rounded-full  border-black border-1 "
+              className=" rounded-full  border-black border-2 px-2 ml-2 hover:bg-accent"
             >
               Login
             </Link>

@@ -3,8 +3,9 @@ import { supabase } from "../utils/supabaseClient";
 import { Recipe } from "../utils/types";
 import { UserContext } from "../context/Context";
 import { useNavigate } from "react-router-dom";
-import TopCard from "../components/card/TopCard";
+
 import EmptyHero from "../components/EmptyHero";
+import TopCard from "../components/TopCard";
 
 const MeineRezepte = () => {
   const [favoriteRecipes, setFavoriteRecipes] = useState<Recipe[]>([]);
