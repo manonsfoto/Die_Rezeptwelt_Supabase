@@ -71,17 +71,19 @@ const MyGroceryList = () => {
     <>
       {" "}
       <section className="w-full gap-4 mt-4">
-        <h1 className="text-3xl  my-12 font-caprasimo">Meine Einkaufsliste</h1>
+        <h1 className="text-3xl w-full my-12 pb-4 font-caprasimo border-b-2 border-black">
+          Meine Einkaufsliste
+        </h1>
         <button
           onClick={emptyGroceryList}
-          className="btn btn-xs sm:btn-sm md:btn-md lg:btn-lg btn-outline btn-warning w-fit self-end"
+          className="btn btn-xs sm:btn-sm md:btn-md lg:btn-lg  btn-warning w-fit self-end"
         >
           Liste leeren 🗑️
         </button>
         <div className="overflow-x-auto min-h-128">
-          <table className="table">
+          <table className="table max-w-2xl">
             <thead>
-              <tr className="text-xl">
+              <tr className="text-base text-center">
                 <th></th>
                 <th>Artikelname</th>
                 <th>Menge</th>
@@ -91,7 +93,7 @@ const MyGroceryList = () => {
             </thead>
             <tbody>
               {groceryList?.map((item) => (
-                <tr key={item.ingredient_id} className="text-lg">
+                <tr key={item.ingredient_id}>
                   <th>
                     <label>
                       <input
@@ -105,54 +107,32 @@ const MyGroceryList = () => {
                       />
                     </label>
                   </th>
-                  <td>
-                    <div className="flex items-center gap-3">
-                      <div>
-                        <div className="font-bold ">
-                          {item.ingredients.name}
-                        </div>
-                      </div>
+                  <td className="flex items-center justify-center">
+                    <div className="font-bold font-gaegu text-xl italic bg-secondary rounded-2xl uppercase w-28 h-16 flex items-center justify-center">
+                      {item.ingredients.name}
                     </div>
                   </td>
                   <td>
-                    {item.quantity}{" "}
-                    <div className="dropdown dropdown-bottom">
-                      <div
-                        tabIndex={0}
-                        role="button"
-                        className="btn btn-ghost btn-xs m-1"
+                    <div className="flex items-center gap-3">
+                      <button
+                        onClick={() => {
+                          handleQuantityChangeButton(item.ingredient_id);
+                        }}
+                        className="font-semibold"
                       >
-                        edit
-                      </div>
-                      <div
-                        tabIndex={0}
-                        className="dropdown-content menu bg-base-200 rounded-box z-[1] w-24 p-2 shadow  gap-2"
+                        –
+                      </button>
+                      <p className="font-semibold rounded-full border-2 border-black w-7 h-7 flex items-center justify-center">
+                        {item.quantity}
+                      </p>
+                      <button
+                        onClick={() => {
+                          handleQuantityChangeButton(item.ingredient_id);
+                        }}
+                        className="font-semibold"
                       >
-                        <input
-                          type="number"
-                          name={`quantityInput${item.ingredient_id}`}
-                          min={1}
-                          value={quantityInputs[item.ingredient_id] || ""}
-                          onChange={(e) =>
-                            handleInputChange(
-                              item.ingredient_id,
-                              Number(e.target.value)
-                            )
-                          }
-                          placeholder="200"
-                          className="input input-bordered input-xs w-full text-xs "
-                        />
-
-                        <button
-                          type="button"
-                          className="btn btn-active  btn-xs"
-                          onClick={() => {
-                            handleQuantityChangeButton(item.ingredient_id);
-                          }}
-                        >
-                          Change
-                        </button>
-                      </div>
+                        +
+                      </button>
                     </div>
                   </td>
                   <td className="text-sm">{item.ingredients.unit}</td>
@@ -183,16 +163,6 @@ const MyGroceryList = () => {
                 </tr>
               ))}
             </tbody>
-
-            <tfoot>
-              <tr className="text-xl">
-                <th></th>
-                <th>Artikelname</th>
-                <th>Menge</th>
-                <th>Einheit</th>
-                <th></th>
-              </tr>
-            </tfoot>
           </table>
         </div>
       </section>

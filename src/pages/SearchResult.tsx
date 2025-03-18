@@ -10,6 +10,7 @@ import { supabase } from "../utils/supabaseClient";
 import { useNavigate } from "react-router-dom";
 
 import LoaderTopRecipes from "../components/loader/LoaderTopRecipes";
+import EmptyHero from "../components/EmptyHero";
 
 const SearchResult = () => {
   const { user } = useContext(UserContext);
@@ -51,7 +52,7 @@ const SearchResult = () => {
   return (
     <>
       {" "}
-      <section className="flex flex-col justify-center items-center">
+      <section className="flex flex-col justify-center items-center w-full">
         <h1 className="text-3xl w-full my-12 pb-4 font-caprasimo border-b-2 border-black">
           Search Results
         </h1>
@@ -66,10 +67,9 @@ const SearchResult = () => {
             ))}
           </ul>
         ) : (
-          <p className="text-red-500">
-            Sorry, No results found for{" "}
-            <span className="font-bold">{searchInput}</span>
-          </p>
+          <EmptyHero
+            mainText={`Sorry, No results found for "${searchInput}"`}
+          />
         )}
       </section>
     </>

@@ -5,7 +5,7 @@ const EmptyHero = ({
   subText,
 }: {
   mainText: string;
-  subText: string;
+  subText?: string;
 }) => {
   return (
     <div
