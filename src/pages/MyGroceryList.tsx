@@ -1,4 +1,4 @@
-import { ChangeEvent, useContext, useState } from "react";
+import { ChangeEvent, useContext } from "react";
 
 import {
   GroceryListContext,
@@ -11,9 +11,6 @@ import EmptyHero from "../components/EmptyHero";
 const MyGroceryList = () => {
   const { groceryList } = useContext(GroceryListContext);
   const { setRefreshGroceryList } = useContext(RefreshGroceryListContext);
-  const [quantityInputs, setQuantityInputs] = useState<{
-    [key: string]: number;
-  }>({});
 
   async function handleDeleteGroceryItem(ingredient_id: string) {
     await supabase
@@ -23,14 +20,26 @@ const MyGroceryList = () => {
     setRefreshGroceryList((prev) => !prev);
   }
 
-  async function handleQuantityChangeButton(ingredient_id: string) {
+  async function handleQuantityChangeButton(
+    ingredient_id: string,
+    action: "increase" | "decrease"
+  ) {
     try {
+      const currentItem = groceryList?.find(
+        (item) => item.ingredient_id === ingredient_id
+      );
+      if (!currentItem) return;
+
+      const newQuantity =
+        action === "increase"
+          ? currentItem.quantity + 1
+          : Math.max(1, currentItem.quantity - 1);
+
       const { error } = await supabase
         .from("grocerylist_ingredients")
-        .update({ quantity: quantityInputs[ingredient_id] })
+        .update({ quantity: newQuantity })
         .eq("ingredient_id", ingredient_id);
 
-      console.log("quantityInput", quantityInputs[ingredient_id]);
       if (error) {
         throw new Error();
       }
@@ -40,13 +49,6 @@ const MyGroceryList = () => {
       setRefreshGroceryList((prev) => !prev);
     }
   }
-
-  const handleInputChange = (ingredient_id: string, value: number) => {
-    setQuantityInputs((prev) => ({
-      ...prev,
-      [ingredient_id]: value,
-    }));
-  };
 
   async function changeCheckbox(item: GroceryList, completed: boolean) {
     const { error } = await supabase
@@ -111,7 +113,10 @@ const MyGroceryList = () => {
                     <div className="flex items-center justify-center gap-3">
                       <button
                         onClick={() => {
-                          handleQuantityChangeButton(item.ingredient_id);
+                          handleQuantityChangeButton(
+                            item.ingredient_id,
+                            "decrease"
+                          );
                         }}
                         className="font-semibold"
                       >
@@ -122,7 +127,10 @@ const MyGroceryList = () => {
                       </p>
                       <button
                         onClick={() => {
-                          handleQuantityChangeButton(item.ingredient_id);
+                          handleQuantityChangeButton(
+                            item.ingredient_id,
+                            "increase"
+                          );
                         }}
                         className="font-semibold"
                       >

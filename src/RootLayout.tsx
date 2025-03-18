@@ -62,7 +62,8 @@ const RootLayout = () => {
     async function getMyGroceryList() {
       const { data, error } = await supabase
         .from("grocerylist_ingredients")
-        .select(`*,ingredients(name, unit)`);
+        .select(`*,ingredients(name, unit)`)
+        .order("created_at", { ascending: true });
 
       if (error) {
         console.error(error);
