@@ -1,6 +1,6 @@
 import { useContext, useRef, useState } from "react";
-import { Recipe } from "../utils/types";
-import { supabase } from "../utils/supabaseClient";
+import { Recipe } from "../lib/supabase/types";
+import { supabase } from "../lib/supabase/supabaseClient";
 import { UserContext } from "../context/Context";
 
 const CreateRecipe = () => {

@@ -1,9 +1,9 @@
 import { useContext, useRef, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { supabase } from "../utils/supabaseClient";
+import { supabase } from "../lib/supabase/supabaseClient";
 import { UserContext } from "../context/Context";
-import EmailIcon from "../assets/SVG/EmailIcon";
-import PasswordIcon from "../assets/SVG/PasswordIcon";
+import EmailIcon from "../components/icons/EmailIcon";
+import PasswordIcon from "../components/icons/PasswordIcon";
 
 const Login = () => {
   const emailRef = useRef<HTMLInputElement>(null!);

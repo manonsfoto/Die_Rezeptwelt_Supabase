@@ -1,5 +1,5 @@
 import { useContext, useRef, useState, useEffect } from "react";
-import { supabase } from "../utils/supabaseClient";
+import { supabase } from "../lib/supabase/supabaseClient";
 import { Link, useNavigate } from "react-router-dom";
 import { UserContext } from "../context/Context";
 
@@ -174,7 +174,7 @@ const Signup = () => {
               to={"/login"}
               className="btn btn-ghost hover:bg-transparent hover:text-info rounded-full underline "
             >
-             Schon registriert? Zum Login 
+              Schon registriert? Zum Login
             </Link>
             {error.length > 0 && (
               <p className="text-red-500 text-center font-semibold">

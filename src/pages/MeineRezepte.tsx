@@ -1,11 +1,12 @@
 import { useContext, useEffect, useState } from "react";
-import { supabase } from "../utils/supabaseClient";
-import { Recipe } from "../utils/types";
+import { supabase } from "../lib/supabase/supabaseClient";
+import { Recipe } from "../lib/supabase/types";
 import { UserContext } from "../context/Context";
 import { useNavigate } from "react-router-dom";
 
 import EmptyHero from "../components/EmptyHero";
-import TopCard from "../components/TopCard";
+import Card from "../components/Card";
+
 
 const MeineRezepte = () => {
   const [favoriteRecipes, setFavoriteRecipes] = useState<Recipe[]>([]);
@@ -47,12 +48,15 @@ const MeineRezepte = () => {
           <ul className="flex flex-col gap-4 flex-wrap min-h-screen md:flex-row">
             {favoriteRecipes.map((recipe) => (
               <li key={recipe.id}>
-                <TopCard recipe={recipe} />
+                <Card recipe={recipe} />
               </li>
             ))}
           </ul>
         ) : (
-          <EmptyHero mainText="No favorite Recipes found" subText="When you click a 🩶 button on detailed recipes, it will appear here." />
+          <EmptyHero
+            mainText="No favorite Recipes found"
+            subText="When you click a 🩶 button on detailed recipes, it will appear here."
+          />
         )}
       </section>
     </>

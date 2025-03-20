@@ -1,6 +1,6 @@
 import { User } from "@supabase/supabase-js";
 import { createContext } from "react";
-import { GroceryList } from "../utils/types";
+import { GroceryList } from "../lib/supabase/types";
 
 interface ISearchInputContext {
   searchInput: string;

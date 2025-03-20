@@ -7,11 +7,11 @@ import {
   SearchInputContext,
   UserContext,
 } from "../context/Context";
-import { supabase } from "../utils/supabaseClient";
-import ListIcon from "../assets/SVG/ListIcon";
-import LogoutIcon from "../assets/SVG/LogoutIcon";
-import SearchIcon from "../assets/SVG/SearchIcon";
-import MenuIcon from "../assets/SVG/MenuIcon";
+import { supabase } from "../lib/supabase/supabaseClient";
+import ListIcon from "./icons/ListIcon";
+import LogoutIcon from "./icons/LogoutIcon";
+import SearchIcon from "./icons/SearchIcon";
+import MenuIcon from "./icons/MenuIcon";
 
 const Header = () => {
   const { user, setUser } = useContext(UserContext);

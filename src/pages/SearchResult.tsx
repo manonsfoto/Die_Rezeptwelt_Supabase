@@ -4,14 +4,15 @@ import {
   SearchInputContext,
   UserContext,
 } from "../context/Context";
-import { Recipe } from "../utils/types";
+import { Recipe } from "../lib/supabase/types";
 
-import { supabase } from "../utils/supabaseClient";
+import { supabase } from "../lib/supabase/supabaseClient";
 import { useNavigate } from "react-router-dom";
 
 import LoaderTopRecipes from "../components/loader/LoaderTopRecipes";
 import EmptyHero from "../components/EmptyHero";
-import TopCard from "../components/TopCard";
+import Card from "../components/Card";
+
 
 const SearchResult = () => {
   const { user } = useContext(UserContext);
@@ -63,7 +64,7 @@ const SearchResult = () => {
           <ul className="flex flex-row gap-4 flex-wrap justify-center items-center">
             {recipes.map((recipe) => (
               <li key={recipe.id}>
-                <TopCard recipe={recipe} />
+                <Card recipe={recipe} />
               </li>
             ))}
           </ul>

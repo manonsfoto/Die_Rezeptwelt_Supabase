@@ -4,8 +4,8 @@ import {
   GroceryListContext,
   RefreshGroceryListContext,
 } from "../context/Context";
-import { supabase } from "../utils/supabaseClient";
-import { GroceryList } from "../utils/types";
+import { supabase } from "../lib/supabase/supabaseClient";
+import { GroceryList } from "../lib/supabase/types";
 import EmptyHero from "../components/EmptyHero";
 
 const MyGroceryList = () => {

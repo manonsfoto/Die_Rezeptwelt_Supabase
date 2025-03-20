@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import ArrowIcon from "../assets/SVG/ArrowIcon";
+import ArrowIcon from "./icons/ArrowIcon";
 
 const StyledLinks = ({ bgColor }: { bgColor: string }) => {
   return (

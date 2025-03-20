@@ -1,11 +1,11 @@
 import { useParams, useNavigate } from "react-router-dom";
 import { useContext, useEffect, useState } from "react";
-import { supabase } from "../utils/supabaseClient";
+import { supabase } from "../lib/supabase/supabaseClient";
 import {
   GroceryItem,
   InsertRecipeFavorites,
   JoinedRecipe,
-} from "../utils/types";
+} from "../lib/supabase/types";
 
 import {
   RefreshGroceryListContext,
@@ -13,8 +13,8 @@ import {
   SessionContext,
 } from "../context/Context";
 import LoaderDetails from "../components/loader/LoaderDetails";
-import HeartIcon from "../assets/SVG/HeartIcon";
-import ArrowIcon from "../assets/SVG/ArrowIcon";
+import HeartIcon from "../components/icons/HeartIcon";
+import ArrowIcon from "../components/icons/ArrowIcon";
 
 const Details = () => {
   const { recipe_id } = useParams<{ recipe_id: string }>();

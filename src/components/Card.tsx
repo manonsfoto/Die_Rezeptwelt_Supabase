@@ -1,13 +1,13 @@
 import { FC } from "react";
 import { Link } from "react-router-dom";
-import { Recipe } from "../utils/types";
-import HeartIcon from "../assets/SVG/HeartIcon";
+import { Recipe } from "../lib/supabase/types";
+import HeartIcon from "./icons/HeartIcon";
 
-interface TopCardProps {
+interface CardProps {
   recipe: Recipe;
 }
 
-const TopCard: FC<TopCardProps> = ({ recipe }) => {
+const Card: FC<CardProps> = ({ recipe }) => {
   return (
     <div className=" max-w-96 relative  ">
       {" "}
@@ -44,4 +44,4 @@ const TopCard: FC<TopCardProps> = ({ recipe }) => {
   );
 };
 
-export default TopCard;
+export default Card;

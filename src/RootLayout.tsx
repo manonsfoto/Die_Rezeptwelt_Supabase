@@ -11,8 +11,8 @@ import {
   UserContext,
 } from "./context/Context";
 import { User } from "@supabase/supabase-js";
-import { supabase } from "./utils/supabaseClient";
-import { GroceryList } from "./utils/types";
+import { supabase } from "./lib/supabase/supabaseClient";
+import { GroceryList } from "./lib/supabase/types";
 
 const RootLayout = () => {
   const [searchInput, setSearchInput] = useState<string>("");
