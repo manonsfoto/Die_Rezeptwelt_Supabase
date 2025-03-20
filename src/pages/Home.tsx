@@ -1,11 +1,11 @@
 import HomeHero from "../components/HomeHero";
 import TopRecipes from "../components/TopRecipes";
 import Greeting from "../components/Greeting";
-import { useContext } from "react";
-import { UserContext } from "../context/Context";
+import { useAuthStore } from "../store/authStore";
+
 
 const Home = () => {
-  const { user } = useContext(UserContext);
+  const { user } = useAuthStore();
   return (
     <>
       {user && <Greeting />}

@@ -1,7 +1,6 @@
-import { useContext, useRef, useState, useEffect } from "react";
+import { useRef, useState, useEffect } from "react";
 import { supabase } from "../lib/supabase/supabaseClient";
 import { Link, useNavigate } from "react-router-dom";
-import { UserContext } from "../context/Context";
 
 type TUser = {
   email: string;
@@ -22,7 +21,7 @@ const Signup = () => {
 
   const [success, setSuccess] = useState<string>("");
   const [error, setError] = useState<string>("");
-  const { setUser } = useContext(UserContext);
+
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -73,7 +72,7 @@ const Signup = () => {
     }
     if (data.user) {
       setError("");
-      setUser(data.user);
+
       setSuccess("Bitte bestätige deine Registrierung per E-Mail 🥰");
       emailRef.current.value = "";
       passwordRef.current.value = "";

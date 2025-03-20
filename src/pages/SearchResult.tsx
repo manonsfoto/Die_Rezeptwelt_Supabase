@@ -2,12 +2,12 @@ import { useContext, useEffect, useState } from "react";
 import {
   RefreshContext,
   SearchInputContext,
-  UserContext,
+
 } from "../context/Context";
 import { Recipe } from "../lib/supabase/types";
 
 import { supabase } from "../lib/supabase/supabaseClient";
-import { useNavigate } from "react-router-dom";
+
 
 import LoaderTopRecipes from "../components/loader/LoaderTopRecipes";
 import EmptyHero from "../components/EmptyHero";
@@ -15,18 +15,15 @@ import Card from "../components/Card";
 
 
 const SearchResult = () => {
-  const { user } = useContext(UserContext);
+
   const { searchInput } = useContext(SearchInputContext);
   const { refresh } = useContext(RefreshContext);
   const [recipes, setRecipes] = useState<Recipe[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
-  const navigate = useNavigate();
+
 
   useEffect(() => {
-    if (!user) {
-      navigate("/login");
-      return;
-    }
+  
 
     const getSearchResult = async () => {
       setLoading(true);
@@ -49,7 +46,7 @@ const SearchResult = () => {
     };
 
     getSearchResult();
-  }, [refresh, user]);
+  }, [refresh]);
 
   return (
     <>

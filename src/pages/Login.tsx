@@ -1,15 +1,16 @@
-import { useContext, useRef, useState } from "react";
+import {  useRef, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { supabase } from "../lib/supabase/supabaseClient";
-import { UserContext } from "../context/Context";
+
 import EmailIcon from "../components/icons/EmailIcon";
 import PasswordIcon from "../components/icons/PasswordIcon";
+
 
 const Login = () => {
   const emailRef = useRef<HTMLInputElement>(null!);
   const passwordRef = useRef<HTMLInputElement>(null!);
 
-  const { setUser } = useContext(UserContext);
+ 
   const [error, setError] = useState<string>("");
 
   const navigate = useNavigate();
@@ -36,7 +37,7 @@ const Login = () => {
     }
 
     if (data.user) {
-      setUser(data.user);
+     
       navigate("/");
     }
   }

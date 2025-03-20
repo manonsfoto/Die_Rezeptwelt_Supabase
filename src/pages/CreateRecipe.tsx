@@ -1,7 +1,8 @@
-import { useContext, useRef, useState } from "react";
+import {  useRef, useState } from "react";
 import { Recipe } from "../lib/supabase/types";
 import { supabase } from "../lib/supabase/supabaseClient";
-import { UserContext } from "../context/Context";
+import { useAuthStore } from "../store/authStore";
+
 
 const CreateRecipe = () => {
   const nameRef = useRef<HTMLInputElement>(null!);
@@ -18,7 +19,8 @@ const CreateRecipe = () => {
   const [uploadSuccess, setUploadSuccess] = useState<string>("");
   const [uploadError, setUploadError] = useState<string>("");
   const imageUrlRef = useRef<string | null>(null!);
-  const { user } = useContext(UserContext);
+
+  const { user } = useAuthStore();
 
   async function createNewRecipe(event: React.FormEvent) {
     event.preventDefault();

@@ -1,4 +1,4 @@
-import { User } from "@supabase/supabase-js";
+
 import { createContext } from "react";
 import { GroceryList } from "../lib/supabase/types";
 
@@ -14,11 +14,7 @@ interface IRefreshContext {
 }
 export const RefreshContext = createContext<IRefreshContext>(null!);
 
-interface IUserContext {
-  user: User | null;
-  setUser: React.Dispatch<React.SetStateAction<User | null>>;
-}
-export const UserContext = createContext<IUserContext>(null!);
+
 
 interface IGroceryListContext {
   groceryList: GroceryList[] | null;
@@ -33,16 +29,4 @@ interface IRefreshGroceryListContext {
 export const RefreshGroceryListContext =
   createContext<IRefreshGroceryListContext>(null!);
 
-interface ISessionContext {
-  session: {
-    isLoading: boolean;
-    isAuthenticated: boolean;
-  };
-  setSession: React.Dispatch<
-    React.SetStateAction<{
-      isLoading: boolean;
-      isAuthenticated: boolean;
-    }>
-  >;
-}
-export const SessionContext = createContext<ISessionContext>(null!);
+

@@ -2,22 +2,24 @@ import { Link, NavLink } from "react-router-dom";
 
 import { useContext, useRef } from "react";
 import {
-  GroceryListContext,
+ 
   RefreshContext,
   SearchInputContext,
-  UserContext,
+
 } from "../context/Context";
-import { supabase } from "../lib/supabase/supabaseClient";
 import ListIcon from "./icons/ListIcon";
 import LogoutIcon from "./icons/LogoutIcon";
 import SearchIcon from "./icons/SearchIcon";
 import MenuIcon from "./icons/MenuIcon";
+import { useGroceryListStore } from "../store/groceryListStore";
+import { useAuthStore } from "../store/authStore";
 
 const Header = () => {
-  const { user, setUser } = useContext(UserContext);
+  
   const { setSearchInput } = useContext(SearchInputContext);
   const { setRefresh } = useContext(RefreshContext);
-  const { groceryList } = useContext(GroceryListContext);
+  const { groceryList } = useGroceryListStore();
+  const { signOut, user } = useAuthStore();
   const searchInputRef = useRef<HTMLInputElement>(null);
 
   function handleSearchButton() {
@@ -27,10 +29,7 @@ const Header = () => {
     }
   }
   async function handleLogOutButton() {
-    const { error } = await supabase.auth.signOut();
-    console.log(error);
-
-    setUser(null);
+    await signOut();
   }
 
   return (

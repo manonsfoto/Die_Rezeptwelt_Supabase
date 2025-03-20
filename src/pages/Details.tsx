@@ -9,29 +9,26 @@ import {
 
 import {
   RefreshGroceryListContext,
-  UserContext,
-  SessionContext,
+  
+ 
 } from "../context/Context";
 import LoaderDetails from "../components/loader/LoaderDetails";
 import HeartIcon from "../components/icons/HeartIcon";
 import ArrowIcon from "../components/icons/ArrowIcon";
+import { useAuthStore } from "../store/authStore";
 
 const Details = () => {
   const { recipe_id } = useParams<{ recipe_id: string }>();
   const navigate = useNavigate();
   const [singleRecipe, setSingleRecipes] = useState<JoinedRecipe | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
-  const { user } = useContext(UserContext);
-  const { session } = useContext(SessionContext);
+  const { user } = useAuthStore();
+  
   const { setRefreshGroceryList } = useContext(RefreshGroceryListContext);
 
   const [isMarked, setIsMarked] = useState<boolean>(false);
 
-  useEffect(() => {
-    if (!session.isLoading && !session.isAuthenticated) {
-      navigate("/login");
-    }
-  }, [session, navigate]);
+  
 
   useEffect(() => {
     const fetchSingleRecipe = async () => {

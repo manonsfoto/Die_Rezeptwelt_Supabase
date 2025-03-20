@@ -1,8 +1,7 @@
-import { useContext, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { supabase } from "../lib/supabase/supabaseClient";
 import { Recipe } from "../lib/supabase/types";
-import { UserContext } from "../context/Context";
-import { useNavigate } from "react-router-dom";
+
 
 import EmptyHero from "../components/EmptyHero";
 import Card from "../components/Card";
@@ -10,14 +9,10 @@ import Card from "../components/Card";
 
 const MeineRezepte = () => {
   const [favoriteRecipes, setFavoriteRecipes] = useState<Recipe[]>([]);
-  const { user } = useContext(UserContext);
-  const navigate = useNavigate();
+
 
   useEffect(() => {
-    if (!user) {
-      navigate("/login");
-      return;
-    }
+ 
 
     const fetchFavorites = async () => {
       const { data, error } = await supabase
@@ -36,7 +31,7 @@ const MeineRezepte = () => {
     };
 
     fetchFavorites();
-  }, [user, navigate]);
+  }, [ ]);
 
   return (
     <>

@@ -1,17 +1,13 @@
-import { useContext, useEffect } from "react";
-import { UserContext } from "../context/Context";
-import { useNavigate } from "react-router-dom";
+
+
 import StyledLinks from "../components/StyledLinks";
+import { useAuthStore } from "../store/authStore";
 
 const Profile = () => {
-  const { user } = useContext(UserContext);
-  const navigate = useNavigate();
+  const { user } = useAuthStore();
 
-  useEffect(() => {
-    if (!user) {
-      navigate("/login");
-    }
-  }, [user, navigate]);
+
+  
 
   return (
     <>
