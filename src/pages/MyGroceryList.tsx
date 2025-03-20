@@ -1,23 +1,18 @@
-import { ChangeEvent, useContext } from "react";
+import { ChangeEvent } from "react";
 
-import {
-  GroceryListContext,
-  RefreshGroceryListContext,
-} from "../context/Context";
 import { supabase } from "../lib/supabase/supabaseClient";
 import { GroceryList } from "../lib/supabase/types";
 import EmptyHero from "../components/EmptyHero";
+import { useGroceryListStore } from "../store/groceryListStore";
 
 const MyGroceryList = () => {
-  const { groceryList } = useContext(GroceryListContext);
-  const { setRefreshGroceryList } = useContext(RefreshGroceryListContext);
+  const { groceryList } = useGroceryListStore();
 
   async function handleDeleteGroceryItem(ingredient_id: string) {
     await supabase
       .from("grocerylist_ingredients")
       .delete()
       .eq("ingredient_id", ingredient_id);
-    setRefreshGroceryList((prev) => !prev);
   }
 
   async function handleQuantityChangeButton(
@@ -45,8 +40,6 @@ const MyGroceryList = () => {
       }
     } catch (error) {
       console.error(error);
-    } finally {
-      setRefreshGroceryList((prev) => !prev);
     }
   }
 
@@ -55,7 +48,7 @@ const MyGroceryList = () => {
       .from("grocerylist_ingredients")
       .update({ completed: completed })
       .eq("ingredient_id", item.ingredient_id);
-    setRefreshGroceryList((prev) => !prev);
+
     if (error) {
       console.error("Error", error);
     }
@@ -66,8 +59,6 @@ const MyGroceryList = () => {
         .from("grocerylist_ingredients")
         .delete()
         .eq("grocerylist_id", groceryList[0].grocerylist_id);
-
-      setRefreshGroceryList((prev) => !prev);
     }
   }
   return (

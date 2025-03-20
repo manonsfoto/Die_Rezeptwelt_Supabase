@@ -1,37 +1,26 @@
-import { useContext, useEffect, useState } from "react";
-import {
-  RefreshContext,
-  SearchInputContext,
-
-} from "../context/Context";
+import { useEffect, useState } from "react";
 import { Recipe } from "../lib/supabase/types";
-
 import { supabase } from "../lib/supabase/supabaseClient";
 
-
-import LoaderTopRecipes from "../components/loader/LoaderTopRecipes";
 import EmptyHero from "../components/EmptyHero";
 import Card from "../components/Card";
-
+import { useSearchParams } from "react-router-dom";
 
 const SearchResult = () => {
+  const [searchParams] = useSearchParams();
+  const searchQuery = searchParams.get("q") || "";
 
-  const { searchInput } = useContext(SearchInputContext);
-  const { refresh } = useContext(RefreshContext);
   const [recipes, setRecipes] = useState<Recipe[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
 
-
   useEffect(() => {
-  
-
     const getSearchResult = async () => {
       setLoading(true);
       try {
         const { data, error } = await supabase
           .from("recipes")
           .select()
-          .ilike("name", `%${searchInput}%`);
+          .ilike("name", `%${searchQuery}%`);
 
         if (error) {
           console.error("Fehler beim Laden der Rezepte:", error.message);
@@ -46,7 +35,7 @@ const SearchResult = () => {
     };
 
     getSearchResult();
-  }, [refresh]);
+  }, [searchQuery]);
 
   return (
     <>
@@ -56,7 +45,7 @@ const SearchResult = () => {
           Search Results
         </h1>
         {loading ? (
-          <LoaderTopRecipes />
+          <div className="skeleton h-80 w-full"></div>
         ) : recipes.length > 0 ? (
           <ul className="flex flex-row gap-4 flex-wrap justify-center items-center">
             {recipes.map((recipe) => (
@@ -67,7 +56,7 @@ const SearchResult = () => {
           </ul>
         ) : (
           <EmptyHero
-            mainText={`Sorry, No results found for "${searchInput}"`}
+            mainText={`Sorry, No results found for "${searchQuery}"`}
           />
         )}
       </section>

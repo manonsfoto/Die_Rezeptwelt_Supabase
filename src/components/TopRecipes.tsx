@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { supabase } from "../lib/supabase/supabaseClient";
 
 import { Recipe } from "../lib/supabase/types";
-import LoaderTopRecipes from "./loader/LoaderTopRecipes";
+
 import Card from "./Card";
 
 
@@ -41,7 +41,7 @@ const TopRecipes = () => {
         Die beliebtesten Rezepte
       </h1>
       {loading ? (
-        <LoaderTopRecipes />
+        <div className="skeleton h-80 w-full"></div>
       ) : (
         <ul className="flex flex-row gap-4 flex-wrap justify-center items-center">
           {recipes.map((recipe) => (

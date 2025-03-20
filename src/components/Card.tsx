@@ -2,12 +2,26 @@ import { FC } from "react";
 import { Link } from "react-router-dom";
 import { Recipe } from "../lib/supabase/types";
 import HeartIcon from "./icons/HeartIcon";
+import { useFavoritesStore } from "../store/favoritesStore";
+import { useAuthStore } from "../store/authStore";
 
 interface CardProps {
   recipe: Recipe;
 }
 
 const Card: FC<CardProps> = ({ recipe }) => {
+  const { toggleFavorite, isFavorite } = useFavoritesStore();
+  const { user } = useAuthStore();
+  const isFav = isFavorite(recipe.id);
+
+  const handleFavoriteClick = (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    if (user) {
+      toggleFavorite(recipe);
+    }
+  };
+
   return (
     <div className=" max-w-96 relative  ">
       {" "}
@@ -32,8 +46,11 @@ const Card: FC<CardProps> = ({ recipe }) => {
               {recipe.description}
             </p>
           </Link>
-          <div className="border-l-2 border-black h-full p-5 ">
-            <HeartIcon />
+          <div
+            className="border-l-2 border-black h-full p-5 cursor-pointer"
+            onClick={handleFavoriteClick}
+          >
+            <HeartIcon isFilled={isFav} />
           </div>
         </div>
         <p className="font-gaegu absolute top-3 right-3 text-xl font-bold w-14 h-14 -rotate-12 bg-accent text-center flex items-center justify-center rounded-full">

@@ -1,21 +1,11 @@
 import { useParams, useNavigate } from "react-router-dom";
-import { useContext, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { supabase } from "../lib/supabase/supabaseClient";
-import {
-  GroceryItem,
-  InsertRecipeFavorites,
-  JoinedRecipe,
-} from "../lib/supabase/types";
-
-import {
-  RefreshGroceryListContext,
-  
- 
-} from "../context/Context";
-import LoaderDetails from "../components/loader/LoaderDetails";
+import { GroceryItem, JoinedRecipe } from "../lib/supabase/types";
 import HeartIcon from "../components/icons/HeartIcon";
 import ArrowIcon from "../components/icons/ArrowIcon";
 import { useAuthStore } from "../store/authStore";
+import { useFavoritesStore } from "../store/favoritesStore";
 
 const Details = () => {
   const { recipe_id } = useParams<{ recipe_id: string }>();
@@ -23,13 +13,15 @@ const Details = () => {
   const [singleRecipe, setSingleRecipes] = useState<JoinedRecipe | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const { user } = useAuthStore();
-  
-  const { setRefreshGroceryList } = useContext(RefreshGroceryListContext);
-
-  const [isMarked, setIsMarked] = useState<boolean>(false);
-
-  
-
+  const { toggleFavorite, isFavorite } = useFavoritesStore();
+  const isFav = isFavorite(recipe_id!);
+  const handleFavoriteClick = (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    if (user && singleRecipe) {
+      toggleFavorite(singleRecipe);
+    }
+  };
   useEffect(() => {
     const fetchSingleRecipe = async () => {
       setLoading(true);
@@ -61,62 +53,6 @@ const Details = () => {
 
     fetchSingleRecipe();
   }, []);
-
-  async function checkIsMarkedforFavorites() {
-    if (singleRecipe && user) {
-      const { data, error } = await supabase
-        .from("recipe_favorites")
-        .select()
-        .eq("recipe_id", singleRecipe.id)
-        .eq("user_id", user.id);
-
-      if (data) {
-        if (data.length > 0) {
-          setIsMarked(true);
-        } else {
-          setIsMarked(false);
-        }
-      }
-
-      if (error) {
-        console.error(error);
-      }
-    }
-  }
-
-  useEffect(() => {
-    checkIsMarkedforFavorites();
-  }, [user, singleRecipe]);
-
-  async function handleFavoritesBtn() {
-    if (singleRecipe && user && isMarked === false) {
-      const recipeFavorites: InsertRecipeFavorites = {
-        recipe_id: singleRecipe.id,
-        user_id: user.id,
-      };
-
-      const { error } = await supabase
-        .from("recipe_favorites")
-        .insert(recipeFavorites);
-
-      if (error) {
-        console.error(error);
-      }
-    }
-    if (singleRecipe && user && isMarked === true) {
-      const response = await supabase
-        .from("recipe_favorites")
-        .delete()
-        .eq("recipe_id", singleRecipe.id)
-        .eq("user_id", user.id);
-
-      if (response.error) {
-        console.error(response.error);
-      }
-    }
-
-    checkIsMarkedforFavorites();
-  }
 
   async function handleAddMyGroceryList(item: GroceryItem) {
     if (!user) return;
@@ -160,14 +96,12 @@ const Details = () => {
         }
       }
     }
-
-    setRefreshGroceryList((prev) => !prev);
   }
 
   return (
     <>
       {loading ? (
-        <LoaderDetails />
+        <div className="skeleton h-80 w-full"></div>
       ) : (
         <>
           <section className="md:max-w-7xl  w-full">
@@ -201,9 +135,9 @@ const Details = () => {
                   className="border-l-2 border-black h-full  p-5 text-xl "
                   type="button"
                   title="Zu meinen Rezepten hinzufügen"
-                  onClick={handleFavoritesBtn}
+                  onClick={handleFavoriteClick}
                 >
-                  <HeartIcon isFilled={isMarked} />
+                  <HeartIcon isFilled={isFav} />
                 </button>
               </div>
             </div>

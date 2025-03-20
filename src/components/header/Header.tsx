@@ -1,35 +1,20 @@
-import { Link, NavLink } from "react-router-dom";
-
-import { useContext, useRef } from "react";
-import {
- 
-  RefreshContext,
-  SearchInputContext,
-
-} from "../context/Context";
-import ListIcon from "./icons/ListIcon";
-import LogoutIcon from "./icons/LogoutIcon";
-import SearchIcon from "./icons/SearchIcon";
-import MenuIcon from "./icons/MenuIcon";
-import { useGroceryListStore } from "../store/groceryListStore";
-import { useAuthStore } from "../store/authStore";
+import { Link, NavLink, useNavigate } from "react-router-dom";
+import ListIcon from "../icons/ListIcon";
+import LogoutIcon from "../icons/LogoutIcon";
+import SearchIcon from "../icons/SearchIcon";
+import MenuIcon from "../icons/MenuIcon";
+import { useGroceryListStore } from "../../store/groceryListStore";
+import { useAuthStore } from "../../store/authStore";
+import Search from "./Search";
 
 const Header = () => {
-  
-  const { setSearchInput } = useContext(SearchInputContext);
-  const { setRefresh } = useContext(RefreshContext);
   const { groceryList } = useGroceryListStore();
   const { signOut, user } = useAuthStore();
-  const searchInputRef = useRef<HTMLInputElement>(null);
+  const navigate = useNavigate();
 
-  function handleSearchButton() {
-    if (searchInputRef.current) {
-      setSearchInput(searchInputRef.current.value);
-      setRefresh((prev) => !prev);
-    }
-  }
   async function handleLogOutButton() {
     await signOut();
+    navigate("/");
   }
 
   return (
@@ -140,26 +125,7 @@ const Header = () => {
                 user ? "-left-10" : ""
               }`}
             >
-              <div className="card-body">
-                <input
-                  ref={searchInputRef}
-                  type="text"
-                  name="searchInput"
-                  placeholder="Search"
-                  className="input input-bordered rounded-full "
-                />
-
-                <Link to={"/results"}>
-                  {" "}
-                  <button
-                    type="button"
-                    className="btn bg-black hover:text-black text-base-100 btn-block rounded-full"
-                    onClick={handleSearchButton}
-                  >
-                    Search
-                  </button>
-                </Link>
-              </div>
+              <Search />
             </div>
           </div>
 

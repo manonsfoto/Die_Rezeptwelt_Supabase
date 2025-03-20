@@ -1,8 +1,8 @@
+import Greeting from "../components/Greeting";
 import HomeHero from "../components/HomeHero";
 import TopRecipes from "../components/TopRecipes";
-import Greeting from "../components/Greeting";
-import { useAuthStore } from "../store/authStore";
 
+import { useAuthStore } from "../store/authStore";
 
 const Home = () => {
   const { user } = useAuthStore();
