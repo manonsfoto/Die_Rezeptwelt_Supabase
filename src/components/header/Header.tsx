@@ -178,7 +178,7 @@ const Header = () => {
               to={"/login"}
               className=" rounded-full  border-black border-2 px-2 ml-2 hover:bg-accent"
             >
-              Login
+              Anmelden
             </Link>
           )}
         </div>

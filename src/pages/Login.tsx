@@ -60,11 +60,11 @@ const Login = () => {
       <div className="hero bg-secondary min-h-screen mt-4 rounded-3xl">
         <div className="card bg-base-100 w-full max-w-sm ">
           <form className="card-body" onSubmit={handleLogin}>
-            <h1 className="text-3xl  my-12 font-caprasimo">Login</h1>
+            <h1 className="text-3xl  my-12 font-caprasimo">Anmelden</h1>
             <div className="form-control">
               <label className="label">
                 <span className="label-text flex items-center gap-2 font-semibold">
-                  <EmailIcon /> Email
+                  <EmailIcon /> E-Mail
                 </span>
               </label>
               <input
@@ -106,7 +106,7 @@ const Login = () => {
               )}
               <label className="label">
                 <p className="label-text-alt link link-hover">
-                  Forgot password?
+                  Passwort vergessen?
                 </p>
               </label>
             </div>
@@ -115,7 +115,7 @@ const Login = () => {
                 className="btn bg-black hover:text-black text-base-100 rounded-full"
                 type="submit"
               >
-                Login
+                Anmelden
               </button>
             </div>{" "}
             <Link

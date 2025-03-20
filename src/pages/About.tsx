@@ -14,7 +14,7 @@ const About = () => {
           />
         </figure>
       </div>
-      <article className="text-3xl md:text-5xl md:my-12 w-full md:h-[50vh] bg-accent p-4 rounded-3xl font-light relative flex flex-col justify-end">
+      <article className="text-3xl md:text-5xl md:my-12 w-full md:h-fit bg-accent p-4 rounded-3xl font-light relative flex flex-col justify-end">
         <div className="self-end max-w-2xl">
           Hier findest du eine bunte Vielfalt an Rezepten: von traditionellen
           Wohlfühlgerichten bis hin zu kreativen, modernen Kreationen. Jedes
