@@ -7,7 +7,7 @@ type FavoritesState = {
   favorites: Recipe[];
   isLoading: boolean;
   
-  // Actions
+
   fetchFavorites: () => Promise<void>;
   toggleFavorite: (recipe: Recipe) => Promise<void>;
   isFavorite: (recipeId: string) => boolean;
@@ -34,7 +34,7 @@ export const useFavoritesStore = create<FavoritesState>((set, get) => ({
         return;
       }
       
-      // Extract recipe data from the joined query
+     
       const favorites = data.map(item => item.recipes);
       set({ favorites, isLoading: false });
     } catch (error) {
@@ -50,7 +50,7 @@ export const useFavoritesStore = create<FavoritesState>((set, get) => ({
     const isFav = get().isFavorite(recipe.id);
     
     if (isFav) {
-      // Remove from favorites
+    
       const { error } = await supabase
         .from('recipe_favorites')
         .delete()
@@ -62,12 +62,12 @@ export const useFavoritesStore = create<FavoritesState>((set, get) => ({
         return;
       }
       
-      // Update local state
+     
       set(state => ({
         favorites: state.favorites.filter(fav => fav.id !== recipe.id)
       }));
     } else {
-      // Add to favorites
+    
       const { error } = await supabase
         .from('recipe_favorites')
         .insert({
@@ -80,7 +80,7 @@ export const useFavoritesStore = create<FavoritesState>((set, get) => ({
         return;
       }
       
-      // Update local state
+      
       set(state => ({
         favorites: [...state.favorites, recipe]
       }));
@@ -92,7 +92,7 @@ export const useFavoritesStore = create<FavoritesState>((set, get) => ({
   }
 }));
 
-// Initialize favorites when the store is first used
+
 if (typeof window !== 'undefined') {
   const { user } = useAuthStore.getState();
   if (user) {

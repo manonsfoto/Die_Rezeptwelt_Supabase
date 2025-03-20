@@ -1,11 +1,12 @@
 import { useParams, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
-import { supabase } from "../lib/supabase/supabaseClient";
 import { GroceryItem, JoinedRecipe } from "../lib/supabase/types";
 import HeartIcon from "../components/icons/HeartIcon";
 import ArrowIcon from "../components/icons/ArrowIcon";
 import { useAuthStore } from "../store/authStore";
 import { useFavoritesStore } from "../store/favoritesStore";
+import { addToGroceryList, fetchSingleRecipe } from "../lib/supabase/actions";
+import { useGroceryListStore } from "../store/groceryListStore";
 
 const Details = () => {
   const { recipe_id } = useParams<{ recipe_id: string }>();
@@ -14,7 +15,11 @@ const Details = () => {
   const [loading, setLoading] = useState<boolean>(true);
   const { user } = useAuthStore();
   const { toggleFavorite, isFavorite } = useFavoritesStore();
+  const refreshGroceryList = useGroceryListStore(
+    (state) => state.refreshGroceryList
+  );
   const isFav = isFavorite(recipe_id!);
+
   const handleFavoriteClick = (e: React.MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
@@ -23,24 +28,15 @@ const Details = () => {
     }
   };
   useEffect(() => {
-    const fetchSingleRecipe = async () => {
+    const loadSingleRecipe = async () => {
       setLoading(true);
       try {
-        const { data, error } = await supabase
-          .from("recipes")
-          .select(
-            `*,
-            categories(name),
-            recipes_ingredients(
-              quantity,
-              ingredients(id,name, unit, additional_info)
-            )`
-          )
-          .eq("id", `${recipe_id && recipe_id}`)
-          .single();
+        if (!recipe_id) return;
+
+        const { data, error } = await fetchSingleRecipe(recipe_id);
 
         if (error) {
-          console.error("Fehler beim Laden der Rezepte:", error.message);
+          console.error("Fehler beim Laden des Rezepts:", error);
         } else {
           setSingleRecipes(data);
         }
@@ -51,50 +47,18 @@ const Details = () => {
       }
     };
 
-    fetchSingleRecipe();
-  }, []);
+    loadSingleRecipe();
+  }, [recipe_id]);
 
   async function handleAddMyGroceryList(item: GroceryItem) {
     if (!user) return;
 
-    const { data, error } = await supabase
-      .from("grocerylists")
-      .select()
-      .eq("user_id", user.id);
+    const { success, error } = await addToGroceryList(item, user.id);
 
-    if (error) {
-      console.error(error);
-    }
-    if (!data) return;
-    if (data?.length > 0) {
-      const { error } = await supabase.from("grocerylist_ingredients").insert({
-        grocerylist_id: data[0].id,
-        user_id: user.id,
-        ingredient_id: item.ingredients.id,
-      });
-
-      if (error) {
-        console.error(error);
-      }
+    if (!success) {
+      console.error("Fehler beim Hinzufügen zur Einkaufsliste:", error);
     } else {
-      const { error } = await supabase
-        .from("grocerylists")
-        .insert({ user_id: user.id });
-
-      if (error) {
-        console.error(error);
-
-        const { error: addIngredientError } = await supabase
-          .from("grocerylist_ingredients")
-          .insert({
-            grocerylist_id: data[0].id,
-            user_id: user.id,
-            ingredient_id: item.ingredients.id,
-          });
-        if (addIngredientError) {
-          console.error(addIngredientError);
-        }
-      }
+           await refreshGroceryList();
     }
   }
 

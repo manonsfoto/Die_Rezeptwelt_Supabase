@@ -1,37 +1,14 @@
-import { useEffect, useState } from "react";
-import { supabase } from "../lib/supabase/supabaseClient";
-import { Recipe } from "../lib/supabase/types";
-
-
+import { useEffect } from "react";
 import EmptyHero from "../components/EmptyHero";
 import Card from "../components/Card";
-
+import { useFavoritesStore } from "../store/favoritesStore";
 
 const MeineRezepte = () => {
-  const [favoriteRecipes, setFavoriteRecipes] = useState<Recipe[]>([]);
-
+  const { favorites, isLoading, fetchFavorites } = useFavoritesStore();
 
   useEffect(() => {
- 
-
-    const fetchFavorites = async () => {
-      const { data, error } = await supabase
-        .from("recipe_favorites")
-        .select(`*,  recipes(*)`);
-
-      if (error) {
-        console.error("Fehler beim Laden der Rezepte:", error.message);
-      } else {
-        const mappedData = data.map((singleItem) => {
-          return singleItem.recipes;
-        });
-
-        setFavoriteRecipes(mappedData);
-      }
-    };
-
     fetchFavorites();
-  }, [ ]);
+  }, [fetchFavorites]);
 
   return (
     <>
@@ -39,9 +16,11 @@ const MeineRezepte = () => {
         <h1 className="text-3xl w-full my-12 pb-4 font-caprasimo border-b-2 border-black">
           Meine Rezepte
         </h1>
-        {favoriteRecipes.length > 0 ? (
+        {isLoading ? (
+          <div className="skeleton h-80 w-full"></div>
+        ) : favorites.length > 0 ? (
           <ul className="flex flex-col gap-4 flex-wrap min-h-screen md:flex-row">
-            {favoriteRecipes.map((recipe) => (
+            {favorites.map((recipe) => (
               <li key={recipe.id}>
                 <Card recipe={recipe} />
               </li>
@@ -49,8 +28,8 @@ const MeineRezepte = () => {
           </ul>
         ) : (
           <EmptyHero
-            mainText="No favorite Recipes found"
-            subText="When you click a 🩶 button on detailed recipes, it will appear here."
+            mainText="Keine Lieblingsrezepte gefunden"
+            subText="Wenn du auf ein 🩶 bei einem Rezept klickst, erscheint es hier."
           />
         )}
       </section>

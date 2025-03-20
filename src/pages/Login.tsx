@@ -1,28 +1,40 @@
-import {  useRef, useState } from "react";
+import { useRef, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { supabase } from "../lib/supabase/supabaseClient";
-
 import EmailIcon from "../components/icons/EmailIcon";
 import PasswordIcon from "../components/icons/PasswordIcon";
-
+import { loginSchema } from "../lib/validation";
 
 const Login = () => {
   const emailRef = useRef<HTMLInputElement>(null!);
   const passwordRef = useRef<HTMLInputElement>(null!);
-
- 
-  const [error, setError] = useState<string>("");
-
   const navigate = useNavigate();
+  const [validationErrors, setValidationErrors] = useState<{
+    email?: string;
+    password?: string;
+    auth?: string;
+  }>({});
 
   async function handleLogin(event: React.FormEvent) {
     event.preventDefault();
-    const emailValue = emailRef.current?.value;
-    const passwordValue = passwordRef.current?.value;
+    setValidationErrors({});
 
-    if (!emailValue || !passwordValue) {
-      setError("E-Mail und Passwort müssen ausgefüllt sein.");
+    const emailValue = emailRef.current?.value || "";
+    const passwordValue = passwordRef.current?.value || "";
 
+    const validationResult = loginSchema.safeParse({
+      email: emailValue,
+      password: passwordValue,
+    });
+
+    if (!validationResult.success) {
+      const formattedErrors: { email?: string; password?: string } = {};
+      validationResult.error.errors.forEach((err) => {
+        const path = err.path[0] as "email" | "password";
+        formattedErrors[path] = err.message;
+      });
+
+      setValidationErrors(formattedErrors);
       return;
     }
 
@@ -30,14 +42,15 @@ const Login = () => {
       email: emailValue,
       password: passwordValue,
     });
+
     if (error) {
-      setError(error.message);
+      setValidationErrors({ auth: error.message });
       emailRef.current.value = "";
       passwordRef.current.value = "";
+      return;
     }
 
     if (data.user) {
-     
       navigate("/");
     }
   }
@@ -46,7 +59,7 @@ const Login = () => {
     <>
       <div className="hero bg-secondary min-h-screen mt-4 rounded-3xl">
         <div className="card bg-base-100 w-full max-w-sm ">
-          <form className="card-body">
+          <form className="card-body" onSubmit={handleLogin}>
             <h1 className="text-3xl  my-12 font-caprasimo">Login</h1>
             <div className="form-control">
               <label className="label">
@@ -59,9 +72,16 @@ const Login = () => {
                 ref={emailRef}
                 name="emailInput"
                 placeholder="email@rezeptwelt.com"
-                className="input input-bordered"
+                className={`input input-bordered ${
+                  validationErrors.email ? "input-error" : ""
+                }`}
                 required
               />
+              {validationErrors.email && (
+                <p className="text-error text-sm mt-1">
+                  {validationErrors.email}
+                </p>
+              )}
             </div>
             <div className="form-control">
               <label className="label">
@@ -74,9 +94,16 @@ const Login = () => {
                 ref={passwordRef}
                 name="passwordInput"
                 placeholder="password"
-                className="input input-bordered"
+                className={`input input-bordered ${
+                  validationErrors.password ? "input-error" : ""
+                }`}
                 required
               />
+              {validationErrors.password && (
+                <p className="text-error text-sm mt-1">
+                  {validationErrors.password}
+                </p>
+              )}
               <label className="label">
                 <p className="label-text-alt link link-hover">
                   Forgot password?
@@ -86,7 +113,7 @@ const Login = () => {
             <div className="form-control mt-6">
               <button
                 className="btn bg-black hover:text-black text-base-100 rounded-full"
-                onClick={handleLogin}
+                type="submit"
               >
                 Login
               </button>
@@ -97,8 +124,10 @@ const Login = () => {
             >
               Noch kein Konto? Jetzt registrieren
             </Link>{" "}
-            {error && (
-              <p className="text-red-500 text-center font-semibold">{error}</p>
+            {validationErrors.auth && (
+              <p className="text-red-500 text-center font-semibold">
+                {validationErrors.auth}
+              </p>
             )}
           </form>
         </div>

@@ -24,10 +24,10 @@ function App() {
       <Route path="/" element={<RootLayout />}>
         <Route index element={<Home />} />
         <Route path="about" element={<About />} />
-        <Route path="search" element={<SearchResult />} />
+        <Route path="rezepte" element={<Rezepte />} />{" "}
         <Route path="login" element={<Login />} />
         <Route path="signup" element={<Signup />} />
-        <Route path="rezepte" element={<Rezepte />} />{" "}
+        <Route path="search" element={<SearchResult />} />{" "}
         <Route element={<ProtectedRoute />}>
           <Route path="details/:recipe_id" element={<Details />} />{" "}
           <Route path="meine_rezepte" element={<MeineRezepte />} />

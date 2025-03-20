@@ -7,6 +7,16 @@ import { useGroceryListStore } from "../../store/groceryListStore";
 import { useAuthStore } from "../../store/authStore";
 import Search from "./Search";
 
+const navItems = [
+  { id: 1, name: "Home", path: "/" },
+  { id: 2, name: "Rezepte", path: "/rezepte" },
+  { id: 3, name: "Über uns", path: "/about" },
+];
+
+const navItemsPrivate = [
+  { id: 4, name: "Profil", path: "/profile" },
+  { id: 5, name: "Meine Rezepte", path: "/meine_rezepte" },
+];
 const Header = () => {
   const { groceryList } = useGroceryListStore();
   const { signOut, user } = useAuthStore();
@@ -33,24 +43,19 @@ const Header = () => {
               tabIndex={0}
               className="menu menu-sm dropdown-content bg-primary rounded-box z-[1] mt-3 w-52 p-2 shadow"
             >
-              <li>
-                <NavLink to={"/"}>Home</NavLink>
-              </li>
+              {navItems.map((item) => (
+                <li key={item.id}>
+                  <NavLink to={item.path}>{item.name}</NavLink>
+                </li>
+              ))}
 
-              <li>
-                <NavLink to={"rezepte"}>Rezepte</NavLink>
-              </li>
-              <li>
-                <NavLink to={"about"}>Über uns</NavLink>
-              </li>
               {user && (
                 <>
-                  <li>
-                    <NavLink to={"profile"}>Profil</NavLink>
-                  </li>
-                  <li>
-                    <NavLink to={"meine_rezepte"}>Meine Rezepte</NavLink>
-                  </li>
+                  {navItemsPrivate.map((item) => (
+                    <li key={item.id}>
+                      <NavLink to={item.path}>{item.name}</NavLink>
+                    </li>
+                  ))}
                 </>
               )}
             </ul>
@@ -62,50 +67,37 @@ const Header = () => {
         </div>
         <div className="navbar-center hidden lg:flex">
           <ul className="flex gap-4  px-1">
-            <li>
-              <NavLink
-                to={"/"}
-                className={({ isActive }) =>
-                  isActive ? "border-2 rounded-full border-black px-2" : "px-2"
-                }
-              >
-                Home
-              </NavLink>
-            </li>
-
-            <li>
-              <NavLink
-                to={"rezepte"}
-                className={({ isActive }) =>
-                  isActive ? "border-2 rounded-full border-black px-2" : "px-2"
-                }
-              >
-                Rezepte
-              </NavLink>
-            </li>
-            <li>
-              <NavLink
-                to={"about"}
-                className={({ isActive }) =>
-                  isActive ? "border-2 rounded-full border-black px-2" : "px-2"
-                }
-              >
-                Über uns
-              </NavLink>
-            </li>
-            {user && (
-              <li>
+            {navItems.map((item) => (
+              <li key={item.id}>
                 <NavLink
-                  to={"profile"}
+                  to={item.path}
                   className={({ isActive }) =>
                     isActive
                       ? "border-2 rounded-full border-black px-2"
                       : "px-2"
                   }
                 >
-                  Profil
+                  {item.name}
                 </NavLink>
               </li>
+            ))}
+            {user && (
+              <>
+                {navItemsPrivate.map((item) => (
+                  <li key={item.id}>
+                    <NavLink
+                      to={item.path}
+                      className={({ isActive }) =>
+                        isActive
+                          ? "border-2 rounded-full border-black px-2"
+                          : "px-2"
+                      }
+                    >
+                      {item.name}
+                    </NavLink>
+                  </li>
+                ))}
+              </>
             )}
           </ul>
         </div>
@@ -132,7 +124,6 @@ const Header = () => {
           {user ? (
             <>
               <div className="flex gap-4 items-center justify-center">
-                {/*my grocery list  */}
                 <div className="dropdown dropdown-end">
                   <div
                     tabIndex={0}
@@ -172,7 +163,6 @@ const Header = () => {
                     </div>
                   </div>
                 </div>
-                {/* my grocery list */}
 
                 <button
                   className="btn btn-ghost btn-circle"

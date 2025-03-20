@@ -1,15 +1,13 @@
 import { useEffect, useState } from "react";
 import { Recipe } from "../lib/supabase/types";
-import { supabase } from "../lib/supabase/supabaseClient";
-
 import EmptyHero from "../components/EmptyHero";
 import Card from "../components/Card";
 import { useSearchParams } from "react-router-dom";
+import { searchRecipes } from "../lib/supabase/actions";
 
 const SearchResult = () => {
   const [searchParams] = useSearchParams();
   const searchQuery = searchParams.get("q") || "";
-
   const [recipes, setRecipes] = useState<Recipe[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
 
@@ -17,15 +15,12 @@ const SearchResult = () => {
     const getSearchResult = async () => {
       setLoading(true);
       try {
-        const { data, error } = await supabase
-          .from("recipes")
-          .select()
-          .ilike("name", `%${searchQuery}%`);
+        const { data, error } = await searchRecipes(searchQuery);
 
         if (error) {
-          console.error("Fehler beim Laden der Rezepte:", error.message);
+          console.error("Fehler beim Laden der Suchergebnisse:", error);
         } else {
-          setRecipes(data || []);
+          setRecipes(data);
         }
       } catch (err) {
         console.error("Unerwarteter Fehler:", err);
@@ -42,7 +37,7 @@ const SearchResult = () => {
       {" "}
       <section className="flex flex-col justify-center items-center w-full">
         <h1 className="text-3xl w-full my-12 pb-4 font-caprasimo border-b-2 border-black">
-          Search Results
+          Suchergebnisse
         </h1>
         {loading ? (
           <div className="skeleton h-80 w-full"></div>
@@ -56,7 +51,7 @@ const SearchResult = () => {
           </ul>
         ) : (
           <EmptyHero
-            mainText={`Sorry, No results found for "${searchQuery}"`}
+            mainText={`Keine Ergebnisse gefunden für "${searchQuery}"`}
           />
         )}
       </section>

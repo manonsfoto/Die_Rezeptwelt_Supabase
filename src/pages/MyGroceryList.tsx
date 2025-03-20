@@ -1,18 +1,22 @@
 import { ChangeEvent } from "react";
-
-import { supabase } from "../lib/supabase/supabaseClient";
 import { GroceryList } from "../lib/supabase/types";
 import EmptyHero from "../components/EmptyHero";
 import { useGroceryListStore } from "../store/groceryListStore";
+import {
+  deleteGroceryItem,
+  updateGroceryItemQuantity,
+  updateGroceryItemStatus,
+  clearGroceryList,
+} from "../lib/supabase/actions";
 
 const MyGroceryList = () => {
-  const { groceryList } = useGroceryListStore();
+  const { groceryList, refreshGroceryList } = useGroceryListStore();
 
   async function handleDeleteGroceryItem(ingredient_id: string) {
-    await supabase
-      .from("grocerylist_ingredients")
-      .delete()
-      .eq("ingredient_id", ingredient_id);
+    const { success } = await deleteGroceryItem(ingredient_id);
+    if (success) {
+      refreshGroceryList();
+    }
   }
 
   async function handleQuantityChangeButton(
@@ -25,18 +29,14 @@ const MyGroceryList = () => {
       );
       if (!currentItem) return;
 
-      const newQuantity =
-        action === "increase"
-          ? currentItem.quantity + 1
-          : Math.max(1, currentItem.quantity - 1);
+      const { success } = await updateGroceryItemQuantity(
+        ingredient_id,
+        action,
+        currentItem.quantity
+      );
 
-      const { error } = await supabase
-        .from("grocerylist_ingredients")
-        .update({ quantity: newQuantity })
-        .eq("ingredient_id", ingredient_id);
-
-      if (error) {
-        throw new Error();
+      if (success) {
+        refreshGroceryList();
       }
     } catch (error) {
       console.error(error);
@@ -44,21 +44,21 @@ const MyGroceryList = () => {
   }
 
   async function changeCheckbox(item: GroceryList, completed: boolean) {
-    const { error } = await supabase
-      .from("grocerylist_ingredients")
-      .update({ completed: completed })
-      .eq("ingredient_id", item.ingredient_id);
-
-    if (error) {
-      console.error("Error", error);
+    const { success } = await updateGroceryItemStatus(
+      item.ingredient_id,
+      completed
+    );
+    if (success) {
+      refreshGroceryList();
     }
   }
+
   async function emptyGroceryList() {
-    if (groceryList) {
-      await supabase
-        .from("grocerylist_ingredients")
-        .delete()
-        .eq("grocerylist_id", groceryList[0].grocerylist_id);
+    if (groceryList && groceryList.length > 0) {
+      const { success } = await clearGroceryList(groceryList[0].grocerylist_id);
+      if (success) {
+        refreshGroceryList();
+      }
     }
   }
   return (

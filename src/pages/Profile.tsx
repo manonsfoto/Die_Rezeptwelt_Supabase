@@ -1,13 +1,9 @@
-
-
 import StyledLinks from "../components/StyledLinks";
+import { formatDate } from "../lib/utils";
 import { useAuthStore } from "../store/authStore";
 
 const Profile = () => {
   const { user } = useAuthStore();
-
-
-  
 
   return (
     <>
@@ -31,16 +27,15 @@ const Profile = () => {
               </p>
               <p>
                 <strong>Erstellt am</strong>
-                <br />{" "}
-                {user?.created_at && new Date(user.created_at).toLocaleString()}
+                <br /> {formatDate(user?.created_at)}
               </p>
               <p>
                 <strong>Zuletzt geändert am</strong>
-                <br /> {user?.updated_at}
+                <br /> {formatDate(user?.updated_at)}
               </p>
               <p>
                 <strong>Letzter Login</strong>
-                <br /> {user?.last_sign_in_at}
+                <br /> {formatDate(user?.last_sign_in_at)}
               </p>
             </div>
           </div>

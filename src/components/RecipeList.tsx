@@ -1,27 +1,26 @@
 import { useState, useEffect } from "react";
-import { supabase } from "../lib/supabase/supabaseClient";
-
 import { Recipe } from "../lib/supabase/types";
-
 import Card from "./Card";
 
+type RecipeListProps = {
+  title: string;
+  fetchRecipes: (limit?: number) => Promise<{ data: Recipe[] | null; error: Error | null }>;
+  className?: string;
+  limit?: number;
+};
 
-const TopRecipes = () => {
+const RecipeList = ({ title, fetchRecipes, className = "", limit = 3 }: RecipeListProps) => {
   const [recipes, setRecipes] = useState<Recipe[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
 
   useEffect(() => {
-    const fetchTopRecipes = async () => {
+    const loadRecipes = async () => {
       setLoading(true);
       try {
-        const { data, error } = await supabase
-          .from("recipes")
-          .select("*")
-          .order("rating", { ascending: false })
-          .limit(3);
+        const { data, error } = await fetchRecipes(limit);
 
         if (error) {
-          console.error("Fehler beim Laden der Rezepte:", error.message);
+          console.error("Fehler beim Laden der Rezepte:", error);
         } else {
           setRecipes(data || []);
         }
@@ -32,13 +31,13 @@ const TopRecipes = () => {
       }
     };
 
-    fetchTopRecipes();
-  }, []);
+    loadRecipes();
+  }, [fetchRecipes, limit]);
 
   return (
-    <section className="flex flex-col justify-center items-center">
-      <h1 className=" text-3xl w-full my-12 pb-4 font-caprasimo border-b-2 border-black ">
-        Die beliebtesten Rezepte
+    <section className={`flex flex-col justify-center items-center ${className}`}>
+      <h1 className="text-3xl w-full my-12 pb-4 font-caprasimo border-b-2 border-black">
+        {title}
       </h1>
       {loading ? (
         <div className="skeleton h-80 w-full"></div>
@@ -55,4 +54,4 @@ const TopRecipes = () => {
   );
 };
 
-export default TopRecipes;
+export default RecipeList;
