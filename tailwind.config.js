@@ -40,7 +40,7 @@ export default {
 
           warning: "#fde68a",
 
-          error: "#fda4af",
+          error: "#f44336",
           black: "#212121",
         },
       },

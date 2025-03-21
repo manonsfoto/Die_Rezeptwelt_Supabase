@@ -1,317 +1,432 @@
-import {  useRef, useState } from "react";
+import { useState } from "react";
 import { Recipe } from "../lib/supabase/types";
 import { supabase } from "../lib/supabase/supabaseClient";
 import { useAuthStore } from "../store/authStore";
-
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { recipeSchema, RecipeFormData } from "../lib/validation";
 
 const CreateRecipe = () => {
-  const nameRef = useRef<HTMLInputElement>(null!);
-  const descriptionRef = useRef<HTMLTextAreaElement>(null!);
-  const servingsRef = useRef<HTMLSelectElement>(null!);
-  const instructionsRef = useRef<HTMLTextAreaElement>(null!);
-  const categoryIdRef = useRef<HTMLSelectElement>(null!);
-  const imageFileRef = useRef<HTMLInputElement>(null!);
-  const imageFileNameForRemoveRef = useRef<string>(null!);
-
-  const ratingRef = useRef<string | null>(null!);
   const [success, setSuccess] = useState<string>("");
   const [error, setError] = useState<string>("");
   const [uploadSuccess, setUploadSuccess] = useState<string>("");
   const [uploadError, setUploadError] = useState<string>("");
-  const imageUrlRef = useRef<string | null>(null!);
+  const [imageUrl, setImageUrl] = useState<string | null>(null);
+  const [imageFileName, setImageFileName] = useState<string | null>(null);
+  const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
+  const [isUploading, setIsUploading] = useState<boolean>(false);
 
   const { user } = useAuthStore();
 
-  async function createNewRecipe(event: React.FormEvent) {
-    event.preventDefault();
-    const nameValue = nameRef.current?.value;
-    const descriptionValue = descriptionRef.current?.value;
-    const servingsValue = servingsRef.current?.value;
-    const instructionsValue = instructionsRef.current?.value;
-    const categoryIdValue = categoryIdRef.current?.value;
-    const ratingValue = ratingRef.current;
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+    reset,
+    setValue,
+    watch,
+  } = useForm<RecipeFormData>({
+    resolver: zodResolver(recipeSchema),
+    defaultValues: {
+      name: "",
+      description: "",
+      instructions: "",
+      servings: "",
+      category_id: "",
+      rating: "",
+    },
+  });
 
-    const instructionsArr = instructionsValue.split(/([.!?])\s*/);
-    const processedInstructions = instructionsArr
-      .map((sentence, index) => {
-        if (index % 2 === 0 && sentence.trim() !== "") {
-          return sentence.trim() + ";";
-        }
-        return sentence;
-      })
-      .join(" ");
+  const watchRating = watch("rating");
 
-    if (
-      !nameValue ||
-      !descriptionValue ||
-      !servingsValue ||
-      !instructionsValue ||
-      !categoryIdValue
-    ) {
+  const onSubmit = async (data: RecipeFormData) => {
+    setIsSubmitting(true);
+    setError("");
+    setSuccess("");
+
+    try {
+      const instructionsArr = data.instructions.split(/([.!?])\s*/);
+      const processedInstructions = instructionsArr
+        .map((sentence, index) => {
+          if (index % 2 === 0 && sentence.trim() !== "") {
+            return sentence.trim() + ";";
+          }
+          return sentence;
+        })
+        .join(" ");
+
+      const newRecipe: Pick<
+        Recipe,
+        | "category_id"
+        | "description"
+        | "imageUrl"
+        | "instructions"
+        | "name"
+        | "rating"
+        | "servings"
+      > = {
+        name: data.name,
+        description: data.description,
+        servings: Number(data.servings),
+        instructions: processedInstructions,
+        category_id: data.category_id,
+        imageUrl: imageUrl,
+        rating: data.rating ? Number(data.rating) : 0,
+      };
+
+      const { error: responseError } = await supabase
+        .from("recipes")
+        .insert(newRecipe)
+        .select();
+
+      if (responseError) {
+        throw new Error(responseError.message);
+      }
+
+      setSuccess("Rezept erfolgreich erstellt! ");
+      reset();
+      setImageUrl(null);
+      setImageFileName(null);
+      setUploadSuccess("");
+    } catch (err) {
+      console.error("Fehler beim Erstellen des Rezepts:", err);
       setError(
-        "Name, description, servings, instructions und category müssen ausgefüllt sein."
+        err instanceof Error
+          ? err.message
+          : "Ein unbekannter Fehler ist aufgetreten"
       );
-      setSuccess("");
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
+  const handleFileUpload = async (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    if (!event.target.files || !event.target.files[0] || !user) {
       return;
     }
 
-    const newRecipe: Pick<
-      Recipe,
-      | "category_id"
-      | "description"
-      | "imageUrl"
-      | "instructions"
-      | "name"
-      | "rating"
-      | "servings"
-    > = {
-      name: nameValue,
-      description: descriptionValue,
-      servings: Number(servingsValue),
-      instructions: processedInstructions,
-      category_id: categoryIdValue,
-      imageUrl: imageUrlRef.current,
-      rating: Number(ratingValue),
-    };
+    setIsUploading(true);
+    setUploadError("");
+    setUploadSuccess("");
 
-    const { data, error } = await supabase
-      .from("recipes")
-      .insert(newRecipe)
-      .select();
-
-    if (error) {
-      setSuccess("");
-      setError(error.message);
-      nameRef.current.value = "";
-      descriptionRef.current.value = "";
-      servingsRef.current.value = "";
-      instructionsRef.current.value = "";
-      categoryIdRef.current.value = "";
-      setUploadError("");
-      setUploadSuccess("");
-    }
-    if (data) {
-      setError("");
-      setSuccess("Successfully the new Recipe is created! 🥰");
-      nameRef.current.value = "";
-      descriptionRef.current.value = "";
-      servingsRef.current.value = "";
-      instructionsRef.current.value = "";
-      categoryIdRef.current.value = "";
-      setUploadError("");
-      setUploadSuccess("");
-    }
-  }
-
-  const handleRatingChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    ratingRef.current = event.target.value;
-  };
-
-  async function uploadImgFile() {
     try {
-      if (imageFileRef.current.files && user) {
-        const imageFile = imageFileRef.current?.files[0];
-        const fileName = `${user.id}_${imageFile.name}`;
-        imageFileNameForRemoveRef.current = fileName;
-        const { data, error } = await supabase.storage
-          .from("photos")
-          .upload(fileName, imageFile, {
-            cacheControl: "3600",
-            upsert: false,
-          });
+      const imageFile = event.target.files[0];
+      const fileName = `${user.id}_${imageFile.name}`;
 
-        if (data) {
-          setUploadSuccess(`"${imageFile.name}" ✅uploaded`);
-          setUploadError("");
+      if (imageFileName) {
+        await supabase.storage.from("photos").remove([imageFileName]);
+      }
 
-          const { data: publicURL } = supabase.storage
-            .from("photos")
-            .getPublicUrl(data.path);
+      const { data, error } = await supabase.storage
+        .from("photos")
+        .upload(fileName, imageFile, {
+          cacheControl: "3600",
+          upsert: false,
+        });
 
-          if (publicURL) {
-            imageUrlRef.current = publicURL.publicUrl;
-          }
-        }
-        if (error) {
-          setUploadSuccess("");
-          setUploadError("Failed to upload ❌");
-        }
-      } else {
-        throw new Error();
+      if (error) {
+        throw new Error(error.message);
+      }
+
+      setImageFileName(fileName);
+      setUploadSuccess(`"${imageFile.name}" erfolgreich hochgeladen `);
+
+      const { data: publicURL } = supabase.storage
+        .from("photos")
+        .getPublicUrl(data.path);
+
+      if (publicURL) {
+        setImageUrl(publicURL.publicUrl);
       }
     } catch (err) {
-      console.error(err);
-      setUploadSuccess("");
-      setUploadError("Failed to upload ❌");
+      console.error("Fehler beim Hochladen:", err);
+      setUploadError("Hochladen fehlgeschlagen ");
     } finally {
-      imageFileRef.current.value = "";
-    }
-  }
+      setIsUploading(false);
 
-  async function changeImgFile() {
-    const { data, error } = await supabase.storage
-      .from("photos")
-      .remove([imageFileNameForRemoveRef.current]);
-    if (data) {
-      setUploadSuccess("");
-      imageUrlRef.current = "";
+      event.target.value = "";
     }
-    if (error) {
+  };
+
+  const handleImageChange = async () => {
+    if (!imageFileName) return;
+
+    try {
+      const { error } = await supabase.storage
+        .from("photos")
+        .remove([imageFileName]);
+
+      if (error) {
+        throw new Error(error.message);
+      }
+
+      setImageUrl(null);
+      setImageFileName(null);
       setUploadSuccess("");
-      setUploadError("Failed to change ❌");
+    } catch (err) {
+      console.error("Fehler beim Ändern des Bildes:", err);
+      setUploadError("Ändern fehlgeschlagen ");
     }
-  }
+  };
 
   return (
     <>
-      <section className="hero bg-secondary min-h-screen mt-4 rounded-3xl ">
-        <div className="card bg-base-100  max-w-sm ">
-          <form className="card-body ">
-            <h1 className="text-3xl  my-12 font-caprasimo text-center">
-              Create New Recipe
+      <section className="hero bg-secondary min-h-screen mt-4 rounded-3xl">
+        <div className="card bg-base-100 my-12 max-w-sm md:max-w-md">
+          <form className="card-body" onSubmit={handleSubmit(onSubmit)}>
+            <h1 className="text-3xl my-12 font-caprasimo text-center">
+              Neues Rezept erstellen
             </h1>
 
-            <label className="form-control font-semibold ">
+            <div className="form-control w-full">
               <input
-                ref={nameRef}
-                name="RecipeName"
+                {...register("name")}
                 type="text"
-                className="input input-bordered"
-                placeholder="Recipe Name"
+                className={`input input-bordered ${
+                  errors.name ? "input-error" : ""
+                }`}
+                placeholder="Rezeptname"
               />
-            </label>
-
-            <label className="form-control font-semibold ">
-              <textarea
-                ref={descriptionRef}
-                className="textarea textarea-bordered h-24"
-                name="Description"
-                placeholder="Description"
-              ></textarea>
-            </label>
-            <label className="form-control font-semibold">
-              <textarea
-                ref={instructionsRef}
-                className="textarea textarea-bordered h-44"
-                name="Instructions"
-                placeholder="Instructions z.B, 
-          Mehl, Milch und Eier verrühren.
-          In einer Pfanne etwas Butter erhitzen.
-          Teig portionsweise goldbraun braten."
-              ></textarea>
-            </label>
-
-            <select
-              ref={servingsRef}
-              name="servings"
-              className="select select-bordered font-semibold "
-              defaultValue=""
-            >
-              <option value={""}>Servings</option>
-              <option value={1}>1 Serving</option>
-              <option value={2}>2 Servings</option>
-              <option value={3}>3 Servings</option>
-              <option value={4}>4 Servings</option>
-              <option value={5}>5 Servings</option>
-            </select>
-            <select
-              ref={categoryIdRef}
-              name="categoryId"
-              className="select select-bordered font-semibold "
-              defaultValue=""
-            >
-              <option value={""}>Category</option>
-              <option value={"12595269-31df-4a3a-b3c7-7494fe5661c5"}>
-                Getränke
-              </option>
-              <option value={"4e29dd29-d50b-4f8b-8120-4d0487f76b96"}>
-                Hauptspeise
-              </option>
-              <option value={"5162be92-4ab3-4cdf-ba2e-2d9a0e10943f"}>
-                Vorspeise
-              </option>
-              <option value={"53085e10-fe7a-4f4b-8238-2933a63783cd"}>
-                Snack
-              </option>
-              <option value={"891d36b2-07ee-4afe-ac06-996fd4c793ed"}>
-                Frühstück
-              </option>
-              <option value={"933f18c3-052b-4989-9f74-4d692fda1473"}>
-                Dessert
-              </option>
-            </select>
-            <div className="rating mt-4">
-              <p className="mr-8 font-semibold">Rating</p>
-              {[1, 2, 3, 4, 5].map((value) => (
-                <input
-                  key={value}
-                  type="radio"
-                  name="rating"
-                  value={value.toString()}
-                  className="mask mask-star-2 bg-orange-400"
-                  onChange={handleRatingChange}
-                />
-              ))}
-            </div>
-            <label className="form-control font-semibold">
-              <div className="label">
-                <span className="label-text">
-                  Upload an image file for the new recipe
-                </span>
-                <button
-                  type="button"
-                  className="btn btn-neutral max-w-xs rounded-full"
-                  onClick={uploadImgFile}
-                >
-                  Upload
-                </button>
-              </div>
-              <input
-                type="file"
-                ref={imageFileRef}
-                className="file-input file-input-bordered min-w-full "
-              />
-            </label>
-            <div>
-              {uploadError.length > 0 && (
-                <p className="text-red-500 text-center font-semibold">
-                  🚨{uploadError}
+              {errors.name && (
+                <p className="text-error text-sm mt-1 font-semibold">
+                  {errors.name.message}
                 </p>
               )}
-              {uploadSuccess.length > 0 && (
-                <div className="flex gap-6 items-center">
-                  <p className="text-green-900 text-center font-semibold max-w-xs ">
-                    {uploadSuccess}
-                  </p>{" "}
+            </div>
+
+            <div className="form-control w-full">
+              <textarea
+                {...register("description")}
+                className={`textarea textarea-bordered h-24 ${
+                  errors.description ? "textarea-error" : ""
+                }`}
+                placeholder="Beschreibung"
+              ></textarea>
+              {errors.description && (
+                <p className="text-error text-sm mt-1 font-semibold">
+                  {errors.description.message}
+                </p>
+              )}
+            </div>
+
+            <div className="form-control w-full">
+              <textarea
+                {...register("instructions")}
+                className={`textarea textarea-bordered h-44 ${
+                  errors.instructions ? "textarea-error" : ""
+                }`}
+                placeholder="Anleitung z.B, 
+Mehl, Milch und Eier verrühren.
+In einer Pfanne etwas Butter erhitzen.
+Teig portionsweise goldbraun braten."
+              ></textarea>
+              {errors.instructions && (
+                <p className="text-error text-sm mt-1 font-semibold">
+                  {errors.instructions.message}
+                </p>
+              )}
+            </div>
+
+            <div className="form-control w-full">
+              <select
+                {...register("servings")}
+                className={`select select-bordered font-semibold ${
+                  errors.servings ? "select-error" : ""
+                }`}
+                defaultValue=""
+              >
+                <option value="">Portionen</option>
+                <option value="1">1 Portion</option>
+                <option value="2">2 Portionen</option>
+                <option value="3">3 Portionen</option>
+                <option value="4">4 Portionen</option>
+                <option value="5">5 Portionen</option>
+              </select>
+              {errors.servings && (
+                <p className="text-error text-sm mt-1 font-semibold">
+                  {errors.servings.message}
+                </p>
+              )}
+            </div>
+
+            <div className="form-control w-full">
+              <select
+                {...register("category_id")}
+                className={`select select-bordered font-semibold ${
+                  errors.category_id ? "select-error" : ""
+                }`}
+                defaultValue=""
+              >
+                <option value="">Kategorie</option>
+                <option value="12595269-31df-4a3a-b3c7-7494fe5661c5">
+                  Getränke
+                </option>
+                <option value="4e29dd29-d50b-4f8b-8120-4d0487f76b96">
+                  Hauptspeise
+                </option>
+                <option value="5162be92-4ab3-4cdf-ba2e-2d9a0e10943f">
+                  Vorspeise
+                </option>
+                <option value="53085e10-fe7a-4f4b-8238-2933a63783cd">
+                  Snack
+                </option>
+                <option value="891d36b2-07ee-4afe-ac06-996fd4c793ed">
+                  Frühstück
+                </option>
+                <option value="933f18c3-052b-4989-9f74-4d692fda1473">
+                  Dessert
+                </option>
+              </select>
+              {errors.category_id && (
+                <p className="text-error text-sm mt-1 font-semibold">
+                  {errors.category_id.message}
+                </p>
+              )}
+            </div>
+
+            <div className="form-control w-full mt-4">
+              <div className="flex items-center">
+                <p className="mr-8 font-semibold">Bewertung</p>
+                <div className="rating">
+                  {[1, 2, 3, 4, 5].map((value) => (
+                    <input
+                      key={value}
+                      type="radio"
+                      value={value.toString()}
+                      className="mask mask-star-2 bg-orange-400"
+                      checked={watchRating === value.toString()}
+                      onChange={() => setValue("rating", value.toString())}
+                    />
+                  ))}
+                </div>
+              </div>
+            </div>
+
+            <div className="form-control w-full mt-4">
+              <div className="label">
+                <span className="label-text font-semibold">
+                  Bild für das Rezept hochladen
+                </span>
+              </div>
+              <div className="flex flex-col sm:flex-row gap-2">
+                <input
+                  type="file"
+                  className="file-input file-input-bordered w-full"
+                  onChange={handleFileUpload}
+                  disabled={isUploading}
+                />
+                {!imageUrl && (
                   <button
                     type="button"
-                    className="btn btn-neutral max-w-xs rounded-full"
-                    onClick={changeImgFile}
+                    className="btn btn-neutral rounded-full sm:w-auto"
+                    onClick={() =>
+                      document
+                        .querySelector<HTMLInputElement>('input[type="file"]')
+                        ?.click()
+                    }
+                    disabled={isUploading}
                   >
-                    Change File
+                    {isUploading ? (
+                      <span className="loading loading-spinner loading-sm"></span>
+                    ) : (
+                      "Hochladen"
+                    )}
+                  </button>
+                )}
+              </div>
+            </div>
+
+            {uploadError && (
+              <div className="alert alert-error shadow-lg mt-2">
+                <div className="flex items-center">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    className="stroke-current shrink-0 h-6 w-6 mr-2"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth="2"
+                      d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z"
+                    />
+                  </svg>
+                  <span>{uploadError}</span>
+                </div>
+              </div>
+            )}
+
+            {uploadSuccess && (
+              <div className="alert alert-success shadow-lg mt-2">
+                <div className="flex justify-between w-full items-center font-semibold">
+                  <span>{uploadSuccess}</span>
+                  <button
+                    type="button"
+                    className="btn btn-sm btn-neutral rounded-full"
+                    onClick={handleImageChange}
+                  >
+                    Bild ändern
                   </button>
                 </div>
-              )}
-            </div>
+              </div>
+            )}
+
             <button
-              type="button"
+              type="submit"
               className="btn bg-black hover:text-black text-base-100 rounded-full mt-6"
-              onClick={createNewRecipe}
+              disabled={isSubmitting}
             >
-              Save New Recipe
+              {isSubmitting ? (
+                <span className="loading loading-spinner loading-sm"></span>
+              ) : (
+                "Rezept speichern"
+              )}
             </button>
-            <div className="max-w-xs">
-              {error.length > 0 && (
-                <p className="text-red-500 text-center font-semibold">
-                  🚨{error}
-                </p>
-              )}
-              {success.length > 0 && (
-                <p className="text-green-900 text-center font-semibold">
-                  {success}
-                </p>
-              )}
-            </div>
+
+            {error && (
+              <div className="alert alert-error shadow-lg mt-4">
+                <div className="flex items-center">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    className="stroke-current shrink-0 h-6 w-6 mr-2"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth="2"
+                      d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z"
+                    />
+                  </svg>
+                  <span>{error}</span>
+                </div>
+              </div>
+            )}
+
+            {success && (
+              <div className="alert alert-success shadow-lg mt-4">
+                <div className="flex items-center font-semibold">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    className="stroke-current shrink-0 h-6 w-6 mr-2"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth="2"
+                      d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
+                    />
+                  </svg>
+                  <span>{success}</span>
+                </div>
+              </div>
+            )}
           </form>
         </div>
       </section>

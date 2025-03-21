@@ -84,8 +84,6 @@ export const fetchSingleRecipe = async (
   }
 };
 
-
-
 export const deleteGroceryItem = async (
   ingredient_id: string
 ): Promise<{ success: boolean; error: Error | null }> => {
@@ -287,6 +285,8 @@ export const signUp = async (
       email,
       password,
       confirmPassword,
+      firstName,
+      lastName,
     });
 
     if (!validationResult.success) {
@@ -304,14 +304,6 @@ export const signUp = async (
         success: false,
         user: null,
         error: new Error(errorMessage || "Validierungsfehler"),
-      };
-    }
-
-    if (!firstName || !lastName) {
-      return {
-        success: false,
-        user: null,
-        error: new Error("Vorname und Nachname sind erforderlich"),
       };
     }
 

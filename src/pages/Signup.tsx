@@ -195,9 +195,45 @@ const Signup = () => {
             </Link>
 
             {error && (
-              <p className="text-red-500 text-center font-semibold">
-                🚨 {error}
-              </p>
+              <div className="alert alert-error shadow-lg mt-4">
+                <div className="flex flex-col w-full">
+                  <div className="flex items-center">
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      className="stroke-current shrink-0 h-6 w-6 mr-2"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth="2"
+                        d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z"
+                      />
+                    </svg>
+                    <span className="font-semibold">
+                      Registrierung fehlgeschlagen
+                    </span>
+                  </div>
+                  <p className="text-sm mt-2">
+                    {error.includes("Email already registered")
+                      ? "Diese E-Mail-Adresse ist bereits registriert. Bitte verwende eine andere E-Mail oder melde dich an."
+                      : error.includes("Password")
+                      ? "Bitte überprüfe dein Passwort. Es muss mindestens 6 Zeichen lang sein."
+                      : error.includes("network")
+                      ? "Netzwerkfehler. Bitte überprüfe deine Internetverbindung und versuche es erneut."
+                      : error}
+                  </p>
+                  {error.includes("Email already registered") && (
+                    <Link
+                      to="/login"
+                      className="text-sm underline mt-2 self-end"
+                    >
+                      Zum Login
+                    </Link>
+                  )}
+                </div>
+              </div>
             )}
 
             {success && (
