@@ -65,7 +65,7 @@ const Details = () => {
   return (
     <>
       {loading ? (
-        <div className="skeleton h-80 w-full"></div>
+        <SkeletonDetails />
       ) : (
         <>
           <section className="md:max-w-7xl w-full">
@@ -106,7 +106,7 @@ const Details = () => {
               </div>
             </div>
             {singleRecipe?.imageUrl && (
-              <figure className="h-svh rounded-3xl overflow-hidden my-8 ">
+              <figure className="h-[50vh] md:h-[60vh] rounded-3xl overflow-hidden my-8 ">
                 <img
                   src={singleRecipe?.imageUrl}
                   alt={singleRecipe?.name}
@@ -139,9 +139,7 @@ const Details = () => {
               ))}
             </ul>
             <article className="w-full rounded-3xl pb-8 bg-secondary mt-8">
-              <h3 className="py-4 headline-2 pl-2">
-                Zubereitung
-              </h3>
+              <h3 className="py-4 headline-2 pl-2">Zubereitung</h3>
               <ol className="list-decimal list-inside">
                 {singleRecipe?.instructions.split(";").map((item) => (
                   <li
@@ -161,3 +159,58 @@ const Details = () => {
 };
 
 export default Details;
+
+export const SkeletonDetails = () => {
+  return (
+    <section className="md:max-w-7xl w-full">
+      <div className="flex flex-col md:flex-row">
+        <div className="w-full md:border-r-2 border-black md:border-b-2 pt-5 md:py-5">
+          <div className="skeleton w-8 h-8 mb-4 rounded-full"></div>
+          <div className="skeleton h-10 w-3/4 mt-12 mb-4"></div>
+          <div className="skeleton h-4 w-2/3"></div>
+        </div>
+        <div className="border-b-2 border-black flex-between md:h-fit md:self-end md:px-5 md:gap-5 w-full mt-4 md:w-fit md:mt-0">
+          <div className="skeleton h-6 w-32"></div>
+          <div className="skeleton h-6 w-24 rounded-full"></div>
+          <div className="border-l-2 border-black h-full p-5">
+            <div className="skeleton w-6 h-6 rounded-full"></div>
+          </div>
+        </div>
+      </div>
+
+      <div className="skeleton h-[50vh] md:h-[60vh] rounded-3xl my-8"></div>
+
+      <div className="border-t-2 border-black w-full py-4">
+        <div className="skeleton h-8 w-32 mb-4"></div>
+      </div>
+
+      <ul>
+        {[...Array(5)].map((_, index) => (
+          <li
+            key={index}
+            className="border-b-2 border-base-300 py-2 flex-between md:w-1/2 md:mx-auto"
+          >
+            <div className="skeleton h-6 w-32 rounded-full"></div>
+            <div className="skeleton h-6 w-20"></div>
+          </li>
+        ))}
+      </ul>
+
+      <div className="w-full rounded-3xl pb-8 bg-secondary mt-8">
+        <div className="py-4 pl-2">
+          <div className="skeleton h-8 w-32"></div>
+        </div>
+        <ol>
+          {[...Array(3)].map((_, index) => (
+            <li
+              key={index}
+              className="pl-10 border-b-2 border-base-300 py-2 md:w-1/2 md:mx-auto"
+            >
+              <div className="skeleton h-6 w-3/4"></div>
+            </li>
+          ))}
+        </ol>
+      </div>
+    </section>
+  );
+};

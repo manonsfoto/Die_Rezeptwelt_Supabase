@@ -24,10 +24,7 @@ const EmptyHero = ({
               {subText}
             </span>
           </p>
-          <Link
-            to="/rezepte"
-            className="text-black btn-action-neutral"
-          >
+          <Link to="/rezepte" className="text-black btn-action-neutral">
             Zu den Rezepten
           </Link>
         </div>

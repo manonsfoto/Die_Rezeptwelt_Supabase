@@ -4,6 +4,7 @@ import EmptyHero from "../components/EmptyHero";
 import Card from "../components/Card";
 import { useSearchParams } from "react-router-dom";
 import { searchRecipes } from "../lib/supabase/actions";
+import SkeletonCard from "../components/SkeletonCard";
 
 const SearchResult = () => {
   const [searchParams] = useSearchParams();
@@ -40,7 +41,11 @@ const SearchResult = () => {
           Suchergebnisse
         </h1>
         {loading ? (
-          <div className="skeleton h-80 w-full"></div>
+          <ul className="flex-center flex-row gap-4 flex-wrap ">
+            {[...Array(3)].map((_, index) => (
+              <SkeletonCard key={index} />
+            ))}
+          </ul>
         ) : recipes.length > 0 ? (
           <ul className="flex-center flex-row gap-4 flex-wrap ">
             {recipes.map((recipe) => (

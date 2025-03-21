@@ -1,15 +1,23 @@
 import { useState, useEffect } from "react";
 import { Recipe } from "../lib/supabase/types";
 import Card from "./Card";
+import SkeletonCard from "./SkeletonCard";
 
 type RecipeListProps = {
   title: string;
-  fetchRecipes: (limit?: number) => Promise<{ data: Recipe[] | null; error: Error | null }>;
+  fetchRecipes: (
+    limit?: number
+  ) => Promise<{ data: Recipe[] | null; error: Error | null }>;
   className?: string;
   limit?: number;
 };
 
-const RecipeList = ({ title, fetchRecipes, className = "", limit = 3 }: RecipeListProps) => {
+const RecipeList = ({
+  title,
+  fetchRecipes,
+  className = "",
+  limit = 3,
+}: RecipeListProps) => {
   const [recipes, setRecipes] = useState<Recipe[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
 
@@ -40,7 +48,11 @@ const RecipeList = ({ title, fetchRecipes, className = "", limit = 3 }: RecipeLi
         {title}
       </h1>
       {loading ? (
-        <div className="skeleton h-80 w-full"></div>
+        <ul className="flex-center flex-row gap-4 flex-wrap">
+          {[...Array(limit)].map((_, index) => (
+            <SkeletonCard key={index} />
+          ))}
+        </ul>
       ) : (
         <ul className="flex-center flex-row gap-4 flex-wrap ">
           {recipes.map((recipe) => (

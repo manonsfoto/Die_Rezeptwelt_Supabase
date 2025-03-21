@@ -2,6 +2,7 @@ import { useEffect } from "react";
 import EmptyHero from "../components/EmptyHero";
 import Card from "../components/Card";
 import { useFavoritesStore } from "../store/favoritesStore";
+import SkeletonCard from "../components/SkeletonCard";
 
 const MeineRezepte = () => {
   const { favorites, isLoading, fetchFavorites } = useFavoritesStore();
@@ -17,7 +18,11 @@ const MeineRezepte = () => {
           Meine Rezepte
         </h1>
         {isLoading ? (
-          <div className="skeleton h-80 w-full"></div>
+          <ul className="flex-center flex-row gap-4 flex-wrap">
+            {[...Array(3)].map((_, index) => (
+              <SkeletonCard key={index} />
+            ))}
+          </ul>
         ) : favorites.length > 0 ? (
           <ul className="flex flex-col gap-4 flex-wrap min-h-screen md:flex-row">
             {favorites.map((recipe) => (

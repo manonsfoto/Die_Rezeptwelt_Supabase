@@ -11,6 +11,7 @@ const About = () => {
             src="https://images.unsplash.com/photo-1675096000167-4b8a276b6187?q=80&w=1974&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
             alt="man holding a dish filled with food"
             className="w-full h-full object-cover"
+            loading="lazy"
           />
         </figure>
       </div>
@@ -28,6 +29,7 @@ const About = () => {
             src="https://images.unsplash.com/photo-1471478108131-9b2335c21611?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
             alt="a plate with pancakes"
             className="w-full h-full object-cover"
+            loading="lazy"
           />
         </figure>
 

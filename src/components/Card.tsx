@@ -23,7 +23,7 @@ const Card: FC<CardProps> = ({ recipe }) => {
   };
 
   return (
-    <div className="max-w-96 relative">
+    <div className="w-96 relative">
       {" "}
       <Link to={`/details/${recipe.id}`}>
         <figure className="rounded-3xl flex-center  h-80 overflow-hidden ">
@@ -32,6 +32,7 @@ const Card: FC<CardProps> = ({ recipe }) => {
               className="w-full h-full object-cover "
               src={recipe.imageUrl}
               alt={recipe.name}
+              loading="lazy"
             />
           )}
         </figure>{" "}
