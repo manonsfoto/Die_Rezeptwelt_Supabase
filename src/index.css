@@ -33,3 +33,43 @@
     font-display: swap;
   }
 }
+
+
+@layer utilities {
+ .border-b-font-semibold {
+    @apply  border-b-2 border-black font-semibold;
+  }
+  .nav-active{
+    @apply border-2 rounded-full border-black px-2;
+  }
+  .flex-center{
+    @apply flex items-center justify-center;
+  }
+  .flex-between{
+    @apply flex items-center justify-between;
+  }
+  .nav-btn{
+    @apply btn btn-ghost btn-circle;
+  }
+  .btn-action{
+    @apply btn bg-black hover:text-black text-base-100 btn-block rounded-full;
+  }
+  .btn-action-neutral{
+    @apply btn btn-neutral rounded-full;
+  }
+  .btn-underline{
+    @apply btn btn-ghost hover:bg-transparent hover:text-info rounded-full underline;
+  }
+  .headline-1{
+    @apply text-3xl font-caprasimo;
+  }
+  .headline-2{
+    @apply text-2xl font-caprasimo;
+  }
+  .text-error-form{
+    @apply text-error text-sm mt-1 font-semibold;
+  }
+  .stn-secondary{
+    @apply hero bg-secondary min-h-screen mt-4 rounded-3xl;
+  }
+}

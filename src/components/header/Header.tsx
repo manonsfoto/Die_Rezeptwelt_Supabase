@@ -29,13 +29,13 @@ const Header = () => {
 
   return (
     <header className="px-4 sticky top-0 z-50  bg-base-100">
-      <nav className="navbar px-0  border-b-2 border-black uppercase font-semibold">
+      <nav className="navbar px-0  border-b-font-semibold uppercase ">
         <div className="navbar-start">
           <div className="dropdown">
             <div
               tabIndex={0}
               role="button"
-              className="btn btn-ghost btn-circle lg:hidden"
+              className="nav-btn lg:hidden"
             >
               <MenuIcon />
             </div>
@@ -73,7 +73,7 @@ const Header = () => {
                   to={item.path}
                   className={({ isActive }) =>
                     isActive
-                      ? "border-2 rounded-full border-black px-2"
+                      ? "nav-active"
                       : "px-2"
                   }
                 >
@@ -89,7 +89,7 @@ const Header = () => {
                       to={item.path}
                       className={({ isActive }) =>
                         isActive
-                          ? "border-2 rounded-full border-black px-2"
+                          ? "nav-active"
                           : "px-2"
                       }
                     >
@@ -105,7 +105,7 @@ const Header = () => {
           <div className="dropdown dropdown-end">
             <button
               tabIndex={0}
-              className="btn btn-circle btn-ghost mr-4"
+              className="nav-btn mr-4"
               title="Suche"
             >
               <SearchIcon />
@@ -123,13 +123,13 @@ const Header = () => {
 
           {user ? (
             <>
-              <div className="flex gap-4 items-center justify-center">
+              <div className="flex-center gap-4 ">
                 <div className="dropdown dropdown-end">
                   <div
                     tabIndex={0}
                     role="button"
                     title="Einkaufsliste"
-                    className="btn btn-ghost btn-circle"
+                    className="nav-btn"
                   >
                     <div className="indicator flex">
                       <ListIcon />
@@ -165,7 +165,7 @@ const Header = () => {
                 </div>
 
                 <button
-                  className="btn btn-ghost btn-circle"
+                  className="nav-btn"
                   onClick={handleLogOutButton}
                   title="Abmelden"
                 >

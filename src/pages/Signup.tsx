@@ -85,10 +85,10 @@ const Signup = () => {
 
   return (
     <>
-      <div className="hero bg-secondary min-h-screen mt-4 rounded-3xl">
+      <div className="stn-secondary">
         <div className="card bg-base-100 w-full max-w-sm">
           <form className="card-body pb-24" onSubmit={handleSubmit(onSubmit)}>
-            <h1 className="text-3xl my-12 font-caprasimo">Registrieren</h1>
+            <h1 className="headline-1 my-12">Registrieren</h1>
 
             <div className="form-control w-full">
               <label className="input input-bordered flex items-center gap-2">
@@ -101,9 +101,7 @@ const Signup = () => {
                 />
               </label>
               {errors.firstName && (
-                <p className="text-error text-sm mt-1">
-                  {errors.firstName.message}
-                </p>
+                <p className="text-error-form">{errors.firstName.message}</p>
               )}
             </div>
 
@@ -118,9 +116,7 @@ const Signup = () => {
                 />
               </label>
               {errors.lastName && (
-                <p className="text-error text-sm mt-1">
-                  {errors.lastName.message}
-                </p>
+                <p className="text-error-form">{errors.lastName.message}</p>
               )}
             </div>
 
@@ -135,9 +131,7 @@ const Signup = () => {
                 />
               </label>
               {errors.email && (
-                <p className="text-error text-sm mt-1">
-                  {errors.email.message}
-                </p>
+                <p className="text-error-form">{errors.email.message}</p>
               )}
             </div>
 
@@ -152,9 +146,7 @@ const Signup = () => {
                 />
               </label>
               {errors.password && (
-                <p className="text-error text-sm mt-1">
-                  {errors.password.message}
-                </p>
+                <p className="text-error-form">{errors.password.message}</p>
               )}
             </div>
 
@@ -169,7 +161,7 @@ const Signup = () => {
                 />
               </label>
               {errors.confirmPassword && (
-                <p className="text-error text-sm mt-1">
+                <p className="text-error-form">
                   {errors.confirmPassword.message}
                 </p>
               )}
@@ -177,7 +169,7 @@ const Signup = () => {
 
             <button
               type="submit"
-              className="btn bg-black hover:text-black text-base-100 rounded-full mt-6"
+              className="btn-action mt-6"
               disabled={isSubmitting}
             >
               {isSubmitting ? (
@@ -189,7 +181,7 @@ const Signup = () => {
 
             <Link
               to="/login"
-              className="btn btn-ghost hover:bg-transparent hover:text-info rounded-full underline"
+              className="btn-underline"
             >
               Schon registriert? Zum Anmelden
             </Link>

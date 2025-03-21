@@ -26,7 +26,7 @@ const EmptyHero = ({
           </p>
           <Link
             to="/rezepte"
-            className="btn bg-neutral  text-black rounded-full"
+            className="text-black btn-action-neutral"
           >
             Zu den Rezepten
           </Link>

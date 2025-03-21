@@ -60,10 +60,10 @@ const Login = () => {
 
   return (
     <>
-      <div className="hero bg-secondary min-h-screen mt-4 rounded-3xl">
+      <div className="stn-secondary">
         <div className="card bg-base-100 w-full max-w-sm ">
           <form className="card-body" onSubmit={handleSubmit(onSubmit)}>
-            <h1 className="text-3xl my-12 font-caprasimo">Anmelden</h1>
+            <h1 className="headline-1 my-12">Anmelden</h1>
 
             <div className="form-control">
               <label className="input input-bordered flex items-center gap-2">
@@ -76,9 +76,7 @@ const Login = () => {
                 />
               </label>
               {errors.email && (
-                <p className="text-error font-semibold text-sm mt-1">
-                  {errors.email.message}
-                </p>
+                <p className="text-error-form">{errors.email.message}</p>
               )}
             </div>
 
@@ -93,9 +91,7 @@ const Login = () => {
                 />
               </label>
               {errors.password && (
-                <p className="text-error font-semibold  text-sm mt-1">
-                  {errors.password.message}
-                </p>
+                <p className="text-error-form">{errors.password.message}</p>
               )}
               <label className="label">
                 <p className="label-text-alt link link-hover">
@@ -106,7 +102,7 @@ const Login = () => {
 
             <button
               type="submit"
-              className="btn bg-black hover:text-black text-base-100 rounded-full mt-6"
+              className="btn-action mt-6"
               disabled={isSubmitting}
             >
               {isSubmitting ? (
@@ -116,10 +112,7 @@ const Login = () => {
               )}
             </button>
 
-            <Link
-              to="/signup"
-              className="btn btn-ghost hover:bg-transparent hover:text-info rounded-full underline"
-            >
+            <Link to="/signup" className="btn-underline">
               Noch kein Konto? Jetzt registrieren
             </Link>
 

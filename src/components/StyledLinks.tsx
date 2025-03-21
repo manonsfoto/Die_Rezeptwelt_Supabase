@@ -6,7 +6,7 @@ const StyledLinks = ({ bgColor }: { bgColor: string }) => {
     <div className="w-full relative mt-12">
       <Link to={"/meine_rezepte"} className="w-full">
         {" "}
-        <div className="flex items-center justify-between pb-8 bg-primary w-full text-2xl p-4 font-caprasimo rounded-t-3xl group">
+        <div className="flex-between pb-8 bg-primary w-full headline-2 p-4  rounded-t-3xl group">
           <p className="group-hover:underline">Meine Rezepte</p>
           <div className="rotate-180 hover:opacity-70 transition-opacity">
             <ArrowIcon />
@@ -15,7 +15,7 @@ const StyledLinks = ({ bgColor }: { bgColor: string }) => {
       </Link>
       <Link to={"/my_grocery_list"} className="w-full">
         {" "}
-        <div className="flex absolute z-10 top-14  items-center  pb-8 justify-between bg-neutral w-full text-2xl   p-4 font-caprasimo  rounded-b-3xl group">
+        <div className="flex-between absolute z-10 top-14 pb-8  bg-neutral w-full headline-2 p-4 rounded-b-3xl group">
           <p className="group-hover:underline">Einkaufsliste</p>
           <div className="rotate-180 hover:opacity-70 transition-opacity">
             <ArrowIcon />
@@ -23,7 +23,7 @@ const StyledLinks = ({ bgColor }: { bgColor: string }) => {
         </div>
       </Link>
       <div
-        className={` absolute z-20 top-28  ${bgColor} w-full    p-4   rounded-t-3xl`}
+        className={` absolute z-20 top-28  ${bgColor} w-full p-4 rounded-t-3xl`}
       ></div>
     </div>
   );

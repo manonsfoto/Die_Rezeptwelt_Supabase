@@ -66,7 +66,7 @@ const MyGroceryList = () => {
     <>
       {" "}
       <section className="w-full gap-4 mt-4">
-        <h1 className="text-3xl w-full my-12 pb-4 font-caprasimo border-b-2 border-black">
+        <h1 className="headline-1 w-full my-12 pb-4  border-b-2 border-black">
           Meine Einkaufsliste
         </h1>
         {groceryList && groceryList.length > 0 ? (
@@ -82,7 +82,7 @@ const MyGroceryList = () => {
               {groceryList?.map((item) => (
                 <li
                   key={item.ingredient_id}
-                  className="flex items-center justify-between gap-4 md:gap-12 p-6 font-semibold  border-b-2 border-base-300  "
+                  className="flex-between gap-4 md:gap-12 p-6 font-semibold  border-b-2 border-base-300  "
                 >
                   <div className="relative">
                     <label className="absolute -top-2 -left-2">
@@ -97,12 +97,12 @@ const MyGroceryList = () => {
                       />
                     </label>
 
-                    <div className="font-bold font-gaegu text-xl italic bg-secondary rounded-2xl uppercase w-28 h-16 flex items-center justify-center">
+                    <div className="font-bold font-gaegu text-xl italic bg-secondary rounded-2xl uppercase w-28 h-16 flex-center">
                       {item.ingredients.name}
                     </div>
                   </div>
-                  <div className="flex flex-col items-center justify-center gap-3 md:flex-row md:gap-10">
-                    <div className="flex items-center justify-center gap-3">
+                  <div className="flex-center flex-col gap-3 md:flex-row md:gap-10">
+                    <div className="flex-center gap-3">
                       <button
                         onClick={() => {
                           handleQuantityChangeButton(
@@ -114,7 +114,7 @@ const MyGroceryList = () => {
                       >
                         –
                       </button>
-                      <p className="font-semibold rounded-full border-2 border-black w-7 h-7 flex items-center justify-center">
+                      <p className="font-semibold rounded-full border-2 border-black w-7 h-7 flex-center">
                         {item.quantity}
                       </p>
                       <button

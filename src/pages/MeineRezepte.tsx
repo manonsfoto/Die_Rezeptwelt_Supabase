@@ -12,8 +12,8 @@ const MeineRezepte = () => {
 
   return (
     <>
-      <section className="flex flex-col justify-center items-center mb-16 w-full">
-        <h1 className="text-3xl w-full my-12 pb-4 font-caprasimo border-b-2 border-black">
+      <section className="flex-center flex-col  mb-16 w-full">
+        <h1 className=" w-full my-12 pb-4 headline-1 border-b-2 border-black">
           Meine Rezepte
         </h1>
         {isLoading ? (

@@ -19,11 +19,7 @@ const Search = () => {
         className="input input-bordered rounded-full "
       />
 
-      <button
-        type="button"
-        className="btn bg-black hover:text-black text-base-100 btn-block rounded-full"
-        onClick={handleSearchButton}
-      >
+      <button type="button" className="btn-action" onClick={handleSearchButton}>
         Search
       </button>
     </div>

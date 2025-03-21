@@ -35,14 +35,14 @@ const RecipeList = ({ title, fetchRecipes, className = "", limit = 3 }: RecipeLi
   }, [fetchRecipes, limit]);
 
   return (
-    <section className={`flex flex-col justify-center items-center ${className}`}>
-      <h1 className="text-3xl w-full my-12 pb-4 font-caprasimo border-b-2 border-black">
+    <section className={`flex-center flex-col  ${className}`}>
+      <h1 className="headline-1 w-full my-12 pb-4  border-b-2 border-black">
         {title}
       </h1>
       {loading ? (
         <div className="skeleton h-80 w-full"></div>
       ) : (
-        <ul className="flex flex-row gap-4 flex-wrap justify-center items-center">
+        <ul className="flex-center flex-row gap-4 flex-wrap ">
           {recipes.map((recipe) => (
             <li key={recipe.id}>
               <Card recipe={recipe} />

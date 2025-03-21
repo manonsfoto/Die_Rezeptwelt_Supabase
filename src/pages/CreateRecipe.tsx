@@ -173,10 +173,10 @@ const CreateRecipe = () => {
 
   return (
     <>
-      <section className="hero bg-secondary min-h-screen mt-4 rounded-3xl">
+      <section className="stn-secondary">
         <div className="card bg-base-100 my-12 max-w-sm md:max-w-md">
           <form className="card-body" onSubmit={handleSubmit(onSubmit)}>
-            <h1 className="text-3xl my-12 font-caprasimo text-center">
+            <h1 className="headline-1 my-12  text-center">
               Neues Rezept erstellen
             </h1>
 
@@ -190,7 +190,7 @@ const CreateRecipe = () => {
                 placeholder="Rezeptname"
               />
               {errors.name && (
-                <p className="text-error text-sm mt-1 font-semibold">
+                <p className="text-error-form">
                   {errors.name.message}
                 </p>
               )}
@@ -205,7 +205,7 @@ const CreateRecipe = () => {
                 placeholder="Beschreibung"
               ></textarea>
               {errors.description && (
-                <p className="text-error text-sm mt-1 font-semibold">
+                <p className="text-error-form">
                   {errors.description.message}
                 </p>
               )}
@@ -223,7 +223,7 @@ In einer Pfanne etwas Butter erhitzen.
 Teig portionsweise goldbraun braten."
               ></textarea>
               {errors.instructions && (
-                <p className="text-error text-sm mt-1 font-semibold">
+                <p className="text-error-form">
                   {errors.instructions.message}
                 </p>
               )}
@@ -245,7 +245,7 @@ Teig portionsweise goldbraun braten."
                 <option value="5">5 Portionen</option>
               </select>
               {errors.servings && (
-                <p className="text-error text-sm mt-1 font-semibold">
+                <p className="text-error-form">
                   {errors.servings.message}
                 </p>
               )}
@@ -280,7 +280,7 @@ Teig portionsweise goldbraun braten."
                 </option>
               </select>
               {errors.category_id && (
-                <p className="text-error text-sm mt-1 font-semibold">
+                <p className="text-error-form">
                   {errors.category_id.message}
                 </p>
               )}
@@ -361,11 +361,11 @@ Teig portionsweise goldbraun braten."
 
             {uploadSuccess && (
               <div className="alert alert-success shadow-lg mt-2">
-                <div className="flex justify-between w-full items-center font-semibold">
+                <div className="flex-between w-full font-semibold">
                   <span>{uploadSuccess}</span>
                   <button
                     type="button"
-                    className="btn btn-sm btn-neutral rounded-full"
+                    className="btn-action-neutral"
                     onClick={handleImageChange}
                   >
                     Bild ändern
@@ -376,7 +376,7 @@ Teig portionsweise goldbraun braten."
 
             <button
               type="submit"
-              className="btn bg-black hover:text-black text-base-100 rounded-full mt-6"
+              className="btn-action mt-6"
               disabled={isSubmitting}
             >
               {isSubmitting ? (

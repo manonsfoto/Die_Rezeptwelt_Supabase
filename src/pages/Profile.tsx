@@ -8,10 +8,10 @@ const Profile = () => {
   return (
     <>
       <StyledLinks bgColor="bg-secondary" />
-      <section className="hero bg-secondary min-h-screen mt-4 rounded-3xl">
+      <section className="stn-secondary">
         <div className="card bg-base-100 w-full max-w-sm ">
           <div className="card-body ">
-            <h1 className="text-3xl  my-12 font-caprasimo">Profil</h1>
+            <h1 className="headline-1  my-12">Profil</h1>
             <div className="flex flex-col gap-2 font-semibold text-xl">
               <p>
                 <strong> E-Mail</strong>
