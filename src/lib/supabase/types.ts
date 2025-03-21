@@ -21,6 +21,22 @@ export type GroceryList = Tables<"grocerylist_ingredients"> & {
   ingredients: Pick<Tables<"ingredients">, "name" | "unit">;
 };
 
+export type Ingredient = {
+  id: string;
+  name: string;
+  unit: "g" | "ml" | "Stück" | "TL" | "EL" | "Prise" | null;
+  additional_info?: string | null;
+  created_at?: string;
+};
+
+export type RecipeIngredient = {
+  id?: string;
+  recipe_id?: string;
+  ingredient_id: string;
+  quantity: number;
+  ingredient?: Ingredient;
+};
+
 export type GroceryItem = Pick<
   {
     ingredient_id: string;

@@ -1,7 +1,12 @@
-import { useState } from "react";
-import { Recipe } from "../lib/supabase/types";
+import { useState, useEffect } from "react";
+import { Recipe, Ingredient, RecipeIngredient } from "../lib/supabase/types";
 import { supabase } from "../lib/supabase/supabaseClient";
-import { useAuthStore } from "../store/authStore";
+import {
+  fetchIngredients,
+  addNewIngredient,
+  saveRecipeIngredients,
+} from "../lib/ingredientUtils";
+
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { recipeSchema, RecipeFormData } from "../lib/validation";
@@ -16,15 +21,130 @@ const CreateRecipe = () => {
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
   const [isUploading, setIsUploading] = useState<boolean>(false);
 
-  const { user } = useAuthStore();
+  const [ingredients, setIngredients] = useState<Ingredient[]>([]);
+  const [recipeIngredients, setRecipeIngredients] = useState<
+    RecipeIngredient[]
+  >([]);
+  const [newIngredientMode, setNewIngredientMode] = useState<boolean>(false);
+  const [selectedIngredient, setSelectedIngredient] = useState<string>("");
+  const [ingredientQuantity, setIngredientQuantity] = useState<string>("");
+  const [newIngredientName, setNewIngredientName] = useState<string>("");
+  const [newIngredientUnit, setNewIngredientUnit] = useState<
+    "" | "g" | "ml" | "Stück" | "TL" | "EL" | "Prise"
+  >("");
+  const [newIngredientInfo, setNewIngredientInfo] = useState<string>("");
+  const [ingredientError, setIngredientError] = useState<string>("");
+
+  
+  useEffect(() => {
+    const loadIngredients = async () => {
+      const ingredientsData = await fetchIngredients();
+      setIngredients(ingredientsData);
+    };
+
+    loadIngredients();
+  }, []);
+
+  
+  const handleAddNewIngredient = async () => {
+    try {
+      setIngredientError("");
+      const newIngredientData = await addNewIngredient(
+        newIngredientName,
+        newIngredientUnit,
+        newIngredientInfo
+      );
+
+      if (newIngredientData) {
+       
+        setIngredients((prev) => [...prev, newIngredientData]);
+
+      
+        setNewIngredientName("");
+        setNewIngredientUnit("");
+        setNewIngredientInfo("");
+        setNewIngredientMode(false);
+
+       
+        setSelectedIngredient(newIngredientData.id);
+      }
+    } catch (err) {
+      setIngredientError(
+        err instanceof Error
+          ? err.message
+          : "Ein unbekannter Fehler ist aufgetreten"
+      );
+    }
+  };
+
+
+  const addIngredientToRecipe = () => {
+    try {
+      setIngredientError("");
+
+      const quantity = parseFloat(ingredientQuantity);
+      if (isNaN(quantity) || quantity <= 0) {
+        setIngredientError("Bitte gib eine gültige Menge ein");
+        return;
+      }
+
+   
+      const ingredient = ingredients.find(
+        (ing) => ing.id === selectedIngredient
+      );
+      if (!ingredient) {
+        setIngredientError("Zutat nicht gefunden");
+        return;
+      }
+
+   
+      const existingIndex = recipeIngredients.findIndex(
+        (item) => item.ingredient_id === selectedIngredient
+      );
+
+      if (existingIndex !== -1) {
+        
+        const updatedIngredients = [...recipeIngredients];
+        updatedIngredients[existingIndex].quantity = quantity;
+        setRecipeIngredients(updatedIngredients);
+      } else {
+      
+        const newRecipeIngredient: RecipeIngredient = {
+          ingredient_id: selectedIngredient,
+          quantity,
+          ingredient: ingredient,
+        };
+
+        setRecipeIngredients([...recipeIngredients, newRecipeIngredient]);
+      }
+
+     
+      setSelectedIngredient("");
+      setIngredientQuantity("");
+    } catch (err) {
+      console.error("Fehler beim Hinzufügen der Zutat:", err);
+      setIngredientError(
+        err instanceof Error
+          ? err.message
+          : "Ein unbekannter Fehler ist aufgetreten"
+      );
+    }
+  };
+
+ 
+  const removeIngredientFromRecipe = (index: number) => {
+    setRecipeIngredients((prevIngredients) =>
+      prevIngredients.filter((_, i) => i !== index)
+    );
+  };
+
 
   const {
     register,
     handleSubmit,
-    formState: { errors },
     reset,
-    setValue,
     watch,
+    formState: { errors },
   } = useForm<RecipeFormData>({
     resolver: zodResolver(recipeSchema),
     defaultValues: {
@@ -45,15 +165,13 @@ const CreateRecipe = () => {
     setSuccess("");
 
     try {
-      const instructionsArr = data.instructions.split(/([.!?])\s*/);
+     
+      const instructionsArr = data.instructions.split(/(?<=[.!?])\s+/);
+
+     
       const processedInstructions = instructionsArr
-        .map((sentence, index) => {
-          if (index % 2 === 0 && sentence.trim() !== "") {
-            return sentence.trim() + ";";
-          }
-          return sentence;
-        })
-        .join(" ");
+        .filter((sentence) => sentence.trim() !== "")
+        .join(";");
 
       const newRecipe: Pick<
         Recipe,
@@ -74,7 +192,8 @@ const CreateRecipe = () => {
         rating: data.rating ? Number(data.rating) : 0,
       };
 
-      const { error: responseError } = await supabase
+     
+      const { data: recipeData, error: responseError } = await supabase
         .from("recipes")
         .insert(newRecipe)
         .select();
@@ -83,11 +202,22 @@ const CreateRecipe = () => {
         throw new Error(responseError.message);
       }
 
-      setSuccess("Rezept erfolgreich erstellt! ");
-      reset();
-      setImageUrl(null);
-      setImageFileName(null);
-      setUploadSuccess("");
+   
+      if (recipeData && recipeData.length > 0) {
+        const recipeId = recipeData[0].id;
+
+        if (recipeIngredients.length > 0) {
+          await saveRecipeIngredients(recipeId, recipeIngredients);
+        }
+
+        setSuccess("Rezept erfolgreich erstellt! ");
+      
+        reset();
+        setImageUrl(null);
+        setImageFileName(null);
+        setUploadSuccess("");
+        setRecipeIngredients([]);
+      }
     } catch (err) {
       console.error("Fehler beim Erstellen des Rezepts:", err);
       setError(
@@ -100,10 +230,98 @@ const CreateRecipe = () => {
     }
   };
 
-  const handleFileUpload = async (
-    event: React.ChangeEvent<HTMLInputElement>
-  ) => {
-    if (!event.target.files || !event.target.files[0] || !user) {
+
+  const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const files = e.target.files;
+    if (!files || files.length === 0) {
+      return;
+    }
+
+    const file = files[0];
+    setIsUploading(true);
+    setUploadError("");
+    setUploadSuccess("");
+
+    try {
+    
+      if (imageFileName) {
+        const { error: deleteError } = await supabase.storage
+          .from("photos")
+          .remove([`recipe-images/${imageFileName}`]);
+
+        if (deleteError) {
+          console.warn(
+            "Fehler beim Löschen des vorherigen Bildes:",
+            deleteError
+          );
+      
+        }
+      }
+
+    
+      const fileExt = file.name.split(".").pop();
+      const fileName = `${Math.random()
+        .toString(36)
+        .substring(2, 15)}.${fileExt}`;
+      const filePath = `recipe-images/${fileName}`;
+
+      console.log("Versuche Bild hochzuladen nach:", filePath);
+      console.log("Dateiinformationen:", {
+        name: file.name,
+        type: file.type,
+        size: `${(file.size / 1024).toFixed(2)} KB`,
+      });
+
+      
+      const { error: uploadError } = await supabase.storage
+        .from("photos")
+        .upload(filePath, file);
+
+      if (uploadError) {
+        console.error("Supabase Upload Fehler:", JSON.stringify(uploadError));
+        throw new Error(`Upload fehlgeschlagen: ${uploadError.message}`);
+      }
+
+      console.log("Hochladen erfolgreich, hole URL...");
+
+    
+      const { data } = supabase.storage.from("photos").getPublicUrl(filePath);
+
+      if (!data) {
+        throw new Error("Konnte keine öffentliche URL erhalten");
+      }
+
+      console.log("URL erhalten:", data.publicUrl);
+      setImageUrl(data.publicUrl);
+      setImageFileName(fileName);
+      setUploadSuccess("Bild erfolgreich hochgeladen!");
+    } catch (err) {
+      console.error("Fehler beim Hochladen des Bildes:", err);
+      let errorMessage = "Ein unbekannter Fehler ist aufgetreten";
+
+      if (err instanceof Error) {
+        errorMessage = err.message;
+        console.error("Fehlerdetails:", {
+          name: err.name,
+          message: err.message,
+          stack: err.stack,
+        });
+      } else if (err && typeof err === "object") {
+        console.error("Objekt Fehler:", JSON.stringify(err, null, 2));
+        if ("message" in err) {
+          errorMessage = String(err.message);
+        }
+      }
+
+      setUploadError(errorMessage);
+    } finally {
+      setIsUploading(false);
+    }
+  };
+
+
+  const handleDeleteImage = async () => {
+    if (!imageFileName) {
       return;
     }
 
@@ -112,325 +330,504 @@ const CreateRecipe = () => {
     setUploadSuccess("");
 
     try {
-      const imageFile = event.target.files[0];
-      const fileName = `${user.id}_${imageFile.name}`;
-
-      if (imageFileName) {
-        await supabase.storage.from("photos").remove([imageFileName]);
-      }
-
-      const { data, error } = await supabase.storage
+     
+      const { error: deleteError } = await supabase.storage
         .from("photos")
-        .upload(fileName, imageFile, {
-          cacheControl: "3600",
-          upsert: false,
-        });
+        .remove([`recipe-images/${imageFileName}`]);
 
-      if (error) {
-        throw new Error(error.message);
-      }
-
-      setImageFileName(fileName);
-      setUploadSuccess(`"${imageFile.name}" erfolgreich hochgeladen `);
-
-      const { data: publicURL } = supabase.storage
-        .from("photos")
-        .getPublicUrl(data.path);
-
-      if (publicURL) {
-        setImageUrl(publicURL.publicUrl);
-      }
-    } catch (err) {
-      console.error("Fehler beim Hochladen:", err);
-      setUploadError("Hochladen fehlgeschlagen ");
-    } finally {
-      setIsUploading(false);
-
-      event.target.value = "";
-    }
-  };
-
-  const handleImageChange = async () => {
-    if (!imageFileName) return;
-
-    try {
-      const { error } = await supabase.storage
-        .from("photos")
-        .remove([imageFileName]);
-
-      if (error) {
-        throw new Error(error.message);
+      if (deleteError) {
+        console.error("Fehler beim Löschen des Bildes:", deleteError);
+        throw new Error(`Löschen fehlgeschlagen: ${deleteError.message}`);
       }
 
       setImageUrl(null);
       setImageFileName(null);
-      setUploadSuccess("");
+      setUploadSuccess("Bild erfolgreich gelöscht!");
     } catch (err) {
-      console.error("Fehler beim Ändern des Bildes:", err);
-      setUploadError("Ändern fehlgeschlagen ");
+      console.error("Fehler beim Löschen des Bildes:", err);
+      let errorMessage = "Ein unbekannter Fehler ist aufgetreten";
+
+      if (err instanceof Error) {
+        errorMessage = err.message;
+      } else if (err && typeof err === "object" && "message" in err) {
+        errorMessage = String(err.message);
+      }
+
+      setUploadError(errorMessage);
+    } finally {
+      setIsUploading(false);
     }
   };
 
+
   return (
-    <>
-      <section className="stn-secondary">
-        <div className="card bg-base-100 my-12 max-w-sm md:max-w-md">
-          <form className="card-body" onSubmit={handleSubmit(onSubmit)}>
-            <h1 className="headline-1 my-12  text-center">
-              Neues Rezept erstellen
-            </h1>
+    <div className="container mx-auto px-4 py-8">
+      <div className="flex flex-col items-center">
+        <h1 className="text-3xl font-bold mb-8">Neues Rezept erstellen</h1>
 
-            <div className="form-control w-full">
-              <input
-                {...register("name")}
-                type="text"
-                className={`input input-bordered ${
-                  errors.name ? "input-error" : ""
-                }`}
-                placeholder="Rezeptname"
-              />
-              {errors.name && (
-                <p className="text-error-form">
-                  {errors.name.message}
-                </p>
-              )}
-            </div>
-
-            <div className="form-control w-full">
-              <textarea
-                {...register("description")}
-                className={`textarea textarea-bordered h-24 ${
-                  errors.description ? "textarea-error" : ""
-                }`}
-                placeholder="Beschreibung"
-              ></textarea>
-              {errors.description && (
-                <p className="text-error-form">
-                  {errors.description.message}
-                </p>
-              )}
-            </div>
-
-            <div className="form-control w-full">
-              <textarea
-                {...register("instructions")}
-                className={`textarea textarea-bordered h-44 ${
-                  errors.instructions ? "textarea-error" : ""
-                }`}
-                placeholder="Anleitung z.B, 
-Mehl, Milch und Eier verrühren.
-In einer Pfanne etwas Butter erhitzen.
-Teig portionsweise goldbraun braten."
-              ></textarea>
-              {errors.instructions && (
-                <p className="text-error-form">
-                  {errors.instructions.message}
-                </p>
-              )}
-            </div>
-
-            <div className="form-control w-full">
-              <select
-                {...register("servings")}
-                className={`select select-bordered font-semibold ${
-                  errors.servings ? "select-error" : ""
-                }`}
-                defaultValue=""
+        {error && (
+          <div className="alert alert-error shadow-lg mb-4 w-full max-w-2xl">
+            <div className="flex items-center">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                className="stroke-current shrink-0 h-6 w-6 mr-2"
+                fill="none"
+                viewBox="0 0 24 24"
               >
-                <option value="">Portionen</option>
-                <option value="1">1 Portion</option>
-                <option value="2">2 Portionen</option>
-                <option value="3">3 Portionen</option>
-                <option value="4">4 Portionen</option>
-                <option value="5">5 Portionen</option>
-              </select>
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth="2"
+                  d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z"
+                />
+              </svg>
+              <span>{error}</span>
+            </div>
+          </div>
+        )}
+
+        {success && (
+          <div className="alert alert-success shadow-lg mb-4 w-full max-w-2xl">
+            <div className="flex items-center">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                className="stroke-current shrink-0 h-6 w-6 mr-2"
+                fill="none"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth="2"
+                  d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
+                />
+              </svg>
+              <span>{success}</span>
+            </div>
+          </div>
+        )}
+
+        <form
+          onSubmit={handleSubmit(onSubmit)}
+          className="w-full max-w-2xl space-y-6"
+        >
+          <div className="form-control w-full">
+            <label className="label">
+              <span className="label-text font-medium">Rezeptname*</span>
+            </label>
+            <input
+              type="text"
+              className={`input input-bordered w-full ${
+                errors.name ? "input-error" : ""
+              }`}
+              {...register("name")}
+            />
+            {errors.name && (
+              <label className="label">
+                <span className="label-text-alt text-error">
+                  {errors.name.message}
+                </span>
+              </label>
+            )}
+          </div>
+
+          <div className="form-control w-full">
+            <label className="label">
+              <span className="label-text font-medium">Beschreibung*</span>
+            </label>
+            <textarea
+              className={`textarea textarea-bordered h-24 w-full ${
+                errors.description ? "textarea-error" : ""
+              }`}
+              {...register("description")}
+            ></textarea>
+            {errors.description && (
+              <label className="label">
+                <span className="label-text-alt text-error">
+                  {errors.description.message}
+                </span>
+              </label>
+            )}
+          </div>
+
+          <div className="form-control w-full">
+            <label className="label">
+              <span className="label-text font-medium">Zubereitung*</span>
+            </label>
+            <textarea
+              className={`textarea textarea-bordered h-36 w-full ${
+                errors.instructions ? "textarea-error" : ""
+              }`}
+              {...register("instructions")}
+              placeholder="Schritte durch Punkte trennen"
+            ></textarea>
+            {errors.instructions && (
+              <label className="label">
+                <span className="label-text-alt text-error">
+                  {errors.instructions.message}
+                </span>
+              </label>
+            )}
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div className="form-control w-full">
+              <label className="label">
+                <span className="label-text font-medium">Portionen*</span>
+              </label>
+              <input
+                type="number"
+                className={`input input-bordered w-full ${
+                  errors.servings ? "input-error" : ""
+                }`}
+                {...register("servings")}
+                min="1"
+              />
               {errors.servings && (
-                <p className="text-error-form">
-                  {errors.servings.message}
-                </p>
+                <label className="label">
+                  <span className="label-text-alt text-error">
+                    {errors.servings.message}
+                  </span>
+                </label>
               )}
             </div>
 
             <div className="form-control w-full">
+              <label className="label">
+                <span className="label-text font-medium">Kategorie*</span>
+              </label>
               <select
-                {...register("category_id")}
-                className={`select select-bordered font-semibold ${
+                className={`select select-bordered w-full ${
                   errors.category_id ? "select-error" : ""
                 }`}
+                {...register("category_id")}
                 defaultValue=""
               >
-                <option value="">Kategorie</option>
-                <option value="12595269-31df-4a3a-b3c7-7494fe5661c5">
-                  Getränke
+                <option value="" disabled>
+                  Kategorie wählen
                 </option>
-                <option value="4e29dd29-d50b-4f8b-8120-4d0487f76b96">
-                  Hauptspeise
-                </option>
-                <option value="5162be92-4ab3-4cdf-ba2e-2d9a0e10943f">
+                <option value="79d8ece1-d8fa-40e2-9038-8633ea126359">
                   Vorspeise
                 </option>
-                <option value="53085e10-fe7a-4f4b-8238-2933a63783cd">
-                  Snack
+                <option value="87d1c2b3-925a-424a-9f68-a4f961aa1eba">
+                  Hauptgericht
                 </option>
-                <option value="891d36b2-07ee-4afe-ac06-996fd4c793ed">
+                <option value="52c74be3-39fc-4cae-a1a8-48bac18feead">
+                  Dessert
+                </option>
+                <option value="1ce7b612-7997-499a-a40c-87291e0ad398">
+                  Backen
+                </option>
+                <option value="f23e2ed9-a2c7-42e5-a2bf-c91ecac13eb5">
+                  Beilage
+                </option>
+                <option value="8cf5aa79-2264-4e22-bd26-14e2eb72d03d">
                   Frühstück
                 </option>
-                <option value="933f18c3-052b-4989-9f74-4d692fda1473">
-                  Dessert
+                <option value="eaa24805-79d5-4ac8-bc62-c6724023eaa1">
+                  Getränk
+                </option>
+                <option value="ff51694e-1fc4-4e5a-968e-90f4f1441789">
+                  Snack
+                </option>
+                <option value="db9e1c61-3107-4f1d-b10a-9085c7a44d6d">
+                  Salat
+                </option>
+                <option value="9f39c9d9-1176-481e-a79f-b241e1cc8398">
+                  Suppe
+                </option>
+                <option value="71df8d36-e9df-4316-8de8-9e4b7a006ea6">
+                  Sauce
                 </option>
               </select>
               {errors.category_id && (
-                <p className="text-error-form">
-                  {errors.category_id.message}
-                </p>
+                <label className="label">
+                  <span className="label-text-alt text-error">
+                    {errors.category_id.message}
+                  </span>
+                </label>
               )}
             </div>
+          </div>
 
-            <div className="form-control w-full mt-4">
-              <div className="flex items-center">
-                <p className="mr-8 font-semibold">Bewertung</p>
-                <div className="rating">
-                  {[1, 2, 3, 4, 5].map((value) => (
-                    <input
-                      key={value}
-                      type="radio"
-                      value={value.toString()}
-                      className="mask mask-star-2 bg-orange-400"
-                      checked={watchRating === value.toString()}
-                      onChange={() => setValue("rating", value.toString())}
-                    />
-                  ))}
-                </div>
-              </div>
-            </div>
-
-            <div className="form-control w-full mt-4">
-              <div className="label">
-                <span className="label-text font-semibold">
-                  Bild für das Rezept hochladen
-                </span>
-              </div>
-              <div className="flex flex-col sm:flex-row gap-2">
+          <div className="form-control w-full">
+            <label className="label">
+              <span className="label-text font-medium">Bewertung</span>
+            </label>
+            <div className="rating rating-lg">
+              {[1, 2, 3, 4, 5].map((value) => (
                 <input
-                  type="file"
-                  className="file-input file-input-bordered w-full"
-                  onChange={handleFileUpload}
-                  disabled={isUploading}
+                  key={value}
+                  type="radio"
+                  className={`mask mask-star-2 ${
+                    value <= 3 ? "bg-orange-400" : "bg-orange-400"
+                  }`}
+                  value={value}
+                  {...register("rating")}
+                  checked={watchRating === value.toString()}
                 />
-                {!imageUrl && (
-                  <button
-                    type="button"
-                    className="btn btn-neutral rounded-full sm:w-auto"
-                    onClick={() =>
-                      document
-                        .querySelector<HTMLInputElement>('input[type="file"]')
-                        ?.click()
-                    }
-                    disabled={isUploading}
-                  >
-                    {isUploading ? (
-                      <span className="loading loading-spinner loading-sm"></span>
-                    ) : (
-                      "Hochladen"
-                    )}
-                  </button>
+              ))}
+            </div>
+          </div>
+
+          <div className="form-control w-full">
+            <label className="label">
+              <span className="label-text font-medium">Foto hochladen</span>
+            </label>
+            <input
+              type="file"
+              className="file-input file-input-bordered w-full"
+              accept="image/*"
+              onChange={handleImageUpload}
+              disabled={isUploading}
+            />
+            {isUploading && (
+              <div className="mt-2">
+                <span className="loading loading-spinner loading-md mr-2"></span>
+                <span>Wird hochgeladen...</span>
+              </div>
+            )}
+            {uploadSuccess && (
+              <div className="text-success mt-2">{uploadSuccess}</div>
+            )}
+            {uploadError && (
+              <div className="text-error mt-2">{uploadError}</div>
+            )}
+            {imageUrl && (
+              <div className="mt-2">
+                <img
+                  src={imageUrl}
+                  alt="Vorschau"
+                  className="rounded-lg max-h-60 object-contain"
+                />
+                <button
+                  type="button"
+                  className="btn btn-error btn-sm mt-2"
+                  onClick={handleDeleteImage}
+                  disabled={isUploading}
+                >
+                  Bild löschen
+                </button>
+              </div>
+            )}
+          </div>
+
+          {/* Ingredients Section */}
+          <div className="card bg-base-100 shadow-xl mb-8">
+            <div className="card-body">
+              <h2 className="card-title">Zutaten</h2>
+
+              {/* Ingredient selection form */}
+              <div
+                className={`grid ${
+                  newIngredientMode
+                    ? "grid-cols-1"
+                    : "grid-cols-1 md:grid-cols-3"
+                } gap-3 mb-4`}
+              >
+                {!newIngredientMode ? (
+                  <>
+                    <div className="form-control">
+                      <select
+                        className="select select-bordered w-full"
+                        value={selectedIngredient}
+                        onChange={(e) => setSelectedIngredient(e.target.value)}
+                        disabled={ingredients.length === 0}
+                      >
+                        <option value="">Zutat auswählen</option>
+                        {ingredients.map((ingredient) => (
+                          <option key={ingredient.id} value={ingredient.id}>
+                            {ingredient.name} ({ingredient.unit})
+                          </option>
+                        ))}
+                      </select>
+                    </div>
+                    <div className="form-control">
+                      <input
+                        type="number"
+                        className="input input-bordered w-full"
+                        placeholder="Menge"
+                        value={ingredientQuantity}
+                        onChange={(e) => setIngredientQuantity(e.target.value)}
+                        min="0"
+                        step="0.1"
+                      />
+                    </div>
+                    <div className="form-control flex flex-row gap-2">
+                      <button
+                        type="button"
+                        className="btn btn-primary flex-1"
+                        onClick={addIngredientToRecipe}
+                        disabled={!selectedIngredient || !ingredientQuantity}
+                      >
+                        Hinzufügen
+                      </button>
+                      <button
+                        type="button"
+                        className="btn btn-secondary flex-1"
+                        onClick={() => setNewIngredientMode(true)}
+                      >
+                        Neue Zutat
+                      </button>
+                    </div>
+                  </>
+                ) : (
+                  <>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                      <div className="form-control">
+                        <input
+                          type="text"
+                          className="input input-bordered w-full"
+                          placeholder="Name der Zutat"
+                          value={newIngredientName}
+                          onChange={(e) => setNewIngredientName(e.target.value)}
+                        />
+                      </div>
+                      <div className="form-control">
+                        <select
+                          className="select select-bordered w-full"
+                          value={newIngredientUnit}
+                          onChange={(e) =>
+                            setNewIngredientUnit(
+                              e.target.value as
+                                | ""
+                                | "g"
+                                | "ml"
+                                | "Stück"
+                                | "TL"
+                                | "EL"
+                                | "Prise"
+                            )
+                          }
+                        >
+                          <option value="">Einheit</option>
+                          <option value="g">Gramm (g)</option>
+                          <option value="ml">Milliliter (ml)</option>
+                          <option value="Stück">Stück</option>
+                          <option value="TL">Teelöffel (TL)</option>
+                          <option value="EL">Esslöffel (EL)</option>
+                          <option value="Prise">Prise</option>
+                        </select>
+                      </div>
+                      <div className="form-control md:col-span-2">
+                        <input
+                          type="text"
+                          className="input input-bordered w-full"
+                          placeholder="Zusätzliche Informationen (optional)"
+                          value={newIngredientInfo}
+                          onChange={(e) => setNewIngredientInfo(e.target.value)}
+                        />
+                      </div>
+                      <div className="form-control md:col-span-2 flex flex-row gap-2">
+                        <button
+                          type="button"
+                          className="btn btn-primary flex-1"
+                          onClick={handleAddNewIngredient}
+                        >
+                          Speichern
+                        </button>
+                        <button
+                          type="button"
+                          className="btn btn-secondary flex-1"
+                          onClick={() => setNewIngredientMode(false)}
+                        >
+                          Abbrechen
+                        </button>
+                      </div>
+                    </div>
+                  </>
                 )}
               </div>
+
+              {ingredientError && (
+                <div className="alert alert-error">{ingredientError}</div>
+              )}
+
+              {/* Ingredient table */}
+              {recipeIngredients.length > 0 && (
+                <div className="overflow-x-auto mt-4">
+                  <table className="table table-zebra w-full">
+                    <thead>
+                      <tr>
+                        <th className="hidden md:table-cell">Zutat</th>
+                        <th className="hidden md:table-cell">Menge</th>
+                        <th className="hidden md:table-cell">Einheit</th>
+                        <th className="hidden md:table-cell">Aktion</th>
+                        {/* Mobile view combined column */}
+                        <th className="md:hidden">Zutat</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {recipeIngredients.map((item, index) => (
+                        <tr key={index}>
+                          {/* Desktop view */}
+                          <td className="hidden md:table-cell">
+                            {item.ingredient?.name}
+                          </td>
+                          <td className="hidden md:table-cell">
+                            {item.quantity}
+                          </td>
+                          <td className="hidden md:table-cell">
+                            {item.ingredient?.unit}
+                          </td>
+                          <td className="hidden md:table-cell">
+                            <button
+                              type="button"
+                              className="btn btn-error btn-sm"
+                              onClick={() => removeIngredientFromRecipe(index)}
+                            >
+                              Entfernen
+                            </button>
+                          </td>
+
+                          {/* Mobile view - combined info */}
+                          <td className="md:hidden">
+                            <div className="flex flex-col">
+                              <span className="font-bold">
+                                {item.ingredient?.name}
+                              </span>
+                              <span>
+                                {item.quantity} {item.ingredient?.unit}
+                              </span>
+                              <button
+                                type="button"
+                                className="btn btn-error btn-xs mt-1 self-start"
+                                onClick={() =>
+                                  removeIngredientFromRecipe(index)
+                                }
+                              >
+                                Entfernen
+                              </button>
+                            </div>
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              )}
             </div>
+          </div>
 
-            {uploadError && (
-              <div className="alert alert-error shadow-lg mt-2">
-                <div className="flex items-center">
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    className="stroke-current shrink-0 h-6 w-6 mr-2"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth="2"
-                      d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z"
-                    />
-                  </svg>
-                  <span>{uploadError}</span>
-                </div>
-              </div>
-            )}
-
-            {uploadSuccess && (
-              <div className="alert alert-success shadow-lg mt-2">
-                <div className="flex-between w-full font-semibold">
-                  <span>{uploadSuccess}</span>
-                  <button
-                    type="button"
-                    className="btn-action-neutral"
-                    onClick={handleImageChange}
-                  >
-                    Bild ändern
-                  </button>
-                </div>
-              </div>
-            )}
-
+          <div className="form-control w-full mt-4">
             <button
               type="submit"
-              className="btn-action mt-6"
+              className="btn btn-primary w-full"
               disabled={isSubmitting}
             >
               {isSubmitting ? (
-                <span className="loading loading-spinner loading-sm"></span>
+                <>
+                  <span className="loading loading-spinner"></span>
+                  Wird gespeichert...
+                </>
               ) : (
                 "Rezept speichern"
               )}
             </button>
-
-            {error && (
-              <div className="alert alert-error shadow-lg mt-4">
-                <div className="flex items-center">
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    className="stroke-current shrink-0 h-6 w-6 mr-2"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth="2"
-                      d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z"
-                    />
-                  </svg>
-                  <span>{error}</span>
-                </div>
-              </div>
-            )}
-
-            {success && (
-              <div className="alert alert-success shadow-lg mt-4">
-                <div className="flex items-center font-semibold">
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    className="stroke-current shrink-0 h-6 w-6 mr-2"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth="2"
-                      d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
-                    />
-                  </svg>
-                  <span>{success}</span>
-                </div>
-              </div>
-            )}
-          </form>
-        </div>
-      </section>
-    </>
+          </div>
+        </form>
+      </div>
+    </div>
   );
 };
 
