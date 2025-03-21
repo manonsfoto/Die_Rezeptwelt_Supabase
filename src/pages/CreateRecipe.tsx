@@ -35,7 +35,6 @@ const CreateRecipe = () => {
   const [newIngredientInfo, setNewIngredientInfo] = useState<string>("");
   const [ingredientError, setIngredientError] = useState<string>("");
 
-  
   useEffect(() => {
     const loadIngredients = async () => {
       const ingredientsData = await fetchIngredients();
@@ -45,7 +44,6 @@ const CreateRecipe = () => {
     loadIngredients();
   }, []);
 
-  
   const handleAddNewIngredient = async () => {
     try {
       setIngredientError("");
@@ -56,16 +54,13 @@ const CreateRecipe = () => {
       );
 
       if (newIngredientData) {
-       
         setIngredients((prev) => [...prev, newIngredientData]);
 
-      
         setNewIngredientName("");
         setNewIngredientUnit("");
         setNewIngredientInfo("");
         setNewIngredientMode(false);
 
-       
         setSelectedIngredient(newIngredientData.id);
       }
     } catch (err) {
@@ -77,7 +72,6 @@ const CreateRecipe = () => {
     }
   };
 
-
   const addIngredientToRecipe = () => {
     try {
       setIngredientError("");
@@ -88,7 +82,6 @@ const CreateRecipe = () => {
         return;
       }
 
-   
       const ingredient = ingredients.find(
         (ing) => ing.id === selectedIngredient
       );
@@ -97,18 +90,15 @@ const CreateRecipe = () => {
         return;
       }
 
-   
       const existingIndex = recipeIngredients.findIndex(
         (item) => item.ingredient_id === selectedIngredient
       );
 
       if (existingIndex !== -1) {
-        
         const updatedIngredients = [...recipeIngredients];
         updatedIngredients[existingIndex].quantity = quantity;
         setRecipeIngredients(updatedIngredients);
       } else {
-      
         const newRecipeIngredient: RecipeIngredient = {
           ingredient_id: selectedIngredient,
           quantity,
@@ -118,7 +108,6 @@ const CreateRecipe = () => {
         setRecipeIngredients([...recipeIngredients, newRecipeIngredient]);
       }
 
-     
       setSelectedIngredient("");
       setIngredientQuantity("");
     } catch (err) {
@@ -131,13 +120,11 @@ const CreateRecipe = () => {
     }
   };
 
- 
   const removeIngredientFromRecipe = (index: number) => {
     setRecipeIngredients((prevIngredients) =>
       prevIngredients.filter((_, i) => i !== index)
     );
   };
-
 
   const {
     register,
@@ -165,10 +152,8 @@ const CreateRecipe = () => {
     setSuccess("");
 
     try {
-     
       const instructionsArr = data.instructions.split(/(?<=[.!?])\s+/);
 
-     
       const processedInstructions = instructionsArr
         .filter((sentence) => sentence.trim() !== "")
         .join(";");
@@ -192,7 +177,6 @@ const CreateRecipe = () => {
         rating: data.rating ? Number(data.rating) : 0,
       };
 
-     
       const { data: recipeData, error: responseError } = await supabase
         .from("recipes")
         .insert(newRecipe)
@@ -202,7 +186,6 @@ const CreateRecipe = () => {
         throw new Error(responseError.message);
       }
 
-   
       if (recipeData && recipeData.length > 0) {
         const recipeId = recipeData[0].id;
 
@@ -211,7 +194,7 @@ const CreateRecipe = () => {
         }
 
         setSuccess("Rezept erfolgreich erstellt! ");
-      
+
         reset();
         setImageUrl(null);
         setImageFileName(null);
@@ -230,7 +213,6 @@ const CreateRecipe = () => {
     }
   };
 
-
   const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = e.target.files;
     if (!files || files.length === 0) {
@@ -243,7 +225,6 @@ const CreateRecipe = () => {
     setUploadSuccess("");
 
     try {
-    
       if (imageFileName) {
         const { error: deleteError } = await supabase.storage
           .from("photos")
@@ -254,11 +235,9 @@ const CreateRecipe = () => {
             "Fehler beim Löschen des vorherigen Bildes:",
             deleteError
           );
-      
         }
       }
 
-    
       const fileExt = file.name.split(".").pop();
       const fileName = `${Math.random()
         .toString(36)
@@ -272,7 +251,6 @@ const CreateRecipe = () => {
         size: `${(file.size / 1024).toFixed(2)} KB`,
       });
 
-      
       const { error: uploadError } = await supabase.storage
         .from("photos")
         .upload(filePath, file);
@@ -284,7 +262,6 @@ const CreateRecipe = () => {
 
       console.log("Hochladen erfolgreich, hole URL...");
 
-    
       const { data } = supabase.storage.from("photos").getPublicUrl(filePath);
 
       if (!data) {
@@ -319,7 +296,6 @@ const CreateRecipe = () => {
     }
   };
 
-
   const handleDeleteImage = async () => {
     if (!imageFileName) {
       return;
@@ -330,7 +306,6 @@ const CreateRecipe = () => {
     setUploadSuccess("");
 
     try {
-     
       const { error: deleteError } = await supabase.storage
         .from("photos")
         .remove([`recipe-images/${imageFileName}`]);
@@ -359,11 +334,10 @@ const CreateRecipe = () => {
     }
   };
 
-
   return (
     <div className="container mx-auto px-4 py-8">
       <div className="flex flex-col items-center">
-        <h1 className="text-3xl font-bold mb-8">Neues Rezept erstellen</h1>
+        <h1 className="headline-1  mb-8">Neues Rezept erstellen</h1>
 
         {error && (
           <div className="alert alert-error shadow-lg mb-4 w-full max-w-2xl">

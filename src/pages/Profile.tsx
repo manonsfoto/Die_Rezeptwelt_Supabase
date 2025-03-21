@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import StyledLinks from "../components/StyledLinks";
 import { formatDate } from "../lib/utils";
 import { useAuthStore } from "../store/authStore";
@@ -38,6 +39,9 @@ const Profile = () => {
                 <br /> {formatDate(user?.last_sign_in_at)}
               </p>
             </div>
+            <Link className="btn-underline" to="/create_recipe">
+              Neues Rezept erstellen
+            </Link>
           </div>
         </div>
       </section>
