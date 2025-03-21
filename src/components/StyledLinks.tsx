@@ -3,7 +3,7 @@ import ArrowIcon from "./icons/ArrowIcon";
 
 const StyledLinks = ({ bgColor }: { bgColor: string }) => {
   return (
-    <div className="w-full relative mt-12">
+    <div className="max-w-7xl w-full relative mt-12">
       <Link to={"/meine_rezepte"} className="w-full">
         {" "}
         <div className="flex-between pb-8 bg-primary w-full headline-2 p-4  rounded-t-3xl group">

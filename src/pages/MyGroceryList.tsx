@@ -65,7 +65,7 @@ const MyGroceryList = () => {
   return (
     <>
       {" "}
-      <section className="w-full gap-4 mt-4">
+      <section className="max-w-7xl w-full gap-4 mt-4">
         <h1 className="headline-1 w-full my-12 pb-4  border-b-2 border-black">
           Meine Einkaufsliste
         </h1>
@@ -97,7 +97,7 @@ const MyGroceryList = () => {
                       />
                     </label>
 
-                    <div className="font-bold font-gaegu text-xl italic bg-secondary rounded-2xl uppercase w-28 h-16 flex-center">
+                    <div className="font-bold font-gaegu text-xl italic bg-secondary rounded-2xl uppercase w-28 h-16 flex-center text-center break-words hyphens-auto">
                       {item.ingredients.name}
                     </div>
                   </div>

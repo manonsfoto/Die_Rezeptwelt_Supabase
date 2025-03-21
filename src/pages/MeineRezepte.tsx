@@ -13,7 +13,7 @@ const MeineRezepte = () => {
 
   return (
     <>
-      <section className="flex-center flex-col  mb-16 w-full">
+      <section className="max-w-7xl w-full">
         <h1 className=" w-full my-12 pb-4 headline-1 border-b-2 border-black">
           Meine Rezepte
         </h1>
@@ -24,7 +24,7 @@ const MeineRezepte = () => {
             ))}
           </ul>
         ) : favorites.length > 0 ? (
-          <ul className="flex flex-col gap-4 flex-wrap min-h-screen md:flex-row">
+          <ul className="flex justify-center  gap-4 flex-wrap min-h-screen ">
             {favorites.map((recipe) => (
               <li key={recipe.id}>
                 <Card recipe={recipe} />

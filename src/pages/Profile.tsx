@@ -8,8 +8,8 @@ const Profile = () => {
   return (
     <>
       <StyledLinks bgColor="bg-secondary" />
-      <section className="stn-secondary">
-        <div className="card bg-base-100 w-full max-w-sm ">
+      <section className="stn-secondary max-w-7xl w-full">
+        <div className="card bg-base-100 w-full max-w-sm my-12">
           <div className="card-body ">
             <h1 className="headline-1  my-12">Profil</h1>
             <div className="flex flex-col gap-2 font-semibold text-xl">
