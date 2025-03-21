@@ -1,10 +1,7 @@
 import { supabase } from "./supabase/supabaseClient";
 import { Ingredient, RecipeIngredient } from "./supabase/types";
 
-/**
- * Fetches all ingredients from the database
- * @returns Promise containing the ingredients array
- */
+
 export const fetchIngredients = async (): Promise<Ingredient[]> => {
   try {
     const { data, error } = await supabase
@@ -23,13 +20,7 @@ export const fetchIngredients = async (): Promise<Ingredient[]> => {
   }
 };
 
-/**
- * Adds a new ingredient to the database
- * @param name - The name of the ingredient
- * @param unit - The unit of the ingredient
- * @param additionalInfo - Optional additional information about the ingredient
- * @returns Promise containing the new ingredient
- */
+
 export const addNewIngredient = async (
   name: string,
   unit: "g" | "ml" | "Stück" | "TL" | "EL" | "Prise" | "",
@@ -40,7 +31,7 @@ export const addNewIngredient = async (
   }
 
   try {
-    // Unit must be one of the predefined values
+  
     const newIngredient = {
       name: name.trim(),
       unit: unit.trim() as "g" | "ml" | "Stück" | "TL" | "EL" | "Prise",
@@ -67,11 +58,7 @@ export const addNewIngredient = async (
   }
 };
 
-/**
- * Saves recipe ingredients to the database
- * @param recipeId - The ID of the recipe
- * @param ingredients - The ingredients to save
- */
+
 export const saveRecipeIngredients = async (
   recipeId: string,
   ingredients: RecipeIngredient[]

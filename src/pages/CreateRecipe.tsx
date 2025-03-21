@@ -480,38 +480,23 @@ const CreateRecipe = () => {
                 <option value="" disabled>
                   Kategorie wählen
                 </option>
-                <option value="79d8ece1-d8fa-40e2-9038-8633ea126359">
+                <option value="5162be92-4ab3-4cdf-ba2e-2d9a0e10943f">
                   Vorspeise
                 </option>
-                <option value="87d1c2b3-925a-424a-9f68-a4f961aa1eba">
-                  Hauptgericht
+                <option value="4e29dd29-d50b-4f8b-8120-4d0487f76b96">
+                  Hauptspeise
                 </option>
-                <option value="52c74be3-39fc-4cae-a1a8-48bac18feead">
+                <option value="933f18c3-052b-4989-9f74-4d692fda1473">
                   Dessert
                 </option>
-                <option value="1ce7b612-7997-499a-a40c-87291e0ad398">
-                  Backen
-                </option>
-                <option value="f23e2ed9-a2c7-42e5-a2bf-c91ecac13eb5">
-                  Beilage
-                </option>
-                <option value="8cf5aa79-2264-4e22-bd26-14e2eb72d03d">
+                <option value="891d36b2-07ee-4afe-ac06-996fd4c793ed">
                   Frühstück
                 </option>
-                <option value="eaa24805-79d5-4ac8-bc62-c6724023eaa1">
-                  Getränk
+                <option value="12595269-31df-4a3a-b3c7-7494fe5661c5">
+                  Getränke
                 </option>
-                <option value="ff51694e-1fc4-4e5a-968e-90f4f1441789">
+                <option value="53085e10-fe7a-4f4b-8238-2933a63783cd">
                   Snack
-                </option>
-                <option value="db9e1c61-3107-4f1d-b10a-9085c7a44d6d">
-                  Salat
-                </option>
-                <option value="9f39c9d9-1176-481e-a79f-b241e1cc8398">
-                  Suppe
-                </option>
-                <option value="71df8d36-e9df-4316-8de8-9e4b7a006ea6">
-                  Sauce
                 </option>
               </select>
               {errors.category_id && (
