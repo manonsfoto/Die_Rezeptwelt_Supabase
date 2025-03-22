@@ -83,27 +83,22 @@ Nutzer können:
 
 ## Projektvorschau
 
-### Rezepte suchen
+### Zutat zur Einkaufsliste hinzufügen & Meine Einkaufsliste
+![groceryList](https://github.com/user-attachments/assets/4f0c7f36-5d54-4d66-b0e8-614581ef09b5)
 
 
-
-### Rezept zu Favoriten hinzufügen
-
-
-
-### Meine Rezepte anzeigen
+### Rezept zu Favoriten hinzufügen & Meine Rezepte anzeigen
+![Favorite](https://github.com/user-attachments/assets/41d20d0a-d7e7-4c91-a30e-424b3e61c477)
 
 
 
 ### Neues Rezept erstellen
+![CreateRecipe](https://github.com/user-attachments/assets/70ad3ad0-fb1d-45f8-ad5d-22b8c02ee1e0)
 
 
 
-### Zutat zur Einkaufsliste hinzufügen
-
-
-
-### Meine Einkaufsliste
+### Rezepte suchen
+![Search](https://github.com/user-attachments/assets/849a2a59-e362-4d0f-a030-6dde017e7ad3)
 
 
 
