@@ -41,13 +41,13 @@ const SearchResult = () => {
           Suchergebnisse
         </h1>
         {loading ? (
-          <ul className="flex-center flex-row gap-4 flex-wrap  min-h-screen">
+          <ul className="flex justify-start flex-row gap-4 flex-wrap  min-h-screen">
             {[...Array(6)].map((_, index) => (
               <SkeletonCard key={index} />
             ))}
           </ul>
         ) : recipes.length > 0 ? (
-          <ul className="flex-center flex-row gap-4 flex-wrap ">
+          <ul className="flex justify-start flex-row gap-4 flex-wrap min-h-screen">
             {recipes.map((recipe) => (
               <li key={recipe.id}>
                 <Card recipe={recipe} />
