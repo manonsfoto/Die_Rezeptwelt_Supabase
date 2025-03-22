@@ -40,7 +40,7 @@ npm run dev
 
 ## Datenbankschema-Visualisierung
 
-![Supabase Datenbankschema](./images/supabase-schema.png)
+![Supabase Datenbankschema](./public/images/supabase-schema.png)
 
 ## Umgebungsvariablen
 
@@ -85,25 +85,25 @@ Nutzer können:
 
 ### Rezepte suchen
 
-![1Searchbar](https://github.com/user-attachments/assets/f7adebde-503a-4c66-98ec-177d7632e051)
+
 
 ### Rezept zu Favoriten hinzufügen
 
-![2AddFav](https://github.com/user-attachments/assets/7f694346-8cf4-4638-871b-12631d81742e)
+
 
 ### Meine Rezepte anzeigen
 
-![3CheckFav](https://github.com/user-attachments/assets/f5e46879-431a-4cfd-9f92-b15e90c68364)
+
 
 ### Neues Rezept erstellen
 
-![4CreateNewRecipeIntro](https://github.com/user-attachments/assets/183ea0de-013b-47eb-95de-1f8050c9f604)
+
 
 ### Zutat zur Einkaufsliste hinzufügen
 
-![Add_to_grocerylist](https://github.com/user-attachments/assets/71d68294-7710-41da-a2a3-98331eb4ffea)
+
 
 ### Meine Einkaufsliste
 
-![Grocerylist_details](https://github.com/user-attachments/assets/5e9df302-5ccd-43c6-b953-120e9d447e4d)
+
 
