@@ -36,12 +36,12 @@ const SearchResult = () => {
   return (
     <>
       {" "}
-      <section className="flex-center flex-col  max-w-7xl w-full min-h-screen">
+      <section className="flex-center flex-col  max-w-7xl w-full">
         <h1 className="headline-1 w-full my-12 pb-4 border-b-2 border-black">
           Suchergebnisse
         </h1>
         {loading ? (
-          <ul className="flex-center flex-row gap-4 flex-wrap ">
+          <ul className="flex-center flex-row gap-4 flex-wrap  min-h-screen">
             {[...Array(6)].map((_, index) => (
               <SkeletonCard key={index} />
             ))}
