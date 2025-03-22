@@ -36,7 +36,7 @@ const SearchResult = () => {
   return (
     <>
       {" "}
-      <section className="flex-center flex-col  max-w-7xl w-full">
+      <section className="flex-center flex-col  max-w-7xl w-full min-h-screen">
         <h1 className="headline-1 w-full my-12 pb-4 border-b-2 border-black">
           Suchergebnisse
         </h1>
