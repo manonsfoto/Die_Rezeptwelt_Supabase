@@ -38,11 +38,9 @@ npm install
 npm run dev
 ```
 
-## Datenbankstruktur
+## Datenbankschema-Visualisierung
 
-### Datenbankschema-Visualisierung
-
-![Supabase Datenbankschema]("./images/supabase_schema.png")
+![Supabase Datenbankschema](./images/supabase-schema.png)
 
 ## Umgebungsvariablen
 
