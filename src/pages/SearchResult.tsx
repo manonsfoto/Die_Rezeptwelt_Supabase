@@ -5,12 +5,16 @@ import Card from "../components/Card";
 import { useSearchParams } from "react-router-dom";
 import { searchRecipes } from "../lib/supabase/actions";
 import SkeletonCard from "../components/SkeletonCard";
+import { sortRecipes, SortType } from "../lib/sorting";
+import SortingBar from "../components/SortingBar";
+import SkeletonSortingBar from "../components/SkeletonSortingBar";
 
 const SearchResult = () => {
   const [searchParams] = useSearchParams();
   const searchQuery = searchParams.get("q") || "";
   const [recipes, setRecipes] = useState<Recipe[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
+  const [sortType, setSortType] = useState<SortType>("asc");
 
   useEffect(() => {
     const getSearchResult = async () => {
@@ -33,27 +37,34 @@ const SearchResult = () => {
     getSearchResult();
   }, [searchQuery]);
 
+  const sortedRecipes: Recipe[] = sortRecipes(recipes, sortType);
+
   return (
     <>
       {" "}
       <section className="flex-center flex-col  max-w-7xl w-full">
-        <h1 className="headline-1 w-full my-12 pb-4 border-b-2 border-black">
+        <h1 className="headline-1 w-full mt-12 pb-4 border-b-2 border-black">
           Suchergebnisse
         </h1>
-        {loading ? (
-          <ul className="flex justify-start flex-row gap-4 flex-wrap  min-h-screen">
+        {loading ? (<>
+          <SkeletonSortingBar />
+          <ul className="flex justify-center  flex-row gap-4 flex-wrap  min-h-screen">
             {[...Array(6)].map((_, index) => (
               <SkeletonCard key={index} />
             ))}
-          </ul>
+          </ul></>
         ) : recipes.length > 0 ? (
-          <ul className="flex justify-start flex-row gap-4 flex-wrap min-h-screen">
-            {recipes.map((recipe) => (
-              <li key={recipe.id}>
-                <Card recipe={recipe} />
-              </li>
-            ))}
-          </ul>
+          <>
+            <SortingBar sortType={sortType} setSortType={setSortType} />
+
+            <ul className="flex justify-center  flex-row gap-4 flex-wrap min-h-screen">
+              {sortedRecipes.map((recipe) => (
+                <li key={recipe.id} className="h-fit">
+                  <Card recipe={recipe} />
+                </li>
+              ))}
+            </ul>
+          </>
         ) : (
           <EmptyHero
             mainText={`Keine Ergebnisse gefunden für "${searchQuery}"`}
