@@ -35,7 +35,11 @@ const MeineRezepte = () => {
           </>
         ) : favorites.length > 0 ? (
           <>
-            <SortingBar sortType={sortType} setSortType={setSortType} />
+            <SortingBar
+              sortType={sortType}
+              setSortType={setSortType}
+          
+            />
 
             <ul className="flex justify-center gap-4 flex-wrap min-h-screen">
               {sortedFavorites.map((recipe) => (

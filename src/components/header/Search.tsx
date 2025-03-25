@@ -4,23 +4,37 @@ import { useNavigate } from "react-router-dom";
 const Search = () => {
   const searchInputRef = useRef<HTMLInputElement>(null);
   const navigate = useNavigate();
+
   function handleSearchButton() {
     if (searchInputRef.current) {
-      navigate(`/search?q=${encodeURIComponent(searchInputRef.current.value)}`);
+      const searchQuery = searchInputRef.current.value.trim();
+      if (searchQuery) {
+        
+        navigate(`/search?q=${encodeURIComponent(searchQuery)}&category=`);
+      }
     }
   }
+
+ 
+  function handleKeyDown(e: React.KeyboardEvent<HTMLInputElement>) {
+    if (e.key === "Enter") {
+      handleSearchButton();
+    }
+  }
+
   return (
     <div className="card-body">
       <input
         ref={searchInputRef}
         type="text"
         name="searchInput"
-        placeholder="Search"
-        className="input input-bordered rounded-full "
+        placeholder="Rezept suchen..."
+        className="input input-bordered rounded-full"
+        onKeyDown={handleKeyDown}
       />
 
       <button type="button" className="btn-action" onClick={handleSearchButton}>
-        Search
+        Suchen
       </button>
     </div>
   );

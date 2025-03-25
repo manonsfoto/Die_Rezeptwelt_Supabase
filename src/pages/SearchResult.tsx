@@ -15,12 +15,16 @@ const SearchResult = () => {
   const [recipes, setRecipes] = useState<Recipe[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [sortType, setSortType] = useState<SortType>("asc");
+  const [selectedCategory, setSelectedCategory] = useState<string>("");
 
   useEffect(() => {
     const getSearchResult = async () => {
       setLoading(true);
       try {
-        const { data, error } = await searchRecipes(searchQuery);
+        const { data, error } = await searchRecipes(
+          searchQuery,
+          selectedCategory
+        );
 
         if (error) {
           console.error("Fehler beim Laden der Suchergebnisse:", error);
@@ -35,7 +39,7 @@ const SearchResult = () => {
     };
 
     getSearchResult();
-  }, [searchQuery]);
+  }, [searchQuery, selectedCategory]);
 
   const sortedRecipes: Recipe[] = sortRecipes(recipes, sortType);
 
@@ -46,16 +50,24 @@ const SearchResult = () => {
         <h1 className="headline-1 w-full mt-12 pb-4 border-b-2 border-black">
           Suchergebnisse
         </h1>
-        {loading ? (<>
-          <SkeletonSortingBar />
-          <ul className="flex justify-center  flex-row gap-4 flex-wrap  min-h-screen">
-            {[...Array(6)].map((_, index) => (
-              <SkeletonCard key={index} />
-            ))}
-          </ul></>
+
+        {loading ? (
+          <>
+            <SkeletonSortingBar />
+            <ul className="flex justify-center  flex-row gap-4 flex-wrap  min-h-screen">
+              {[...Array(6)].map((_, index) => (
+                <SkeletonCard key={index} />
+              ))}
+            </ul>
+          </>
         ) : recipes.length > 0 ? (
           <>
-            <SortingBar sortType={sortType} setSortType={setSortType} />
+            <SortingBar
+              sortType={sortType}
+              setSortType={setSortType}
+              selectedCategory={selectedCategory}
+              setSelectedCategory={setSelectedCategory}
+            />
 
             <ul className="flex justify-center  flex-row gap-4 flex-wrap min-h-screen">
               {sortedRecipes.map((recipe) => (

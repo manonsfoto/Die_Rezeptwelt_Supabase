@@ -252,13 +252,21 @@ export const addToGroceryList = async (
 };
 
 export const searchRecipes = async (
-  searchQuery: string
+  searchQuery: string,
+  categoryId?: string
 ): Promise<{ data: Recipe[]; error: Error | null }> => {
   try {
-    const { data, error } = await supabase
-      .from("recipes")
-      .select()
-      .ilike("name", `%${searchQuery}%`);
+    let query = supabase.from("recipes").select(`*, categories(id, name)`);
+
+    if (searchQuery) {
+      query = query.ilike("name", `%${searchQuery}%`);
+    }
+
+    if (categoryId) {
+      query = query.eq("category_id", categoryId);
+    }
+
+    const { data, error } = await query;
 
     if (error) {
       console.error("Fehler beim Laden der Rezepte:", error.message);
@@ -271,6 +279,7 @@ export const searchRecipes = async (
     return { data: [], error: err as Error };
   }
 };
+
 export const signUp = async (
   userData: SignUpData
 ): Promise<{
