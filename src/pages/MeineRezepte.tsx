@@ -6,6 +6,7 @@ import SkeletonCard from "../components/SkeletonCard";
 import { sortRecipes, SortType } from "../lib/sorting";
 import SortingBar from "../components/SortingBar";
 import SkeletonSortingBar from "../components/SkeletonSortingBar";
+import BackToTopButton from "../components/BacoToTopButton";
 
 const MeineRezepte = () => {
   const { favorites, isLoading, fetchFavorites } = useFavoritesStore();
@@ -55,6 +56,7 @@ const MeineRezepte = () => {
             subText="Wenn du auf ein 🩶 bei einem Rezept klickst, erscheint es hier."
           />
         )}
+        <BackToTopButton />
       </section>
     </>
   );

@@ -8,6 +8,7 @@ import SkeletonCard from "../components/SkeletonCard";
 import { sortRecipes, SortType } from "../lib/sorting";
 import SortingBar from "../components/SortingBar";
 import SkeletonSortingBar from "../components/SkeletonSortingBar";
+import BackToTopButton from "../components/BacoToTopButton";
 
 const SearchResult = () => {
   const [searchParams] = useSearchParams();
@@ -82,6 +83,7 @@ const SearchResult = () => {
             mainText={`Keine Ergebnisse gefunden für "${searchQuery}"`}
           />
         )}
+        <BackToTopButton />
       </section>
     </>
   );

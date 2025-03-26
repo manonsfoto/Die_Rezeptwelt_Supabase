@@ -10,6 +10,7 @@ import SortingBar from "../components/SortingBar";
 import { SortType, sortRecipes } from "../lib/sorting";
 import { Recipe } from "../lib/supabase/types";
 import Card from "../components/Card";
+import BackToTopButton from "../components/BacoToTopButton";
 
 const Rezepte = () => {
   const [sortType, setSortType] = useState<SortType>("rating");
@@ -90,6 +91,7 @@ const Rezepte = () => {
           </div>
         )}
       </section>
+      <BackToTopButton />
     </section>
   );
 };

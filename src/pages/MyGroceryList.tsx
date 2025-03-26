@@ -9,6 +9,7 @@ import {
   clearGroceryList,
 } from "../lib/supabase/actions";
 import DeleteIcon from "../components/icons/DeleteIcon";
+import BackToTopButton from "../components/BacoToTopButton";
 
 const MyGroceryList = () => {
   const { groceryList, refreshGroceryList } = useGroceryListStore();
@@ -152,6 +153,7 @@ const MyGroceryList = () => {
         ) : (
           <EmptyHero mainText="Keine Einkaufsliste" />
         )}
+        <BackToTopButton />
       </section>
     </>
   );
