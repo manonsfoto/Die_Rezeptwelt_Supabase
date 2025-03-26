@@ -9,13 +9,12 @@ const Search = () => {
     if (searchInputRef.current) {
       const searchQuery = searchInputRef.current.value.trim();
       if (searchQuery) {
-        
         navigate(`/search?q=${encodeURIComponent(searchQuery)}&category=`);
+        searchInputRef.current.value = "";
       }
     }
   }
 
- 
   function handleKeyDown(e: React.KeyboardEvent<HTMLInputElement>) {
     if (e.key === "Enter") {
       handleSearchButton();
